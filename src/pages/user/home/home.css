@@ -1,0 +1,36 @@
+.slider-swiper{
+    height: 600px;
+}
+.swiper{
+    width: 100%;
+    height: 100%;
+}
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background-color:  #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.swiper{
+    margin-left: auto;
+    margin-right: auto;
+}
+.backgroud-slider{
+    position: relative;
+}
+.background-content {
+    text-align: left;
+    max-width: 400px;
+    position: absolute; /* Để đặt vị trí chính xác */
+    top: 200px; /* Khoảng cách từ trên */
+    left: 150px; /* Khoảng cách từ trái */
+    z-index: 10; /* Đảm bảo hiển thị trên các phần tử khác */
+}
