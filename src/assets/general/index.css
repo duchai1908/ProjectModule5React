@@ -1,0 +1,4 @@
+/* styles.css or a relevant CSS module */
+.ant-dropdown-menu {
+    box-shadow: none !important; /* Remove box shadow */
+  }

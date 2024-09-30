@@ -1,8 +1,9 @@
 import React from "react";
-import AdminLayout from "../layouts/admin/AdminLayout";
 import LazyLoader from "../components/LazyLoad";
+import AdminLayout from "../layouts/admin/AdminLayout";
+import ManagerProduct from "../pages/admin/manager-products";
 
-const DashboardPage = React.lazy(() => import("../pages/admin/dashboard"))
+const DashboardPage = React.lazy(() => import("../pages/admin/dashboard/Dashboard"))
 const PrivateRoutes = [
     {
         path: "/admin",
@@ -11,6 +12,10 @@ const PrivateRoutes = [
             {
                 index:true,
                 element: <LazyLoader children={<DashboardPage/>} />
+            },
+            {
+                path:"manager-product",
+                element: <ManagerProduct/>
             }
         ]
     }
