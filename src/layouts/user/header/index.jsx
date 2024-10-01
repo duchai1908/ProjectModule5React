@@ -1,13 +1,13 @@
 import React from "react";
-import Marquee from "./marquee/Marquee";
 import Navigation from "./navigation";
 import ForUsers from "./forUser";
 import { IoMenu } from "react-icons/io5";
+import MarqueeComponent from "./marquee/MarqueeComponent";
 
 export default function HeaderGenaral() {
   return (
     <>
-      <Marquee />
+      <MarqueeComponent />
       <div className="p-[24px] flex justify-between items-baseline">
         <div className="block md:hidden">
           <button className="text-[16px] bg-white border-none p-2 rounded-md hover:bg-gray-100 focus:outline-none">

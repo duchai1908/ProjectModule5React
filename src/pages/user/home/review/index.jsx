@@ -1,5 +1,5 @@
 import React from "react";
-import "./review.css";
+
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -17,7 +17,7 @@ export default function Review() {
             loop={true}
           >
             <SwiperSlide >
-              <div className="flex flex-col items-center justify-center text-center review-bg ">
+              <div className="flex flex-col items-center justify-center text-center w-full bg-[#EBEBEB] ">
                 <p className="mt-8 mb-8 ">
                   <i
                     className="bi bi-chat-quote"
@@ -37,7 +37,7 @@ export default function Review() {
               </div>
             </SwiperSlide>
             <SwiperSlide >
-              <div className="flex flex-col items-center justify-center text-center review-bg">
+              <div className="flex flex-col items-center justify-center text-center w-full bg-[#EBEBEB]">
                 <p className="mt-8 mb-8 ">
                   <i
                     className="bi bi-chat-quote"

@@ -3,6 +3,7 @@ import React from 'react'
 import FooterLayout from './footer'
 import { Outlet } from 'react-router-dom'
 import HeaderGenaral from './header'
+import "../../assets/user.css"
 
 export default function UserLayout() {
   return (
