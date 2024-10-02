@@ -1,10 +1,12 @@
 import React from "react";
 import UserLayout from "../layouts/user/UserLayout";
 import LazyLoader from "../components/LazyLoad";
-import ListProducts from "../pages/user/list-products";
-import ProductDetail from "../pages/user/product-detail";
 
 const HomePage = React.lazy(() => import("../pages/user/home"))
+const ListProducts = React.lazy(() => import("../pages/user/list-products"))
+const Contact = React.lazy(() => import("../pages/user/contact"))
+const About = React.lazy(() => import("../pages/user/about"))
+const ProductDetail = React.lazy(() => import("../pages/user/product-detail"))
 
 const PublicRoutes = [
     {
@@ -16,12 +18,20 @@ const PublicRoutes = [
                 element: <LazyLoader children={<HomePage/>} />
             },
             {
-                path:"/list-products",
-                element: <ListProducts/>
+                path:"list-products",
+                element: <LazyLoader children={<ListProducts/>} />
             },
             {
-                path:"/product-detail",
+                path:"product-detail/:id",
                 element: <LazyLoader children={<ProductDetail/>} />
+            },
+            {
+                path:"about",
+                element: <LazyLoader children={<About/>}/>
+            },
+            {
+                path:"contact",
+                element: <LazyLoader children={<Contact/>}/>
             },
         ]
     }
