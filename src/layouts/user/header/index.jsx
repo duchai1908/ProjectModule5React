@@ -15,6 +15,7 @@ export default function HeaderGenaral() {
             <IoMenu />
           </button>
         </div>
+
         <Link to="/">
           <div
             className="w-[150px] h-[29px] bg-white"
