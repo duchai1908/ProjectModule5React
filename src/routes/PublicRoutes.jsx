@@ -1,49 +1,40 @@
 import React from "react";
 import UserLayout from "../layouts/user/UserLayout";
 import LazyLoader from "../components/LazyLoad";
-import ListProducts from "../pages/user/list-products";
-import ProductDetail from "../pages/user/product-detail";
 
-const HomePage = React.lazy(() => import("../pages/user/home"));
-const WishListPage = React.lazy(() => import("../pages/user/wishList"));
-const CartListPage = React.lazy(() => import("../pages/user/cartList"));
-const CartDetailPage = React.lazy(() => import("../pages/user/cartDetail"));
-const CheckOutPage = React.lazy(() => import("../pages/user/checkOut"));
+
+const HomePage = React.lazy(() => import("../pages/user/home"))
+const ListProducts = React.lazy(() => import("../pages/user/list-products"))
+const Contact = React.lazy(() => import("../pages/user/contact"))
+const About = React.lazy(() => import("../pages/user/about"))
+const ProductDetail = React.lazy(() => import("../pages/user/product-detail"))
 
 const PublicRoutes = [
-  {
-    path: "/",
-    element: <UserLayout />,
-    children: [
-      {
-        index: true,
-        element: <LazyLoader children={<HomePage />} />,
-      },
-      {
-        path: "/list-products",
-        element: <ListProducts />,
-      },
-      {
-        path: "/product-detail",
-        element: <LazyLoader children={<ProductDetail />} />,
-      },
-      {
-        path: "wish-list",
-        element: <LazyLoader children={<WishListPage />} />,
-      },
-      {
-        path: "cart-list",
-        element: <LazyLoader children={<CartListPage />} />,
-      },
-      {
-        path: "cart-detail",
-        element: <LazyLoader children={<CartDetailPage />} />,
-      },
-      {
-        path: "checkout",
-        element: <LazyLoader children={<CheckOutPage />} />,
-      },
-    ],
-  },
-];
-export default PublicRoutes;
+    {
+        path: "/",
+        element: <UserLayout/>,
+        children: [
+            {
+                index:true,
+                element: <LazyLoader children={<HomePage/>} />
+            },
+            {
+                path:"list-products",
+                element: <LazyLoader children={<ListProducts/>} />
+            },
+            {
+                path:"product-detail/:id",
+                element: <LazyLoader children={<ProductDetail/>} />
+            },
+            {
+                path:"about",
+                element: <LazyLoader children={<About/>}/>
+            },
+            {
+                path:"contact",
+                element: <LazyLoader children={<Contact/>}/>
+            },
+        ]
+    }
+]
+export default PublicRoutes
