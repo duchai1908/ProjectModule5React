@@ -13,7 +13,7 @@ export default function AdminLayout() {
   } = theme.useToken();
 
   return (
-    <Layout>
+    <Layout className="h-screen">
       <Sider
         className="fixed-sider"
         trigger={null}

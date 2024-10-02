@@ -1,15 +1,17 @@
 import React from "react";
 import LazyLoader from "../components/LazyLoad";
 import AdminLayout from "../layouts/admin/AdminLayout";
+import CategoryManager from "../pages/admin/caterogyManager";
+// import CustomerManager from "../pages/admin/customerManager";
 
 const DashBoardPage = React.lazy(() => import("../pages/admin/dashBoard"));
 
 const CustomerManagerPage = React.lazy(() =>
   import("../pages/admin/customerManager")
 );
-const CategoryManagerPage = React.lazy(() =>
-  import("../pages/admin/categoryManager")
-);
+// const CategoryManagerPage = React.lazy(() =>
+//   import("../pages/admin/categoryManager")
+// );
 const PrivateRoutes = [
   {
     path: "/admin",
@@ -25,9 +27,10 @@ const PrivateRoutes = [
       },
       {
         path: "category-manager",
-        element: <LazyLoader children={<CategoryManagerPage />} />,
+        element: <CategoryManager />,
       },
     ],
   },
 ];
 export default PrivateRoutes;
+// customer-manager

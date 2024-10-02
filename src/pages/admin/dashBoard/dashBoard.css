@@ -29,7 +29,7 @@
 .title span {
   position: relative;
   padding: 0.5rem;
-  background-color: #363062;
+  background-color: #0f2f95;
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 9999px;
@@ -52,7 +52,7 @@
 
 .percent {
   margin-left: 0.5rem;
-  color: #227b94;
+  color: #071952;
   font-weight: 600;
   display: flex;
 }

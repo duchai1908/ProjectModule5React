@@ -180,9 +180,6 @@
   color: #ffffff;
 }
 /* search */
-/* From Uiverse.io by satyamchaudharydev */
-/* From uiverse.io by @satyamchaudharydev */
-/* removing default style of button */
 
 .form button {
   border: none;
@@ -223,7 +220,7 @@
 .form:before {
   content: "";
   position: absolute;
-  background: #363062;
+  background: #071952;
   transform: scaleX(0);
   transform-origin: center;
   width: 100%;
@@ -272,7 +269,7 @@ input:not(:placeholder-shown) ~ .reset {
   --burger-line-width: 1.125em;
   --burger-line-height: 0.125em;
   --burger-offset: 0.625em;
-  --burger-bg: #363062;
+  --burger-bg: #071952;
   --burger-color: #333;
   --burger-line-border-radius: 0.1875em;
   --burger-diameter: 3.125em;
@@ -491,16 +488,19 @@ input:not(:placeholder-shown) ~ .reset {
   justify-content: space-between;
   gap: 50px;
 }
-
 .ant-menu,
 .ant-layout-sider-children {
-  background-color: #001524;
+  background: #071952;
 }
 .ant-menu-item-selected {
-  background-color: #fde5d4 !important;
-  color: #001f3f !important;
+  background-color: #0f2f95 !important;
+  color: #fff !important;
   letter-spacing: 1.2px;
+  background-attachment: fixed;
 }
 .recharts-layer .recharts-bar-rectangle {
   background-color: #fde5d4 !important;
+}
+:where(.css-dev-only-do-not-override-5wsri9).ant-layout-sider {
+  background-color: #071952;
 }
