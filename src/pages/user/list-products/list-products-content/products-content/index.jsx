@@ -3,7 +3,7 @@ import { Select } from "antd";
 import { Input, Space } from "antd";
 const { Search } = Input;
 import { FaShoppingCart, FaHeart } from "react-icons/fa"; // Importing the icons
-import { Pagination } from 'antd';
+import { Pagination } from "antd";
 
 export default function ProductsPanagation() {
   const handleChange = (value) => {
@@ -95,11 +95,11 @@ export default function ProductsPanagation() {
         </div>
         {/* List product */}
         {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-5"> */}
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4  py-5 md:gap-5 place-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4  py-5 md:gap-5 gap-24 place-items-center">
           {products.map((product, index) => (
-            <div key={index} className="w-[270px] h-[380px] text-center">
+            <div key={index} className="w-[200px] h-[300px] text-center">
               <div
-                className="relative w-[270px] h-[270px] rounded-3xl bg-cover bg-center transition duration-300 ease-in-out hover:bg-black hover:bg-opacity-50"
+                className="relative size-full rounded-3xl bg-cover bg-center transition duration-300 ease-in-out hover:bg-black hover:bg-opacity-50"
                 style={{
                   backgroundImage: `url('${product.image}')`,
                 }}
@@ -130,7 +130,7 @@ export default function ProductsPanagation() {
             </div>
           ))}
         </div>
-          <Pagination align="center" defaultCurrent={1} total={50} />
+        <Pagination align="center" defaultCurrent={1} total={50} />
       </div>
     </>
   );

@@ -1,34 +1,63 @@
 import React, { useState } from "react";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Button, Layout, theme } from "antd";
 import { Outlet } from "react-router-dom";
-import { Layout } from "antd";
-// import "../../../public/admin.css";
-import "../../assets/admin.css"
-import SideBar from "./side-bar/SideBar";
+import SidebarAdmin from "./sidebar";
 import HeaderAdmin from "./header";
-
+import "./admin.css";
+const { Header, Sider, Content } = Layout;
 export default function AdminLayout() {
-  // Lift the collapsed state here
   const [collapsed, setCollapsed] = useState(false);
-
-  // Function to toggle the sidebar collapsed state
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
-  };
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
 
   return (
-    <Layout className="min-h-screen flex">
-      {/* Sidebar */}
-      <SideBar collapsed={collapsed} />
-
-      {/* Main Layout */}
-      <Layout className="flex h-[100vh] overflow-hidden">
-        {/* Header */}
-        <HeaderAdmin toggleCollapsed={toggleCollapsed} collapsed={collapsed} />
-
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-4">
+    <Layout>
+      <Sider
+        className="fixed-sider"
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        width={260}
+        collapsedWidth={80} //
+      >
+        <SidebarAdmin />
+      </Sider>
+      <Layout className="layout_dash">
+        <Header
+          className="fixed-header "
+          style={{
+            padding: 0,
+            background: "white",
+          }}
+        >
+          <div className="header_control">
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 64,
+                height: 64,
+              }}
+            />
+            <HeaderAdmin />
+          </div>
+        </Header>
+        <Content
+          className="content-dashboard"
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
           <Outlet />
-        </div>
+        </Content>
       </Layout>
     </Layout>
   );
