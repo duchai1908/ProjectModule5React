@@ -53,6 +53,7 @@ export default function Navigation() {
           </p>
         </Link>
       </Dropdown>
+
       <Link to="/about">
         <p className="text-[24px] font-bold cursor-pointer hover:text-blue-500 items-center">
           About
