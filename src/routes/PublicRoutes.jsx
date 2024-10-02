@@ -2,6 +2,7 @@ import React from "react";
 import UserLayout from "../layouts/user/UserLayout";
 import LazyLoader from "../components/LazyLoad";
 
+
 const HomePage = React.lazy(() => import("../pages/user/home"))
 const ListProducts = React.lazy(() => import("../pages/user/list-products"))
 const Contact = React.lazy(() => import("../pages/user/contact"))

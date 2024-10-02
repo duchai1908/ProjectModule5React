@@ -2,6 +2,7 @@ import React from "react";
 import { Select } from "antd";
 import { Input, Space } from "antd";
 const { Search } = Input;
+
 import { FaShoppingCart, FaHeart, FaStar } from "react-icons/fa"; // Importing the icons
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
