@@ -2,6 +2,7 @@ import { Dropdown } from "antd";
 import React from "react";
 
 import { IoMdArrowDropdown } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 export default function Navigation() {
   const items = [
@@ -90,7 +91,9 @@ export default function Navigation() {
 
   return (
     <nav className="hidden md:flex gap-6">
-      <p className="text-[24px] font-bold cursor-pointer hover:text-blue-500 items-center">Home</p>
+      <p className="text-[24px] font-bold cursor-pointer hover:text-blue-500 items-center">
+        Home
+      </p>
       <Dropdown
         menu={{
           items,
@@ -98,10 +101,12 @@ export default function Navigation() {
         placement="bottom"
         overlayStyle={{ minWidth: "1000px" }} // Set dropdown menu width here
       >
-        <p className="flex text-[24px] font-bold cursor-pointer text-center hover:text-blue-500 items-center">
-          Shop
-          <IoMdArrowDropdown/>
-        </p>
+        <Link to="/list-products">
+          <p className="flex text-[24px] font-bold cursor-pointer text-center hover:text-blue-500 items-center">
+            Shop
+            <IoMdArrowDropdown />
+          </p>
+        </Link>
       </Dropdown>
       <Dropdown
         menu={{
@@ -112,7 +117,7 @@ export default function Navigation() {
       >
         <p className="flex text-[24px] font-bold cursor-pointer text-center hover:text-blue-500 items-center">
           Categories
-          <IoMdArrowDropdown/>
+          <IoMdArrowDropdown />
         </p>
       </Dropdown>
     </nav>
