@@ -17,7 +17,7 @@ export default function Home() {
       <Feartured/>
       <BannerArea/>
       <NewCollection/>
-      <ProductIntroductionVideo/>
+      {/* <ProductIntroductionVideo/> */}
       <Review/>
     </>
   );

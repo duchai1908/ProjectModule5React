@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 export default function Review() {
   return (
     <>
-      <section className="block p-0 w-full max-w-[1200px] mx-auto z-20 mt-14 mb-14">
+      <section className="block p-0 px-5 w-full max-w-[1200px] mx-auto z-20 mt-14 mb-14">
         <div className="w-full flex flex-col items-center justify-between relative z-10">
           <Swiper
             navigation={true}
@@ -38,7 +38,7 @@ export default function Review() {
                     className="bi bi-chat-quote text-[36px] mr-[10px] text-blue-500"
                   ></i>
                 </p>
-                <p className="font-bold w-[800px]">
+                <p className="font-bold max-w-[800px]">
                   Being an avid language learner, I've always sought ways to
                   practice and improve my skills. Minimalin has become my
                   language learning companion.

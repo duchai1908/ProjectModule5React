@@ -15,6 +15,28 @@ export default function Feartured() {
               slidesPerView={4}
               spaceBetween={15}
               loop = {true}
+              breakpoints={{
+                0:{
+                  slidesPerView: 1, // Single column on small screens
+                  spaceBetween: 10,
+                },
+                640: {
+                  slidesPerView: 1, // Single column on small screens
+                  spaceBetween: 10,
+                },
+                768: {
+                  slidesPerView: 2, // Two columns on tablets
+                  spaceBetween: 15,
+                },
+                1024: {
+                  slidesPerView: 3, // Three columns on larger tablets
+                  spaceBetween: 20,
+                },
+                1200: {
+                  slidesPerView: 4, // Four columns on large screens
+                  spaceBetween: 15,
+                },
+              }}
               className="mySwiper"
             >
               <SwiperSlide>
