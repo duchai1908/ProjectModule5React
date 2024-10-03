@@ -5,6 +5,8 @@ import CategoryManager from "../pages/admin/caterogyManager";
 // import CustomerManager from "../pages/admin/customerManager";
 
 const DashBoardPage = React.lazy(() => import("../pages/admin/dashBoard"));
+const ProductManager = React.lazy(() => import("../pages/admin/productManager"));
+const ProductDetailManager = React.lazy(() => import("../pages/admin/productDetailManager"));
 
 const CustomerManagerPage = React.lazy(() =>
   import("../pages/admin/customerManager")
@@ -28,6 +30,14 @@ const PrivateRoutes = [
       {
         path: "category-manager",
         element: <CategoryManager />,
+      },
+      {
+        path: "product-manager",
+        element: <LazyLoader children={<ProductManager />} />,
+      },
+      {
+        path: "product-detail-manager/:id",
+        element: <LazyLoader children={<ProductDetailManager />} />,
       },
     ],
   },
