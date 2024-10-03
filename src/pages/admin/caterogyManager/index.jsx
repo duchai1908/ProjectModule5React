@@ -1,25 +1,49 @@
 // CategoryManager.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCategory } from "../../../services/categoryService";
+import {
+  deleteCategory,
+  findAllCategory,
+  updateCategory,
+} from "../../../services/categoryService";
 import { Button, Dropdown, Input, Pagination, Select, Tag } from "antd";
 import { FaFilter } from "react-icons/fa";
 import { LuRefreshCw } from "react-icons/lu";
-import AddCategoryModal from "../../../components/model/AddCategoryModal";
+import AddCategoryModal from "./modelCategory/AddCategoryModal";
 import "./category.css";
-import { formAxios, jsonAxios } from "../../../api";
 import { changePageCategory } from "../../../redux/slices/categorySlice";
+import UpdateCategory from "./modelCategory/UpdateCategory";
 
 export default function CategoryManager() {
+  const options = [
+    {
+      key: "4",
+      label: <span>Chỉnh sửa</span>,
+      onClick: () => handleEditCategory(selectedCategory),
+    },
+    {
+      key: "5",
+      label: <span>Chặn</span>,
+      onClick: () => handleBlockCategory(selectedCategory),
+    },
+    {
+      key: "6",
+      label: <span>Xóa</span>,
+      onClick: () => handleDeleteCategory(selectedCategory),
+    },
+  ];
   const { data, status, error, totalElements, number, size } = useSelector(
     (state) => state.category
   );
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     dispatch(findAllCategory({ page: number, size }));
-  }, [dispatch, number]);
+  }, [dispatch, number, reload]);
 
   // Thêm danh mục bằng cách dispatch addCategory action
   const handleAddCategory = async (newCategory) => {
@@ -27,12 +51,52 @@ export default function CategoryManager() {
     dispatch(addCategory(newCategory)); // Dispatch action
     setIsModalVisible(false); // Đóng modal
   };
-
+  // phan trang
   const handleChangePage = (page, pageSize) => {
     console.log(page);
     dispatch(changePageCategory(page - 1));
   };
+  // delete
+  const handleDeleteCategory = (category) => {
+    console.log(category);
+    if (window.confirm(`Bạn có chắc muốn xóa danh mục ${category.name}?`)) {
+      dispatch(deleteCategory(category.id));
+      setReload(!reload);
+    }
+  };
 
+  //ham init Update lay du lieu len form
+  const handleEditCategory = (category) => {
+    setSelectedCategory(category); // Đặt danh mục được chọn
+    setIsEditModalVisible(true); // Hiển thị modal chỉnh sửa
+  };
+
+  //ham update
+
+  const handleSave = (updatedCategoryData) => {
+    dispatch(updateCategory(updatedCategoryData)) // Truyền object vào
+      .then(() => {
+        setIsEditModalVisible(false); // Đóng modal khi cập nhật thành công
+        dispatch(findAllCategory({ page: 0, size: 3 })); // Lấy lại danh sách danh mục
+      })
+      .catch((error) => {
+        console.error("Lỗi khi cập nhật danh mục:", error);
+      });
+  };
+
+  // update phan active
+  const handleBlockCategory = (category) => {
+    if (window.confirm(`Bạn có chắc muốn chặn danh mục ${category.name}?`)) {
+      const updatedCategory = { ...category, status: true }; // Giả sử rằng status = false là không hoạt động
+      dispatch(updateCategory(updatedCategory)) // Gọi action updateCategory với danh mục đã cập nhật
+        .then(() => {
+          setReload(!reload); // Reload danh sách danh mục
+        })
+        .catch((error) => {
+          console.error("Lỗi khi chặn danh mục:", error);
+        });
+    }
+  };
   return (
     <>
       <div>{status === "pending" ? "Loading..." : ""}</div>
@@ -88,15 +152,24 @@ export default function CategoryManager() {
                       </td>
                       <td className="px-4 h-11">{item.description}</td>
                       <td className="px-4 h-11">
-                        {true ? (
+                        {item.status ? ( // Kiểm tra trạng thái
                           <Tag color="green">Đang hoạt động</Tag>
                         ) : (
                           <Tag color="red">Ngừng hoạt động</Tag>
                         )}
                       </td>
                       <td className="px-4 h-11">
-                        <Dropdown placement="bottom" trigger={["click"]}>
-                          <Button className="border-none shadow-none focus:shadow-none focus:bg-none">
+                        <Dropdown
+                          menu={{
+                            items: options,
+                          }}
+                          placement="bottom"
+                          trigger={["click"]}
+                        >
+                          <Button
+                            className="border-none shadow-none focus:shadow-none focus:bg-none"
+                            onClick={() => setSelectedCategory(item)}
+                          >
                             Sửa
                           </Button>
                         </Dropdown>
@@ -149,6 +222,12 @@ export default function CategoryManager() {
               visible={isModalVisible}
               onClose={() => setIsModalVisible(false)}
               onAdd={handleAddCategory}
+            />
+            <UpdateCategory
+              visible={isEditModalVisible}
+              onClose={() => setIsEditModalVisible(false)}
+              category={selectedCategory} // Truyền danh mục được chọn vào modal
+              onSave={handleSave}
             />
           </div>
         ) : (
