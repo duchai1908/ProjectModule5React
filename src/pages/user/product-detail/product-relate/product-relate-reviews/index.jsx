@@ -33,7 +33,7 @@ export default function ProductRelateReviews({ product }) {
               <div class="grid grid-cols-1 gap-4 md:grid-cols-3 sm:grid-cols-1">
                 <div class=" p-4 flex flex-col items-center justify-center text-[22px]">
                   <p>Rate: 3.8/5</p>
-                  <div className="flex text-blue-500">
+                  <div className="flex text-yellow-400">
                     <FaStar />
                     <FaStar />
                     <FaStar />
@@ -43,7 +43,7 @@ export default function ProductRelateReviews({ product }) {
                 </div>
                 <div class=" p-4 flex justify-center text-[22px]">
                   <div>
-                    <div className="flex text-blue-500 justify-start">
+                    <div className="flex text-yellow-400 justify-start">
                       <p className="text-black">(5)</p>
                       <FaStar />
                       <FaStar />
@@ -51,25 +51,25 @@ export default function ProductRelateReviews({ product }) {
                       <FaStar />
                       <FaStar />
                     </div>
-                    <div className="flex text-blue-500 justify-start">
+                    <div className="flex text-yellow-400 justify-start">
                       <p className="text-black">(4)</p>
                       <FaStar />
                       <FaStar />
                       <FaStar />
                       <FaStar />
                     </div>
-                    <div className="flex text-blue-500 justify-start">
+                    <div className="flex text-yellow-400 justify-start">
                       <p className="text-black">(3)</p>
                       <FaStar />
                       <FaStar />
                       <FaStar />
                     </div>
-                    <div className="flex text-blue-500 justify-start">
+                    <div className="flex text-yellow-400 justify-start">
                       <p className="text-black">(2)</p>
                       <FaStar />
                       <FaStar />
                     </div>
-                    <div className="flex text-blue-500 justify-start">
+                    <div className="flex text-yellow-400 justify-start">
                       <p className="text-black">(1)</p>
                       <FaStar />
                     </div>
@@ -119,7 +119,7 @@ export default function ProductRelateReviews({ product }) {
               <div className="my-4">
                 <div className="relative">
                   <div className="w-full">
-                    <div className="flex text-blue-500">
+                    <div className="flex text-yellow-400">
                       <FaStar />
                       <FaStar />
                       <FaStar />

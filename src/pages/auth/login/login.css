@@ -1,0 +1,176 @@
+/* ========================VARIABLE========================== */
+
+:root {
+  --btn-gradient-from: #3b82f6;
+  --btn-gradient-to: #a855f7;
+  --backToTop-color: #a855f7;
+  --home-color: rgba(59, 130, 246, 0.7);
+  --text-color: #1e293b;
+  --nav-color: #333f48;
+  --primary-color: #3b82f6;
+  --white-color: #ffffff;
+  --black-color: #000;
+  --nav-color: #333f48;
+  --text-color: #333f48;
+  --border-color: #e6e7e8;
+  --gold-color: #f89406;
+  --success-color: #01a244;
+  --error-color: #e74c3c;
+  --hover-bg-color: #eff6ff;
+  --hover-text-bg-color: #3b82f6;
+  --about-color: #e6f1f8;
+  --header-height: 100px;
+  --white-alpha-40: rgba(255, 255, 255, 0.4);
+  --white-alpha-25: rgba(255, 255, 255, 0.25);
+}
+.container-register {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 80px;
+}
+.content-register {
+  width: 400px;
+  height: 450px;
+  background-color: var(--white-color);
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  padding: 50px 0;
+  border-radius: 4px;
+  background: linear-gradient(
+    to bottom right,
+    var(--primary-color),
+    var(--gold-color)
+  );
+}
+.content-register.box {
+  width: 400px;
+  height: 450px;
+  background-color: var(--white-color);
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  padding: 50px 0;
+  border-radius: 4px;
+  background: linear-gradient(
+    to bottom right,
+    var(--primary-color),
+    var(--gold-color)
+  );
+}
+h2 {
+  text-align: center;
+  font-size: 30px;
+}
+.form-auth {
+  margin-top: 20px;
+  text-align: center;
+}
+.control {
+  padding: 16px;
+  position: relative;
+}
+.control_item {
+  /* border: 2px solid transparent; */
+  width: 85%;
+  height: 46px;
+  padding-left: 0.8em;
+  outline: none;
+  overflow: hidden;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+.control_item:hover,
+.control_item:focus {
+  border: 2px solid var(--hover-text-bg-color);
+  box-shadow: 0px 0px 0px 7px rgba(162, 146, 243, 0.2);
+  background-color: white;
+}
+.link-change_password {
+  font-size: 15px;
+  color: var(--about-color);
+}
+.btn {
+  margin-top: 20px;
+}
+
+/* nut button */
+/* From Uiverse.io by nikk7007 */
+.button {
+  --color: var(--hover-text-bg-color);
+  padding: 1.2em 1.8em;
+  background-color: transparent;
+  border-radius: 0.3em;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.5s;
+  font-weight: 400;
+  font-size: 17px;
+  border: 1px solid;
+  font-family: inherit;
+  text-transform: uppercase;
+  color: var(--about-color);
+  z-index: 1;
+}
+
+.button::before,
+.button::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
+  background-color: var(--color);
+  transition: 0.75s ease;
+}
+
+.button::before {
+  top: -1em;
+  left: -1em;
+}
+
+.button::after {
+  left: calc(100% + 1em);
+  top: calc(100% + 1em);
+}
+
+.button:hover::before,
+.button:hover::after {
+  height: 410px;
+  width: 410px;
+}
+
+.button:hover {
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+.button:active {
+  filter: brightness(0.5);
+}
+.account {
+  margin-top: 20px;
+}
+.link-login {
+  color: var(--white-color);
+}
+.link-login:hover {
+  color: var(--btn-gradient-from);
+}
+.error_register {
+  position: absolute;
+  bottom: -9px;
+  left: 56px;
+  font-size: 13px;
+  color: red;
+}
+.content h2 {
+  color: var(--white-color);
+  font-weight: 600;
+}
+.facebook_icon {
+  font-size: 26px;
+}

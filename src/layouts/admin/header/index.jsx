@@ -1,147 +1,95 @@
-import React from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Button, Layout, theme, Input, Dropdown, Space } from "antd";
-import { BellOutlined, LogoutOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-
-const { Header } = Layout;
-const { Search } = Input;
-
-export default function HeaderAdmin({ toggleCollapsed, collapsed }) {
-  const navigate = useNavigate();
-  // Function to handle search
-  const onSearch = (value) => {
-    console.log(value); // Handle your search logic here
-  };
-
+import React, { useState } from "react";
+import "../admin.css";
+import { theme } from "antd";
+export default function HeaderAdmin() {
+  const [collapsed, setCollapsed] = useState(false);
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
-  const handleLogOut = () => {
-    // Perform any logout logic here, such as clearing local storage, cookies, etc.
-
-    // Redirect to the home page
-    navigate("/");
-  };
-
-  const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          1st menu item
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item
-        </a>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item
-        </a>
-      ),
-    },
-  ];
-
   return (
     <>
-      <Header className="sticky top-0 z-50 w-full bg-[#A13333] p-4 flex justify-between items-center shadow-md">
-        <div className="flex items-center">
-          <Button
-            type="text"
-            icon={
-              collapsed ? (
-                <MenuUnfoldOutlined
-                  style={{
-                    fontSize: "30px",
-                  }}
-                />
-              ) : (
-                <MenuFoldOutlined
-                  style={{
-                    fontSize: "30px",
-                  }}
-                />
-              )
-            }
-            onClick={toggleCollapsed} // Call the toggle function when clicked
-            style={{
-              fontSize: "30px",
-              width: 64,
-              height: 64,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          />
-          <Search
-            placeholder="Search..."
-            onSearch={onSearch}
-            enterButton
-            style={{ width: 300, marginLeft: "16px" }}
-          />
-        </div>
-        <div className="flex items-center">
-          <BellOutlined
-            style={{
-              fontSize: "30px",
-              width: 64,
-              height: 64,
-            }}
-          />
-          {/* <div className="flex items-center rounded-full cursor-pointer overflow-hidden h-[40px] w-[40px] justify-center">
-            <img
-              src="https://i.pinimg.com/564x/5d/ac/92/5dac9212b3ecd47758aedbdfc5277018.jpg"
-              alt=""
-              className=" w-[64px] "
-            />
-          </div> */}
-          <div className="flex items-center rounded-full cursor-pointer overflow-hidden h-[40px] w-[40px] justify-center">
-                <Dropdown
-                  menu={{
-                    items,
-                  }}
-                  placement="bottom"
-                  arrow
-                >
-                  <img
-                      src="https://i.pinimg.com/564x/5d/ac/92/5dac9212b3ecd47758aedbdfc5277018.jpg"
-                      alt=""
-                      className="w-[64px] object-contain"
-                    />
-                </Dropdown>
-          </div>
-          <button className="Btn" onClick={handleLogOut}>
-            <div className="sign">
-              <svg viewBox="0 0 512 512">
-                <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
-              </svg>
-            </div>
-            <div className="text">Logout</div>
+      <div className="header_content">
+        {/* search */}
+        <form className="form">
+          <button>
+            <svg
+              width={17}
+              height={16}
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-labelledby="search"
+            >
+              <path
+                d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9"
+                stroke="currentColor"
+                strokeWidth="1.333"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
-        </div>
-      </Header>
+          <input
+            className="input"
+            placeholder="Type your text"
+            required=""
+            type="text"
+          />
+          <button className="reset" type="reset">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </form>
+
+        {/* logout */}
+        <label class="popup">
+          <input type="checkbox" />
+          <div tabindex="0" class="burger">
+            <i class="bx bx-user"></i>
+          </div>
+          <nav class="popup-window">
+            <ul>
+              <li>
+                <button>
+                  <span>Edit profile</span>
+                  <i class="bx bxs-user"></i>
+                </button>
+              </li>
+              <li>
+                <button>
+                  <span>Change password</span>
+                  <i class="bx bx-key"></i>
+                </button>
+              </li>
+              <li>
+                <button>
+                  <span>To do list</span>
+                  <i class="bx bx-notepad"></i>
+                </button>
+              </li>
+              <span className="line_logout"></span>
+              <li>
+                <button>
+                  <i class="bx bx-log-out"></i>
+                  <span>Logout</span>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </label>
+      </div>
     </>
   );
 }
