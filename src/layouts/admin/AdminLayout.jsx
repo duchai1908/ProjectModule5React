@@ -12,6 +12,10 @@ export default function AdminLayout() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const toggleMenu = () => {
+    setCollapsed((prev) => !prev);
+  };
+
   return (
     <Layout className="h-screen">
       <Sider
@@ -25,27 +29,9 @@ export default function AdminLayout() {
         <SidebarAdmin />
       </Sider>
       <Layout className="layout_dash">
-        <Header
-          className="fixed-header "
-          style={{
-            padding: 0,
-            background: "white",
-          }}
-        >
-          <div className="header_control">
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
-            <HeaderAdmin />
-          </div>
-        </Header>
+        {/* Header layout */}
+        <HeaderAdmin onToggleMenu={toggleMenu} isCollapsed={collapsed} />
+        {/* Content layout */}
         <Content
           className="content-dashboard"
           style={{

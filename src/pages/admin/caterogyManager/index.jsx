@@ -79,7 +79,7 @@ const CategoryManager = () => {
   // call api
   useEffect(() => {
     jsonAxios
-      .get(`category?page=${page}&size=${size}&search=${searchInput}`)
+      .get(`/admin/category?page=${page}&size=${size}&search=${searchInput}`)
       .then((resp) => {
         console.log(resp);
         const data = resp.data.data;

@@ -86,3 +86,9 @@ a {
 li {
   list-style: none;
 }
+
+.ant-pagination-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

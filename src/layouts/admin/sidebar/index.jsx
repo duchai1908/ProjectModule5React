@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "../admin.css";
 import {
   SolutionOutlined,
@@ -8,15 +7,13 @@ import {
   StockOutlined,
   AuditOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
-import { Link } from "react-router-dom";
+import { Menu } from "antd";
+import { Link, useLocation } from "react-router-dom";
 
-const { Sider } = Layout;
 export default function SidebarAdmin() {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  const location = useLocation(); // Hook để lấy thông tin đường dẫn hiện tại
+  const currentPath = location.pathname; // Lấy đường dẫn hiện tại
+
   return (
     <>
       <div className="item_title">
@@ -26,24 +23,24 @@ export default function SidebarAdmin() {
       </div>
       <span className="line"></span>
       <div className="demo-logo-vertical" />
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-        <Menu.Item key="1" icon={<AppstoreOutlined />}>
+      <Menu theme="dark" mode="inline" selectedKeys={[currentPath]}>
+        <Menu.Item key="/admin" icon={<AppstoreOutlined />}>
           <Link to="/admin">DashBoard</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<UserOutlined />}>
+        <Menu.Item key="/admin/customer-manager" icon={<UserOutlined />}>
           <Link to="/admin/customer-manager">User Manager</Link>
         </Menu.Item>
-        <Menu.Item key="4" icon={<AuditOutlined />}>
+        <Menu.Item key="/admin/category-manager" icon={<AuditOutlined />}>
           <Link to="/admin/category-manager">Category Manager</Link>
         </Menu.Item>
-        <Menu.Item key="3" icon={<ProductFilled />}>
-          <Link to="product">Product Manager</Link>
+        <Menu.Item key="/admin/product-manager" icon={<ProductFilled />}>
+          <Link to="/admin/product-manager">Product Manager</Link>
         </Menu.Item>
-        <Menu.Item key="5" icon={<SolutionOutlined />}>
-          <Link to="order">Order Manager</Link>
+        <Menu.Item key="/admin/order" icon={<SolutionOutlined />}>
+          <Link to="/admin/order">Order Manager</Link>
         </Menu.Item>
-        <Menu.Item key="6" icon={<StockOutlined />}>
-          <Link to="charts">Charts</Link>
+        <Menu.Item key="/admin/charts" icon={<StockOutlined />}>
+          <Link to="/admin/charts">Charts</Link>
         </Menu.Item>
       </Menu>
     </>
