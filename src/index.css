@@ -23,6 +23,8 @@
   --hover-text-bg-color: #3b82f6;
   --about-color: #e6f1f8;
   --header-height: 100px;
+  --white-alpha-40: rgba(255, 255, 255, 0.4);
+  --white-alpha-25: rgba(255, 255, 255, 0.25);
 }
 /* ==================GLOBAL SETTINGS=========================== */
 * {
