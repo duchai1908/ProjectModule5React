@@ -40,26 +40,19 @@ const ProductManager = () => {
     },
     {
       key: "2",
-      label: <span>Đang hoạt động</span>,
+      label: <span>Lọc theo tên (A-Z)</span>,
     },
     {
       key: "3",
-      label: <span>Ngừng hoạt động</span>,
+      label: <span>Lọc theo tên (Z-A)</span>,
     },
-  ];
-
-  const options = [
     {
       key: "4",
-      label: <span>Chỉnh sửa</span>,
+      label: <span>Lọc theo giá (Thấp tới cao)</span>,
     },
     {
       key: "5",
-      label: <span>Chặn</span>,
-    },
-    {
-      key: "6",
-      label: <span>Xóa</span>,
+      label: <span>Lọc theo giá (Cao tới thấp)</span>,
     },
   ];
 
@@ -72,10 +65,10 @@ const ProductManager = () => {
   const [searchInput, setSearchInput] = useState("");
   const [numberElements, setNumberElements] = useState(0);
   const [file, setFile] = useState(null);
-  const [fileList, setFileList] = useState([]);
   const [productName, setProductName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [sale, setSale] = useState(0);
+  const [filterValue, setFilterValue] = useState("none");
 
   //validate value
   const [isNameFalse, setIsNameFalse] = useState(false);
@@ -94,6 +87,39 @@ const ProductManager = () => {
 
   const [isCreated, setIsCreated] = useState(false);
 
+  //Filter value
+  // Function to handle the item click to change filter value
+  const handleMenuClick = (e) => {
+    console.log("Selected key:", e.key); // Log the selected key
+    //filtering
+    switch (e.key) {
+      //do nothing
+      case "1":
+        setFilterValue("none");
+        break;
+      //case a-z
+      case "2":
+        setFilterValue("aToZ");
+        break;
+      //case z-a
+      case "3":
+        setFilterValue("zToA");
+        break;
+      //case price low to high
+      case "4":
+        setFilterValue("lowToHigh");
+        break;
+      //case price high to low
+      case "5":
+        setFilterValue("highToLow");
+        break;
+      default:
+        setFilterValue("none");
+        break;
+    }
+  };
+
+  //Search value
   const onSearch = (value) => {
     console.log(value); // Handle your search logic here
     setSearchInput(value);
@@ -101,8 +127,11 @@ const ProductManager = () => {
 
   const loadData = () => {
     jsonAxios
-      .get(`/admin/products?page=${page}&size=${size}&search=${searchInput}`)
+      .get(
+        `/admin/products?page=${page}&size=${size}&search=${searchInput}&sortOption=${filterValue}`
+      )
       .then((resp) => {
+        console.log(resp);
         const data = resp.data.data;
         setContent(data.content);
         setTotalElements(data.totalElements);
@@ -118,7 +147,7 @@ const ProductManager = () => {
   // call api
   useEffect(() => {
     loadData();
-  }, [page, searchInput]);
+  }, [page, searchInput, filterValue]);
 
   const handleChangePage = (page) => {
     setPage(page - 1);
@@ -133,14 +162,14 @@ const ProductManager = () => {
   };
 
   /**
-   *
+   * open form add
    */
   const handleOpenFormAdd = () => {
     setIsCreated(true);
   };
 
   /**
-   *
+   * close form add
    */
   const handleCloseFormAdd = () => {
     setIsCreated(false);
@@ -306,6 +335,7 @@ const ProductManager = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   return (
     <>
       <Modal
@@ -336,6 +366,7 @@ const ProductManager = () => {
           <Dropdown
             menu={{
               items,
+              onClick: handleMenuClick, // Add the click handler here
             }}
             placement="bottom"
           >
