@@ -23,3 +23,28 @@ export const addCategory = createAsyncThunk(
     }
   }
 );
+export const deleteCategory = createAsyncThunk(
+  "category/deleteCategory",
+  async (categoryId, thunkAPI) => {
+    try {
+      const response = await jsonAxios.delete(`/admin/category/${categoryId}`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+export const updateCategory = createAsyncThunk(
+  "category/updateCategory",
+  async ({ categoryId, formData }, thunkAPI) => {
+    try {
+      const response = await formAxios.put(
+        `/admin/category/${categoryId}`,
+        formData
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);

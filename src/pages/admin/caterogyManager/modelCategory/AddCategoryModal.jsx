@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Button, Input, Modal, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { addCategory, findAllCategory } from "../../services/categoryService";
+import {
+  addCategory,
+  findAllCategory,
+} from "../../../../services/categoryService";
 
 const AddCategoryModal = ({ visible, onClose }) => {
   const [name, setName] = useState("");
@@ -28,7 +31,7 @@ const AddCategoryModal = ({ visible, onClose }) => {
     dispatch(addCategory(formData))
       .then(() => {
         onClose(); // Đóng modal khi thêm thành công
-        dispatch(findAllCategory({ page: 0, size: 5 }));
+        dispatch(findAllCategory({ page: 0, size: 3 }));
       })
       .catch((error) => {
         console.error("Lỗi khi thêm danh mục:", error);
@@ -51,25 +54,24 @@ const AddCategoryModal = ({ visible, onClose }) => {
     >
       <div>
         <label className="block font-medium mb-2">Tên</label>
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
+        <Input onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="mb-4">
         <label className="block font-medium mb-2">Ảnh sản phẩm</label>
         <Upload
+          action="/api/upload"
           listType="picture"
-          fileList={file ? [file] : []}
+          file={file}
+          value={file}
           onChange={handleUpload}
-          beforeUpload={() => false} // Ngăn chặn tự động upload
+          beforeUpload={() => false}
         >
           <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
         </Upload>
       </div>
       <div className="mb-4">
         <label className="block font-medium mb-2">Mô tả</label>
-        <Input.TextArea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <Input.TextArea onChange={(e) => setDescription(e.target.value)} />
       </div>
     </Modal>
   );
