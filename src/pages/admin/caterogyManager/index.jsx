@@ -6,8 +6,10 @@ export default function CategoryManager() {
   const { data, status, error } = useSelector((state) => state.category);
   const dispatch = useDispatch();
   useEffect(() => {
+
     dispatch(findAllCategory());
   }, []);
+
 
   console.log("Data: ", data);
   return (
