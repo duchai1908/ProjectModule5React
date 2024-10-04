@@ -7,11 +7,19 @@ import { FaShoppingCart, FaHeart, FaStar } from "react-icons/fa"; // Importing t
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
 
-export default function ProductsPanagation() {
+export default function ProductsPanagation({
+  handleSearch,
+  handleFilterValue,
+}) {
   const handleChange = (value) => {
     console.log(`selected ${value}`);
+    handleFilterValue(value);
   };
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
+  const onSearch = (value) => {
+    console.log("Value: ", value);
+
+    handleSearch(value);
+  };
   // Example usage with sample data
   const products = [
     {
@@ -76,14 +84,14 @@ export default function ProductsPanagation() {
                   value: "highToLow",
                   label: "Price, high to low",
                 },
-                {
-                  value: "oldToNew",
-                  label: "Date, old to new",
-                },
-                {
-                  value: "highToLow",
-                  label: "Date, new to old",
-                },
+                // {
+                //   value: "oldToNew",
+                //   label: "Date, old to new",
+                // },
+                // {
+                //   value: "newToOld",
+                //   label: "Date, new to old",
+                // },
               ]}
             />
           </div>
@@ -137,8 +145,8 @@ export default function ProductsPanagation() {
                 </ul>
               </div>
               <div className="my-3 flex justify-center gap-2">
-              <FaStar className="text-yellow-300"/>
-              <p>3.3/5</p>
+                <FaStar className="text-yellow-300" />
+                <p>3.3/5</p>
               </div>
             </div>
           ))}
