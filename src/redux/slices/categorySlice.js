@@ -55,9 +55,9 @@ const categorySlice = createSlice({
         state.data.push(action.payload);
       })
       .addCase(addCategory.rejected, (state, action) => {
-        console.error("Failed to add category", action.payload);
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.payload.message.name;
+        console.log("error", action.payload.message.name);
       });
 
     // Xử lý xóa danh mục
