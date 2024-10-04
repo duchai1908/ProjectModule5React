@@ -486,7 +486,7 @@ const ProductManager = () => {
             Hiển thị <b>{numberElements}</b> trên <b>{totalElements}</b> bản ghi
           </div>
           <div className="flex items-center gap-5">
-            <Select
+            {/* <Select
               defaultValue="Hiển thị 10 bản ghi / trang"
               style={{
                 width: 220,
@@ -509,7 +509,7 @@ const ProductManager = () => {
                   label: "Hiển thị 100 bản ghi / trang",
                 },
               ]}
-            />
+            /> */}
             <div className="flex items-center gap-3">
               <Pagination
                 current={page + 1}
