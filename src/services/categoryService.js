@@ -3,10 +3,10 @@ import { formAxios, jsonAxios } from "../api";
 
 export const findAllCategory = createAsyncThunk(
   "admin/category",
-  async ({ page, size }) => {
-    console.log("vao");
+  async ({ page, size, searchTerm }) => {
+    // console.log("vao", searchTerm);
     const response = await jsonAxios.get(
-      `/admin/category?page=${page}&size=${size}`
+      `/admin/category?page=${page}&size=${size}&search=${searchTerm}`
     );
     return response.data;
   }
@@ -17,6 +17,7 @@ export const addCategory = createAsyncThunk(
   async (newCategory, { rejectWithValue }) => {
     try {
       const response = await formAxios.post("/admin/category", newCategory);
+      console.log(response);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);

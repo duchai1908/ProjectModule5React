@@ -6,13 +6,22 @@ import {
   findAllCategory,
   updateCategory,
 } from "../../../services/categoryService";
-import { Button, Dropdown, Input, Pagination, Select, Tag } from "antd";
+import {
+  Button,
+  Dropdown,
+  Input,
+  Pagination,
+  Select,
+  Tag,
+  message,
+} from "antd";
 import { FaFilter } from "react-icons/fa";
 import { LuRefreshCw } from "react-icons/lu";
 import AddCategoryModal from "./modelCategory/AddCategoryModal";
 import "./category.css";
 import { changePageCategory } from "../../../redux/slices/categorySlice";
 import UpdateCategory from "./modelCategory/UpdateCategory";
+import ConfirmationModal from "../../../components/model/ConfirmationModal";
 
 export default function CategoryManager() {
   const options = [
@@ -39,36 +48,44 @@ export default function CategoryManager() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
   const [reload, setReload] = useState(false);
+  const [actionType, setActionType] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    dispatch(findAllCategory({ page: number, size }));
-  }, [dispatch, number, reload]);
+    dispatch(findAllCategory({ page: number, size, searchTerm }));
+  }, [dispatch, number, reload, searchTerm]);
 
   // Thêm danh mục bằng cách dispatch addCategory action
   const handleAddCategory = async (newCategory) => {
-    console.log(newCategory);
-    dispatch(addCategory(newCategory)); // Dispatch action
-    setIsModalVisible(false); // Đóng modal
+    try {
+      await dispatch(addCategory(newCategory)); // Dispatch action thêm danh mục
+      setIsModalVisible(false); // Đóng modal sau khi thêm
+      setSelectedCategory(null); // Reset form
+      setReload(!reload);
+    } catch (error) {
+      message.error("Có lỗi xảy ra khi thêm danh mục."); // Hiển thị thông báo lỗi nếu có
+    }
   };
+
   // phan trang
   const handleChangePage = (page, pageSize) => {
     console.log(page);
+    console.log("size", size);
     dispatch(changePageCategory(page - 1));
   };
   // delete
   const handleDeleteCategory = (category) => {
-    console.log(category);
-    if (window.confirm(`Bạn có chắc muốn xóa danh mục ${category.name}?`)) {
-      dispatch(deleteCategory(category.id));
-      setReload(!reload);
-    }
+    setSelectedCategory(category);
+    setActionType("delete");
+    setIsConfirmationVisible(true);
   };
 
   //ham init Update lay du lieu len form
   const handleEditCategory = (category) => {
-    setSelectedCategory(category); // Đặt danh mục được chọn
-    setIsEditModalVisible(true); // Hiển thị modal chỉnh sửa
+    setSelectedCategory(category);
+    setIsEditModalVisible(true);
   };
 
   //ham update
@@ -77,6 +94,7 @@ export default function CategoryManager() {
     dispatch(updateCategory(updatedCategoryData)) // Truyền object vào
       .then(() => {
         setIsEditModalVisible(false); // Đóng modal khi cập nhật thành công
+        setReload(!reload);
         dispatch(findAllCategory({ page: 0, size: 3 })); // Lấy lại danh sách danh mục
       })
       .catch((error) => {
@@ -84,22 +102,41 @@ export default function CategoryManager() {
       });
   };
 
-  // update phan active
-  const handleBlockCategory = (category) => {
-    if (window.confirm(`Bạn có chắc muốn chặn danh mục ${category.name}?`)) {
-      const updatedCategory = { ...category, status: true }; // Giả sử rằng status = false là không hoạt động
-      dispatch(updateCategory(updatedCategory)) // Gọi action updateCategory với danh mục đã cập nhật
-        .then(() => {
-          setReload(!reload); // Reload danh sách danh mục
-        })
-        .catch((error) => {
-          console.error("Lỗi khi chặn danh mục:", error);
-        });
-    }
+  //search
+  const handleSearch = (e) => {
+    e.preventDefault(); // Ngăn chặn gửi form
+    setSearchTerm(e.target.value); // Cập nhật giá trị tìm kiếm;
+    dispatch(findAllCategory({ page: 0, size: 3, searchTerm: value })); // Gọi API tìm kiếm
   };
+
+  const handleRefresh = () => {
+    setSearchTerm("");
+    dispatch(findAllCategory({ page: 0, size: 3, searchTerm: "" })); // Làm mới danh sách
+  };
+
+  // Thêm vào khi modal thêm danh mục đóng
+  const handleCloseAddModal = () => {
+    setIsModalVisible(false);
+    setSelectedCategory(null);
+  };
+
+  // Thêm vào khi modal chỉnh sửa đóng
+  const handleCloseEditModal = () => {
+    setIsEditModalVisible(false);
+    setSelectedCategory(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedCategory) {
+      dispatch(deleteCategory(selectedCategory.id));
+      setReload(!reload);
+    }
+    setIsConfirmationVisible(false); // Đóng modal xác nhận
+  };
+
   return (
     <>
-      <div>{status === "pending" ? "Loading..." : ""}</div>
+      {/* <div>{status === "pending" ? "Loading..." : ""}</div> */}
       <div>
         {data ? (
           <div className="container mx-auto p-6 max-w-6xl">
@@ -109,6 +146,7 @@ export default function CategoryManager() {
                 Thêm mới
               </Button>
             </div>
+            {/* search */}
             <div className="mb-4 flex justify-between items-center">
               <Dropdown placement="bottom">
                 <Button className="border-none shadow-none">
@@ -118,19 +156,25 @@ export default function CategoryManager() {
                   />
                 </Button>
               </Dropdown>
-
+              {/* search
+               */}
               <div className="flex items-center gap-3">
                 <Input.Search
                   className="w-[300px]"
-                  placeholder="Tìm kiếm tài khoản theo tên"
+                  placeholder="Tìm kiếm danh mục theo tên"
+                  onSearch={handleSearch} // Gọi hàm khi tìm kiếm
+                  value={searchTerm} // Gán giá trị cho input
+                  onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật giá trị khi nhập
                 />
                 <LuRefreshCw
                   size={24}
                   className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                  onClick={handleRefresh} // Gọi hàm làm mới khi nhấn vào icon
                 />
               </div>
             </div>
             <div className="overflow-x-auto">
+              {/* render du lieu */}
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200">
@@ -152,7 +196,7 @@ export default function CategoryManager() {
                       </td>
                       <td className="px-4 h-11">{item.description}</td>
                       <td className="px-4 h-11">
-                        {item.status ? ( // Kiểm tra trạng thái
+                        {true ? ( // Kiểm tra trạng thái
                           <Tag color="green">Đang hoạt động</Tag>
                         ) : (
                           <Tag color="red">Ngừng hoạt động</Tag>
@@ -220,19 +264,29 @@ export default function CategoryManager() {
             </div>
             <AddCategoryModal
               visible={isModalVisible}
-              onClose={() => setIsModalVisible(false)}
+              onClose={handleCloseAddModal}
               onAdd={handleAddCategory}
             />
             <UpdateCategory
               visible={isEditModalVisible}
-              onClose={() => setIsEditModalVisible(false)}
-              category={selectedCategory} // Truyền danh mục được chọn vào modal
+              onClose={handleCloseEditModal} // Dùng hàm reset khi đóng modal
               onSave={handleSave}
             />
           </div>
         ) : (
           <div>Không có danh mục nào.</div>
         )}
+      </div>
+      <div>
+        <ConfirmationModal
+          visible={isConfirmationVisible}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setIsConfirmationVisible(false)}
+          title="Xác nhận"
+          content={`Bạn có chắc chắn muốn ${
+            actionType === "delete" ? "xóa" : "cập nhật"
+          } danh mục ${selectedCategory?.name}?`}
+        />
       </div>
     </>
   );

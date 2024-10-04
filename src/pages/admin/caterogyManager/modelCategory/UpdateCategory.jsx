@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Input, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import ConfirmationUpdate from "../../../../components/model/ConfirmationUpdate";
 
 export default function UpdateCategory({ visible, onClose, category, onSave }) {
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState("");
+  const [confirmVisible, setConfirmVisible] = useState(false); // Trạng thái modal xác nhận
 
   // Lấy dữ liệu từ category lên form khi modal mở
   useEffect(() => {
@@ -32,20 +34,27 @@ export default function UpdateCategory({ visible, onClose, category, onSave }) {
       formData: formData, // Dữ liệu cần cập nhật
     };
 
-    onSave(updatedCategoryData); // Gọi hàm onSave
+    onSave(updatedCategoryData);
+
+    setConfirmVisible(false); // Đóng modal xác nhận
+  };
+
+  // Hiển thị modal xác nhận khi nhấn nút Lưu
+  const handleShowConfirm = () => {
+    setConfirmVisible(true);
   };
 
   return (
     <>
       <Modal
-        title="Thêm mới danh mục"
+        title="Cập nhật danh mục"
         visible={visible}
         onCancel={onClose}
         footer={[
           <Button key="back" onClick={onClose}>
             Hủy
           </Button>,
-          <Button key="submit" type="primary" onClick={handleSubmitUpdate}>
+          <Button key="submit" type="primary" onClick={handleShowConfirm}>
             Lưu
           </Button>,
         ]}
@@ -64,7 +73,7 @@ export default function UpdateCategory({ visible, onClose, category, onSave }) {
               <img
                 src={category.image}
                 alt="Current category"
-                className="mb-3 max-w-xs"
+                style={{ width: "120px", height: "auto" }}
               />
             </>
           )}
@@ -88,6 +97,13 @@ export default function UpdateCategory({ visible, onClose, category, onSave }) {
           />
         </div>
       </Modal>
+      {/* Modal xác nhận */}
+      <ConfirmationUpdate
+        visible={confirmVisible}
+        onConfirm={handleSubmitUpdate}
+        onCancel={() => setConfirmVisible(false)}
+        title="Xác nhận cập nhật"
+      />
     </>
   );
 }
