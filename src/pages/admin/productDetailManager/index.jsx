@@ -200,7 +200,7 @@ export default function ProductDetailManager() {
               </div>
             </>
           ) : (
-            <div>Không có danh mục nào.</div>
+            <div>Không có sản phẩm chi tiết nào.</div>
           )}
           <AddProductDetailModal
             visible={isModalVisible}

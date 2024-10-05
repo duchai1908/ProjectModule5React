@@ -48,11 +48,11 @@ const ProductManager = () => {
     },
     {
       key: "4",
-      label: <span>Lọc theo giá (Thấp tới cao)</span>,
+      label: <span>Lọc theo sản phẩm cũ (cũ tới mới)</span>,
     },
     {
       key: "5",
-      label: <span>Lọc theo giá (Cao tới thấp)</span>,
+      label: <span>Lọc theo sản phẩm mới (mới tới cũ)</span>,
     },
   ];
 
@@ -87,6 +87,8 @@ const ProductManager = () => {
 
   const [isCreated, setIsCreated] = useState(false);
 
+  const [isReload, setIsReload] = useState(false);
+
   //Filter value
   // Function to handle the item click to change filter value
   const handleMenuClick = (e) => {
@@ -107,11 +109,11 @@ const ProductManager = () => {
         break;
       //case price low to high
       case "4":
-        setFilterValue("lowToHigh");
+        setFilterValue("oldToNew");
         break;
       //case price high to low
       case "5":
-        setFilterValue("highToLow");
+        setFilterValue("newToOld");
         break;
       default:
         setFilterValue("none");
@@ -128,7 +130,7 @@ const ProductManager = () => {
   const loadData = () => {
     jsonAxios
       .get(
-        `/admin/products?page=${page}&size=${size}&search=${searchInput}&sortOption=${filterValue}`
+        `/admin/products?page=${page}&size=${size}&productName=${searchInput}&sortOption=${filterValue}`
       )
       .then((resp) => {
         console.log(resp);
@@ -147,7 +149,7 @@ const ProductManager = () => {
   // call api
   useEffect(() => {
     loadData();
-  }, [page, searchInput, filterValue]);
+  }, [page, searchInput, filterValue, isReload]);
 
   const handleChangePage = (page) => {
     setPage(page - 1);
@@ -236,6 +238,7 @@ const ProductManager = () => {
       .post(`/admin/products`, formData)
       .then((response) => {
         console.log("Thành công:", response.data);
+        setIsReload(!isReload);
       })
       .catch((error) => {
         console.error("Lỗi:", error);
@@ -298,6 +301,8 @@ const ProductManager = () => {
       .put(`/admin/products/${productUpdate.id}`, formData)
       .then((response) => {
         console.log("Thành công:", response.data);
+        handleCloseFormUpdate();
+        setIsReload(!isReload);
       })
       .catch((error) => {
         console.error("Lỗi:", error);

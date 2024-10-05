@@ -11,6 +11,15 @@ export const findAllProductDetail = createAsyncThunk(
   }
 );
 
+export const findAllProductDetailByNothing = createAsyncThunk(
+  "admin/productDetail",
+  async () => {
+    const response = await jsonAxios.get(`/admin/productDetail`);
+    console.log("product detail data:", response.data);
+    return response.data;
+  }
+);
+
 export const addProductDetail = createAsyncThunk(
   "admin/productDetail/add",
   async (newProductDetail) => {
@@ -54,3 +63,30 @@ export const updateProductDetail = createAsyncThunk(
     }
   }
 );
+
+export const findProductDetailById = createAsyncThunk(
+  "admin/productDetail/id",
+  async ({ id }) => {
+    try {
+      const response = await formAxios.get(`/admin/productDetail/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const findProductDetailByProductId = createAsyncThunk(
+  "admin/productDetail/product/id",
+  async ({ id }) => {
+    try {
+      const response = await formAxios.get(
+        `/admin/productDetail/productId/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+// /admin/productDetail/productId/1

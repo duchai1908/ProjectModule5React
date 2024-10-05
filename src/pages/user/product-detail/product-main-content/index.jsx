@@ -12,7 +12,7 @@ import {
 import { TbTruckDelivery } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
-const ProductMainContent = ({ product }) => {
+const ProductMainContent = ({ product, productDetailList }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
 
@@ -23,16 +23,32 @@ const ProductMainContent = ({ product }) => {
 
   const images = product.images;
 
-  // State to track the selected color (default is red)
-  const [selectedColor, setSelectedColor] = useState("red");
+  const [listColors, setListColors] = useState([]);
+  const [listSizes, setListSizes] = useState([]);
+  const [listImages, setListImages] = useState([]);
 
-  // Array of colors to display
-  const colors = [
-    { name: "red", bgClass: "bg-red-500" },
-    { name: "blue", bgClass: "bg-blue-500" },
-    { name: "green", bgClass: "bg-green-500" },
-    { name: "black", bgClass: "bg-black" },
-  ];
+  // State to track the selected color (default is red)
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+
+  useEffect(() => {
+    console.log("check list: ", productDetailList);
+    // Extract colors and sizes from productDetailList
+    const colors = productDetailList.map((detail) => detail.color);
+    const sizes = productDetailList.map((detail) => detail.size);
+
+    // Set the extracted colors and sizes to state
+    setListColors(colors);
+    setListSizes(sizes);
+
+    // Set the initial selected color and size if available
+    if (colors.length > 0) {
+      setSelectedColor(colors[0].color);
+    }
+    if (sizes.length > 0) {
+      setSelectedSize(sizes[0].size);
+    }
+  }, [productDetailList]);
 
   const [number, setNumber] = useState(1);
 
@@ -104,10 +120,6 @@ const ProductMainContent = ({ product }) => {
             <p className="text-blue-500 ml-2">11 left in stock</p>
           </div>
           <div className="flex mb-3">
-            <p className="font-bold">SKU:</p>
-            <p className="ml-2">9911</p>
-          </div>
-          <div className="flex mb-3">
             <p className="font-bold">Type:</p>
             <p className="ml-2">Category Type</p>
           </div>
@@ -116,15 +128,35 @@ const ProductMainContent = ({ product }) => {
         <div className="mt-4">
           <h3 className="font-bold mb-3">Colors:</h3>
           <ul className="flex gap-3 list-none">
-            {colors.map((color) => (
+            {listColors.map((color) => (
               <li
-                key={color.name}
-                className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer ${color.bgClass}`}
-                onClick={() => setSelectedColor(color.name)}
+                key={color.color}
+                className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer bg-${color.color}-500`}
+                onClick={() => setSelectedColor(color.color)}
               >
                 {/* If this color is selected, show the check icon */}
-                {selectedColor === color.name && (
+                {selectedColor === color.color && (
                   <FaCheck className="absolute top-[-5px] right-[-5px] text-white text-[12px] bg-blue-500 rounded-full" />
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="w-full h-[1px] bg-gray-200 my-1"></div>
+        <div className="mt-4">
+          <h3 className="font-bold mb-3">Sizes:</h3>
+          <ul className="flex gap-3 list-none">
+            {listSizes.map((size) => (
+              <li
+                key={size.size}
+                className={`relative  cursor-pointer p-3 rounded-xl`}
+                style={{ border: "1px solid black" }}
+                onClick={() => setSelectedSize(size.size)}
+              >
+                <p>{size.size}</p>
+                {/* If this color is selected, show the check icon */}
+                {selectedSize === size.size && (
+                  <FaCheck className="absolute top-[-5px] right-[-5px] p-[2px] text-white text-[20px] bg-blue-500 rounded-full" />
                 )}
               </li>
             ))}
