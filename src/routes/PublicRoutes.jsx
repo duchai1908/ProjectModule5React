@@ -3,6 +3,7 @@ import UserLayout from "../layouts/user/UserLayout";
 import LazyLoader from "../components/LazyLoad";
 import Login from "../pages/auth/login";
 import Register from "../pages/auth/register";
+import TestPage from "../pages/user/test";
 
 // const LoginPageUser = React.lazy(() => import("../pages/user/login"))
 const HomePage = React.lazy(() => import("../pages/user/home"));
@@ -47,6 +48,11 @@ const PublicRoutes = [
   {
     path: "/register",
     element: <LazyLoader children={<RegisterPage />} />,
+  },
+  //test
+  {
+    path: "test",
+    element: <TestPage />,
   },
 ];
 export default PublicRoutes;

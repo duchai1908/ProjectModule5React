@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { findAllProductWithCondition } from "../../services/productService";
+import {
+  findAllProductWithCondition,
+  getProductById,
+} from "../../services/productService";
 
 // import { addCategory, findAllCategory } from "../../services/categoryService";
 
@@ -8,7 +11,7 @@ const initialValue = {
   data: [],
   totalElements: 0,
   number: 0,
-  size: 6,
+  size: 3,
   error: null,
 };
 //page, size, search, minPrice, maxPrice, sortOption
@@ -39,6 +42,20 @@ const productSlice = createSlice({
       .addCase(findAllProductWithCondition.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+
+      //call api to get product by product id
+      .addCase(getProductById.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(getProductById.fulfilled, (state, action) => {
+        state.status = "successfully";
+        state.data = action.payload.data;
+        // console.log("action", action);
+      })
+      .addCase(getProductById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });

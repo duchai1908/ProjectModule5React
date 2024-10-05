@@ -44,8 +44,6 @@ const AddProductDetailModal = ({ visible, onClose, id }) => {
       }
     }
 
-    console.log(file);
-
     // Dispatch the action to add a product detail
     await dispatch(addProductDetail(formData))
       .then(() => {

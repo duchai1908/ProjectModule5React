@@ -38,6 +38,14 @@ export default function ForUsers() {
         </Link>
       ),
     },
+    {
+      key: "5",
+      label: (
+        <Link to="/test">
+          <p>Test Page</p>
+        </Link>
+      ),
+    },
   ];
   return (
     <>
