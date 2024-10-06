@@ -1,12 +1,13 @@
 import React from "react";
-
+import "./category.css";
+import { Link } from "react-router-dom";
 export default function CategoryPage() {
   return (
     <>
-      <section className="block p-0 w-full max-w-[1200px] m-[0_auto] z-20 mt-14">
+      <section className="block p-0 w-full max-w-[1300px] m-[0_auto] z-20 mt-20">
         <div className="w-full flex items-center justify-between  m-[0_auto] relative z-[10]">
-          <div className="flex flex-wrap justify-between w-full">
-            <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group">
+          <div className="flex flex-wrap justify-between gap-5 w-full">
+            <div className="flex flex-col items-center justify-center  flex-1 min-w-[200px] m-2 group">
               <div>
                 <a href="">
                   <img
@@ -16,29 +17,29 @@ export default function CategoryPage() {
                 </a>
               </div>
               <div className="mt-6">
-                <p className="font-bold text-black group-hover:text-blue-500">
+                <Link className="font-bold text-black group-hover:text-blue-500 category-title">
                   Headphone
-                </p>
+                </Link>
               </div>
             </div>
 
             <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group">
               <div>
-                <a href="">
+                <Link href="">
                   <img
                     src="/images/collection-banner-_35_600x.webp"
                     className="border rounded-3xl"
                   />
-                </a>
+                </Link>
               </div>
               <div className="mt-6">
-                <p className="font-bold text-black group-hover:text-blue-500">
+                <Link className="font-bold text-black group-hover:text-blue-500 category-title">
                   Earphone
-                </p>
+                </Link>
               </div>
             </div>
 
-             <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group">
+            <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group">
               <div>
                 <a href="">
                   <img
@@ -48,9 +49,9 @@ export default function CategoryPage() {
                 </a>
               </div>
               <div className="mt-6">
-                <p className="font-bold text-black group-hover:text-blue-500">
+                <Link className="font-bold text-black group-hover:text-blue-500 category-title">
                   Smartphone
-                </p>
+                </Link>
               </div>
             </div>
 
@@ -64,9 +65,9 @@ export default function CategoryPage() {
                 </a>
               </div>
               <div className="mt-6">
-                <p className="font-bold text-black group-hover:text-blue-500">
+                <Link className="font-bold text-black group-hover:text-blue-500 category-title">
                   Smartwatch
-                </p>
+                </Link>
               </div>
             </div>
           </div>

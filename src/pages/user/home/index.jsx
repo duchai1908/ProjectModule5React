@@ -8,6 +8,7 @@ import NewCollection from "./newproduct";
 import ProductIntroductionVideo from "./video";
 import Review from "./review";
 import { useSelector } from "react-redux";
+import ContentHome from "./contentText";
 
 
 export default function Home() {
@@ -17,13 +18,14 @@ export default function Home() {
   
   return (
     <>
-      <Slider/>
-      <CategoryPage/>
-      <Feartured/>
-      <BannerArea/>
-      <NewCollection/>
+      <Slider />
+      <CategoryPage />
+      <Feartured />
+      <ContentHome />
+      <BannerArea />
+      <NewCollection />
       {/* <ProductIntroductionVideo/> */}
-      <Review/>
+      <Review />
     </>
   );
 }

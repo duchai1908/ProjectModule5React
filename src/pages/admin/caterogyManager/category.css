@@ -2,3 +2,7 @@
   width: 100px;
   height: auto;
 }
+.category_active {
+  font-size: 26px;
+  color: #3b82f6;
+}

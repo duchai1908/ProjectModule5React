@@ -1,41 +1,175 @@
 // CategoryManager.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCategory } from "../../../services/categoryService";
-import { Button, Dropdown, Input, Pagination, Select, Tag } from "antd";
+import {
+  categoryStatusChange,
+  deleteCategory,
+  findAllCategory,
+  updateCategory,
+} from "../../../services/categoryService";
+import {
+  Button,
+  Dropdown,
+  Input,
+  Pagination,
+  Select,
+  Tag,
+  message,
+} from "antd";
+import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { FaFilter } from "react-icons/fa";
 import { LuRefreshCw } from "react-icons/lu";
-import AddCategoryModal from "../../../components/model/AddCategoryModal";
+import AddCategoryModal from "./modelCategory/AddCategoryModal";
 import "./category.css";
-import { formAxios, jsonAxios } from "../../../api";
 import { changePageCategory } from "../../../redux/slices/categorySlice";
+import UpdateCategory from "./modelCategory/UpdateCategory";
+import ConfirmationModal from "../../../components/model/ConfirmationModal";
 
 export default function CategoryManager() {
+  const options = [
+    {
+      key: "4",
+      label: <span>Chỉnh sửa</span>,
+      onClick: () => handleEditCategory(catUpdate),
+    },
+    {
+      key: "5",
+      label: <span>Chặn</span>,
+      onClick: () => handleBlockCategory(catUpdate),
+    },
+    {
+      key: "6",
+      label: <span>Xóa</span>,
+      onClick: () => handleDeleteCategory(catUpdate),
+    },
+  ];
+  const items = [
+    {
+      key: "1",
+      label: <span>Hủy bỏ bộ lọc</span>,
+    },
+    {
+      key: "2",
+      label: <span>Đang hoạt động</span>,
+    },
+    {
+      key: "3",
+      label: <span>Ngừng hoạt động</span>,
+    },
+  ];
+
   const { data, status, error, totalElements, number, size } = useSelector(
     (state) => state.category
   );
+  console.log("loi", error);
+  console.log("status", status);
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [catUpdate, setCatUpdate] = useState(null);
+  const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [actionType, setActionType] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    dispatch(findAllCategory({ page: number, size }));
-  }, [dispatch, number]);
+    dispatch(findAllCategory({ page: number, size, searchTerm }));
+  }, [dispatch, number, reload, searchTerm]);
 
   // Thêm danh mục bằng cách dispatch addCategory action
   const handleAddCategory = async (newCategory) => {
-    console.log(newCategory);
-    dispatch(addCategory(newCategory)); // Dispatch action
-    setIsModalVisible(false); // Đóng modal
+    try {
+      await dispatch(addCategory(newCategory));
+      setIsModalVisible(false);
+      dispatch(findAllCategory({ page: 0, size: 3 }));
+    } catch (error) {
+      message.error("Có lỗi xảy ra khi thêm danh mục.");
+    }
   };
 
+  // phan trang
   const handleChangePage = (page, pageSize) => {
-    console.log(page);
     dispatch(changePageCategory(page - 1));
+  };
+  // delete
+  const handleDeleteCategory = (category) => {
+    setCatUpdate(category);
+    setActionType("delete");
+    setIsConfirmationVisible(true);
+  };
+
+  //ham init Update lay du lieu len form
+  const handleEditCategory = (category) => {
+    setCatUpdate(category);
+    setIsEditModalVisible(true);
+    console.log(category);
+  };
+
+  //ham update
+
+  const handleSave = (updatedCategoryData) => {
+    dispatch(updateCategory(updatedCategoryData)) // Truyền object vào
+      .then(() => {
+        setIsEditModalVisible(false); // Đóng modal khi cập nhật thành công
+        setReload(!reload);
+        dispatch(findAllCategory({ page: 0, size: 3 })); // Lấy lại danh sách danh mục
+      })
+      .catch((error) => {
+        console.error("Lỗi khi cập nhật danh mục:", error);
+      });
+  };
+
+  //search
+  const handleSearch = (e) => {
+    e.preventDefault(); // Ngăn chặn gửi form
+    setSearchTerm(e.target.value); // Cập nhật giá trị tìm kiếm;
+    dispatch(findAllCategory({ page: 0, size: 3, searchTerm: value })); // Gọi API tìm kiếm
+  };
+
+  const handleRefresh = () => {
+    setSearchTerm("");
+    dispatch(findAllCategory({ page: 0, size: 3, searchTerm: "" })); // Làm mới danh sách
+  };
+
+  // Thêm vào khi modal thêm danh mục đóng
+  const handleCloseAddModal = () => {
+    setIsModalVisible(false);
+    setSelectedCategory(null);
+  };
+
+  // Thêm vào khi modal chỉnh sửa đóng
+  const handleCloseEditModal = () => {
+    setIsEditModalVisible(false);
+    setCatUpdate(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (catUpdate) {
+      dispatch(deleteCategory(catUpdate.id));
+      setReload(!reload);
+    }
+    setIsConfirmationVisible(false); // Đóng modal xác nhận
+  };
+
+  // change status category
+  const handleBlockCategory = (category) => {
+    // Đổi trạng thái status
+    const formData = { status: category.status === true ? false : true };
+    // Gọi action categoryStatusChange
+    dispatch(categoryStatusChange({ categoryId: category.id, formData }))
+      .then(() => {
+        message.success(`Danh mục ${category.name} đã bị chặn thành công.`);
+        setReload(!reload);
+      })
+      .catch((error) => {
+        console.error("Chi tiết lỗi:", error); // Log lỗi chi tiết ra console để kiểm tra
+        message.error(`Có lỗi xảy ra khi chặn danh mục: ${error}`);
+      });
   };
 
   return (
     <>
-      <div>{status === "pending" ? "Loading..." : ""}</div>
       <div>
         {data ? (
           <div className="container mx-auto p-6 max-w-6xl">
@@ -45,8 +179,14 @@ export default function CategoryManager() {
                 Thêm mới
               </Button>
             </div>
+            {/* search */}
             <div className="mb-4 flex justify-between items-center">
-              <Dropdown placement="bottom">
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottom"
+              >
                 <Button className="border-none shadow-none">
                   <FaFilter
                     size={20}
@@ -54,19 +194,25 @@ export default function CategoryManager() {
                   />
                 </Button>
               </Dropdown>
-
+              {/* search
+               */}
               <div className="flex items-center gap-3">
                 <Input.Search
                   className="w-[300px]"
-                  placeholder="Tìm kiếm tài khoản theo tên"
+                  placeholder="Tìm kiếm danh mục theo tên"
+                  onSearch={handleSearch} // Gọi hàm khi tìm kiếm
+                  value={searchTerm} // Gán giá trị cho input
+                  onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật giá trị khi nhập
                 />
                 <LuRefreshCw
                   size={24}
                   className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                  onClick={handleRefresh} // Gọi hàm làm mới khi nhấn vào icon
                 />
               </div>
             </div>
             <div className="overflow-x-auto">
+              {/* render du lieu */}
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200">
@@ -88,16 +234,25 @@ export default function CategoryManager() {
                       </td>
                       <td className="px-4 h-11">{item.description}</td>
                       <td className="px-4 h-11">
-                        {true ? (
-                          <Tag color="green">Đang hoạt động</Tag>
+                        {item.status === false ? ( // Nếu status là false thì bị chặn
+                          <Tag color="red">khong hoat dong</Tag>
                         ) : (
-                          <Tag color="red">Ngừng hoạt động</Tag>
+                          <Tag color="green">Đang hoạt động</Tag> // Nếu status là true thì đang hoạt động
                         )}
                       </td>
                       <td className="px-4 h-11">
-                        <Dropdown placement="bottom" trigger={["click"]}>
-                          <Button className="border-none shadow-none focus:shadow-none focus:bg-none">
-                            Sửa
+                        <Dropdown
+                          menu={{
+                            items: options,
+                          }}
+                          placement="bottom"
+                          trigger={["click"]}
+                        >
+                          <Button
+                            className="border-none shadow-none focus:shadow-none focus:bg-none"
+                            onClick={() => setCatUpdate(item)}
+                          >
+                            <PiDotsThreeOutlineFill className="category_active" />
                           </Button>
                         </Dropdown>
                       </td>
@@ -147,13 +302,31 @@ export default function CategoryManager() {
             </div>
             <AddCategoryModal
               visible={isModalVisible}
-              onClose={() => setIsModalVisible(false)}
+              onClose={handleCloseAddModal}
               onAdd={handleAddCategory}
+              error={error}
+            />
+            <UpdateCategory
+              visible={isEditModalVisible}
+              onClose={handleCloseEditModal}
+              onSave={handleSave}
+              catUpdate={catUpdate}
             />
           </div>
         ) : (
           <div>Không có danh mục nào.</div>
         )}
+      </div>
+      <div>
+        <ConfirmationModal
+          visible={isConfirmationVisible}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setIsConfirmationVisible(false)}
+          title="Xác nhận"
+          content={`Bạn có chắc chắn muốn ${
+            actionType === "delete" ? "xóa" : "cập nhật"
+          } danh mục ${selectedCategory?.name}?`}
+        />
       </div>
     </>
   );

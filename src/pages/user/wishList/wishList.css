@@ -1,6 +1,6 @@
 .wish_header {
   width: 100%;
-  height: 15vh;
+  height: 80px;
   background-color: #ececec;
   display: flex;
   flex-direction: column;
@@ -20,6 +20,11 @@
   color: #303030;
   padding: 8px 6px;
   /* background-color: #02a9f7; */
+}
+.wish_title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #02a9f7;
 }
 .wish_home:hover {
   background-color: transparent !important;
