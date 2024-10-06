@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import "./register.css";
 import "../login/login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Input, message, notification } from "antd";
+import { Alert, Button, Input, message, notification } from "antd";
 import { validateEmail } from "../../../utils/validateData.js";
 import { register } from "../../../services/authService";
 // import { register } from "../../../service/authService";
 export default function Register() {
   const navigate = useNavigate();
   const [user, setUser] = useState({
-    fullName: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -20,18 +20,19 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [invalidRegister, setInvalidRegister] = useState("");
   // viet ham validation
 
   const validateData = (name, value) => {
     let invalid = true;
     switch (name) {
-      case "fullName":
+      case "username":
         if (!value) {
-          setFullNameError("Full name is cannot be empty");
+          setFullNameError("User name is cannot be empty");
           invalid = false;
         } else {
           if (value.length < 4) {
-            setFullNameError("Full name is longer than 4 characters");
+            setFullNameError("User name is longer than 4 characters");
             invalid = false;
           } else {
             setFullNameError("");
@@ -99,7 +100,7 @@ export default function Register() {
   // submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const fullNameValid = validateData("fullName", user.fullName);
+    const fullNameValid = validateData("username", user.username);
     const emailValid = validateData("email", user.email);
     const passwordValid = validateData("password", user.password);
     const confirmPassWordValid = validateData(
@@ -109,7 +110,6 @@ export default function Register() {
 
     if (fullNameValid && emailValid && passwordValid && confirmPassWordValid) {
       delete user.confirmPassword;
-      console.log("okok", user);
       try {
         setIsLoading(true);
         // Submit forrm
@@ -123,25 +123,31 @@ export default function Register() {
             message: "Thành công",
             description: response.data,
           });
+
+          
         }
-      } catch (error) {}
+      } catch (error) {
+        const responsError = error?.response?.data?.message?.username;    
+        // message.error(responsError);
+        setInvalidRegister(responsError);
+      }
     }
   };
   return (
     <>
       <div className="container-register">
         <div className="content-register">
-          <h2>Sing In</h2>
+          <h2>Sign In</h2>
           <div className="form-auth">
             <form onSubmit={handleSubmit}>
               <div className="control">
                 <Input
                   onChange={handleChange}
-                  name="fullName"
-                  id="fullName"
+                  name="username"
+                  id="username"
                   status={fullNameError ? "error" : ""}
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder="Enter your user name"
                   className="control_item"
                 ></Input>
                 {fullNameError && (
@@ -189,6 +195,9 @@ export default function Register() {
                 ></Input.Password>
                 {confirmPasswordError && (
                   <p className="error_register">{confirmPasswordError}</p>
+                )}
+                 {invalidRegister && (
+                  <Alert className="mt-8" type="error" message={invalidRegister} />
                 )}
               </div>
               <div className="btn">
