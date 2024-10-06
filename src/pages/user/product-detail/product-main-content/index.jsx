@@ -50,8 +50,10 @@ const ProductMainContent = ({ product, productDetailList }) => {
     }
   }, [productDetailList]);
 
+  //create quantity value
   const [number, setNumber] = useState(1);
 
+  //value quantity
   const onChangeQuantity = (value) => {
     if (value > 0) {
       setNumber(value);
