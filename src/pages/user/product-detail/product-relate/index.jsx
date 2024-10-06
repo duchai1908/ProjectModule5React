@@ -3,7 +3,7 @@ import ProductRelateDescription from "./product-relate-description";
 import ProductRelateReviews from "./product-relate-reviews";
 import ProductRelateShipping from "./product-relate-shipping";
 
-export default function ProductRelate({product}) {
+export default function ProductRelate({ product }) {
   const [selectedValue, setSelectedValue] = useState("Description");
 
   const handleChange = (event) => {
@@ -99,7 +99,9 @@ export default function ProductRelate({product}) {
         {/* Conditional Divs */}
         {selectedValue === "Description" && <ProductRelateDescription />}
 
-        {selectedValue === "Reviews" && <ProductRelateReviews product={product}/>}
+        {selectedValue === "Reviews" && (
+          <ProductRelateReviews product={product} />
+        )}
 
         {selectedValue === "Shipping" && <ProductRelateShipping />}
       </div>

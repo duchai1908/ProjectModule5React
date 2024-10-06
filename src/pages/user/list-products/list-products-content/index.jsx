@@ -7,6 +7,10 @@ export default function ProductsContent({
   onSearch,
   handleFilterValue,
   handleFilterValueLeft,
+  productDetails,
+  number,
+  size,
+  totalElements,
 }) {
   return (
     <div className="md:flex gap-10">
@@ -18,6 +22,10 @@ export default function ProductsContent({
         data={data}
         handleSearch={onSearch}
         handleFilterValue={handleFilterValue}
+        productDetails={productDetails}
+        number={number}
+        size={size}
+        totalElements={totalElements}
       />
     </div>
   );

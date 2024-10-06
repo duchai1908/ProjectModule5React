@@ -3,11 +3,21 @@ import CategoryHeader from "./category-header";
 import ProductsContent from "./list-products-content";
 import { useDispatch, useSelector } from "react-redux";
 import { findAllProductWithCondition } from "../../../services/productService";
+import {
+  findAllProductDetail,
+  findAllProductDetailByNothing,
+} from "../../../services/productDetailService";
+import { jsonAxios } from "../../../api";
 
 export default function ListProducts() {
-  const { data, status, error, totalElements, number, size } = useSelector(
-    (state) => state.product
-  );
+  const {
+    data: products,
+    status: productStatus,
+    error: productError,
+    number,
+    size,
+    totalElements,
+  } = useSelector((state) => state.product);
 
   const dispatch = useDispatch();
 
@@ -16,24 +26,38 @@ export default function ListProducts() {
   const [maxPrice, setMaxPrice] = useState(100);
   const [sortOption, setSortOption] = useState("none");
 
-  // Fetch product details when component mounts and whenever the page changes
+  const [productDetailsList, setProductDetailsList] = useState([]);
+  // Fetch products when component mounts and whenever relevant filters change
   useEffect(() => {
     dispatch(
       findAllProductWithCondition({
         page: number,
         size,
-        search: "",
-        minPrice: 0,
-        maxPrice: 9999999999,
-        sortOption: "none",
-        colorId: 1,
+        search: searchValue,
+        sortOption,
       })
     );
-  }, [dispatch, number, size, searchValue]);
+  }, [dispatch, number, size, searchValue, sortOption]);
 
+  const loadData = () => {
+    jsonAxios
+      .get(`/admin/productDetail`)
+      .then((resp) => {
+        const data = resp.data.data;
+        setProductDetailsList(data);
+      })
+      .catch((err) => {
+        // Xử lý lỗi
+      });
+  };
+
+  // Fetch all product details when component mounts
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  // Handle search input
   const handleSearch = (value) => {
-    console.log("Search value: ", value);
-
     setSearchValue(value);
   };
 
@@ -60,17 +84,19 @@ export default function ListProducts() {
   };
   return (
     <>
-      {status === "pending" && <div>Loading...</div>}
-      {error && <div>Error fetching data: {error}</div>}
-      {data.map((item, index) => (
-        <>hihi,</>
-      ))}
+      {productStatus === "pending" && <div>Loading...</div>}
+      {/* {productError && <div>Error fetching data: {productError}</div>} */}
+
       <CategoryHeader />
       <ProductsContent
-        data={data}
+        data={products}
         onSearch={handleSearch}
         handleFilterValue={handleFilterValue}
         handleFilterValueLeft={handleFilterValueLeft}
+        productDetails={productDetailsList}
+        number={number}
+        size={size}
+        totalElements={totalElements}
       />
     </>
   );

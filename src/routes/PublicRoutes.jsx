@@ -1,6 +1,8 @@
 import React from "react";
 import UserLayout from "../layouts/user/UserLayout";
 import LazyLoader from "../components/LazyLoad";
+import TestPage from "../pages/user/test";
+
 
 // const LoginPageUser = React.lazy(() => import("../pages/user/login"))
 const HomePage = React.lazy(() => import("../pages/user/home"));
@@ -67,6 +69,11 @@ const PublicRoutes = [
   {
     path: "user-detail",
     element: <LazyLoader children={<UserDetailPage />} />,
+  },
+  //test
+  {
+    path: "test",
+    element: <TestPage />,
   },
 ];
 export default PublicRoutes;

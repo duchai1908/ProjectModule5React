@@ -3,6 +3,9 @@ import {
   addProductDetail,
   deleteProductDetail,
   findAllProductDetail,
+  findAllProductDetailByNothing,
+  findProductDetailById,
+  findProductDetailByProductId,
   updateProductDetail,
 } from "../../services/productDetailService";
 // import { addCategory, findAllCategory } from "../../services/categoryService";
@@ -76,6 +79,48 @@ const productDetailSlice = createSlice({
         state.data = [action.payload, ...state.data]; // Add to top of list
       })
       .addCase(updateProductDetail.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+
+      // call api method to have list
+      .addCase(findAllProductDetailByNothing.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(findAllProductDetailByNothing.fulfilled, (state, action) => {
+        state.status = "successfully";
+        state.data = action.payload.data; // Add to top of list
+      })
+      .addCase(findAllProductDetailByNothing.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+
+      // call api to get product detail by id product detail
+      .addCase(findProductDetailById.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(findProductDetailById.fulfilled, (state, action) => {
+        state.status = "successfully";
+        console.log("state", state.data);
+        state.data = action.payload.data;
+        console.log("action", action.payload.data);
+      })
+      .addCase(findProductDetailById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+
+      //call api to get product detail by product id
+      .addCase(findProductDetailByProductId.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(findProductDetailByProductId.fulfilled, (state, action) => {
+        state.status = "successfully";
+        state.data = action.payload.data;
+        // console.log("action", action.payload.data);
+      })
+      .addCase(findProductDetailByProductId.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
