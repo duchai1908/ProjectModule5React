@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import "./cartList.css";
 
 import { Link } from "react-router-dom";
 import CartItem from "../cartItem";
 
-export default function CartList() {
+export default function CartList({ closeCart }) {
   return (
     <>
       <div className="cart_container">
         <div className="cart_box">
           <div className="cart_header">
             <p>your cart</p>
-            <div className="cart_line"></div>
+            <div className="cart_close" onClick={closeCart}>
+              <i class="bx bx-x"></i>
+            </div>
           </div>
-
+          <div className="cart_line"></div>
           <div className="cart_items">
             {/* cartItem  start*/}
             <CartItem />
@@ -32,12 +34,18 @@ export default function CartList() {
             <div className="cart_line"></div>
             <div className="cart_button">
               <button type="button" className="cart_button-item">
-                <Link to="/cart-detail" className="cart_link">
+                <Link
+                  onClick={closeCart}
+                  to="/cart-detail"
+                  className="cart_link"
+                >
                   View cart
                 </Link>
               </button>
               <button type="button" className="cart_button-item">
-                <Link className="cart_link">Check out</Link>
+                <Link onClick={closeCart} to="/checkout" className="cart_link">
+                  Check out
+                </Link>
               </button>
             </div>
           </div>

@@ -137,9 +137,8 @@
   padding: 0 26px;
   border: 1px solid rgb(239, 239, 239);
   background-color: rgb(239, 239, 239);
-  padding: 10px 30px;
-  margin-top: 12px;
   border-radius: 4px;
+  height: 50px;
 }
 
 /* CSS cho phần bên phải checkout - giữ cố định khi cuộn */
@@ -148,6 +147,10 @@
   top: 0;
   float: right;
   width: 40%;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+  border-radius: 10px;
+  min-height: 100vh;
 }
 
 .checkout_main-right {
@@ -211,9 +214,7 @@
 .checkout_address-payment {
   margin: 12px 0;
 }
-.checkout_detail-items {
-  padding-top: 40px;
-}
+
 .checkout_detail-item,
 .checkout_detail-apply {
   display: flex;
@@ -257,7 +258,7 @@
   gap: 16px;
 }
 .checkout-form-apply input {
-  width: 360px;
+  width: 340px;
   height: 50px;
   border: 1px solid rgba(223, 223, 223, 1);
   background: none;
@@ -266,7 +267,7 @@
   border-radius: 4px;
 }
 .checkout-form-apply button {
-  width: 100px;
+  width: 80px;
   height: 50px;
   background-color: #c5c5c5;
   border-radius: 4px;

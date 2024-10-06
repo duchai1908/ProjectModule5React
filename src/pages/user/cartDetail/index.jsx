@@ -89,7 +89,7 @@ export default function CartDetail() {
           </div>
           <div className="cartDetail_button">
             <button className="cartDetail_button-item">
-              Continue Shopping
+              <Link to="/list-products">Continue Shopping</Link>
             </button>
             <button className="cartDetail_button-item">Clear Cart</button>
           </div>
@@ -133,7 +133,7 @@ export default function CartDetail() {
                   class="theme-default-button"
                   name="checkout"
                 >
-                  Proceed to Checkout
+                  <Link to="/checkout">Proceed to Checkout</Link>
                 </button>
               </div>
             </div>

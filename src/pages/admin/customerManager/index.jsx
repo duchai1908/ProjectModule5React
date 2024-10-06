@@ -17,6 +17,21 @@ import { findAllCustomers } from "../../../services/customerService";
 import { changePageCustomer } from "../../../redux/slices/customerSlice";
 import { PiLockKeyOpen } from "react-icons/pi";
 export default function CustomerManager() {
+  const items = [
+    {
+      key: "1",
+      label: <span>Hủy bỏ bộ lọc</span>,
+    },
+    {
+      key: "2",
+      label: <span>Đang hoạt động</span>,
+    },
+    {
+      key: "3",
+      label: <span>Ngừng hoạt động</span>,
+    },
+  ];
+
   const { data, status, error, totalElements, number, size } = useSelector(
     (state) => state.customer
   );
@@ -50,7 +65,12 @@ export default function CustomerManager() {
         {data ? (
           <div className="container mx-auto p-6 max-w-6xl">
             <div className="mb-4 flex justify-between items-center">
-              <Dropdown placement="bottom">
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottom"
+              >
                 <Button className="border-none shadow-none">
                   <FaFilter
                     size={20}

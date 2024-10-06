@@ -23,7 +23,9 @@ export default function Slider() {
         <SwiperSlide>
           <div
             className="bg-black w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: "url('https://cdn2.cellphones.com.vn/x/media/wysiwyg/1-Pro.jpg')" }}
+            style={{
+              backgroundImage: "url('/public/images/slide8.jpg')",
+            }}
           >
             {/* Your content here */}
           </div>
@@ -31,7 +33,9 @@ export default function Slider() {
         <SwiperSlide>
           <div
             className="bg-black w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: "url('https://marithe-official.com/main_banner/24FW/011_OHJAEHUN/pc_1.jpg')" }}
+            style={{
+              backgroundImage: "url('/public/images/slide3.jpg')",
+            }}
           >
             {/* Your content here */}
           </div>
@@ -39,7 +43,9 @@ export default function Slider() {
         <SwiperSlide>
           <div
             className="bg-black w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: "url('https://marithe-official.com/main_banner/24FW/011_OHJAEHUN/pc_1.jpg')" }}
+            style={{
+              backgroundImage: "url('/public/images/slide9.jpg')",
+            }}
           >
             {/* Your content here */}
           </div>
@@ -47,7 +53,10 @@ export default function Slider() {
         <SwiperSlide>
           <div
             className="bg-black w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: "url('https://marithe-official.com/main_banner/24FW/011_OHJAEHUN/pc_1.jpg')" }}
+            style={{
+              backgroundImage:
+                "url('https://marithe-official.com/main_banner/24FW/011_OHJAEHUN/pc_1.jpg')",
+            }}
           >
             {/* Your content here */}
           </div>

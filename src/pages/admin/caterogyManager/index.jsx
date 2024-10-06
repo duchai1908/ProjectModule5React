@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  categoryStatusChange,
   deleteCategory,
   findAllCategory,
   updateCategory,
@@ -15,6 +16,7 @@ import {
   Tag,
   message,
 } from "antd";
+import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { FaFilter } from "react-icons/fa";
 import { LuRefreshCw } from "react-icons/lu";
 import AddCategoryModal from "./modelCategory/AddCategoryModal";
@@ -28,26 +30,44 @@ export default function CategoryManager() {
     {
       key: "4",
       label: <span>Chỉnh sửa</span>,
-      onClick: () => handleEditCategory(selectedCategory),
+      onClick: () => handleEditCategory(catUpdate),
     },
     {
       key: "5",
       label: <span>Chặn</span>,
-      onClick: () => handleBlockCategory(selectedCategory),
+      onClick: () => handleBlockCategory(catUpdate),
     },
     {
       key: "6",
       label: <span>Xóa</span>,
-      onClick: () => handleDeleteCategory(selectedCategory),
+      onClick: () => handleDeleteCategory(catUpdate),
     },
   ];
+  const items = [
+    {
+      key: "1",
+      label: <span>Hủy bỏ bộ lọc</span>,
+    },
+    {
+      key: "2",
+      label: <span>Đang hoạt động</span>,
+    },
+    {
+      key: "3",
+      label: <span>Ngừng hoạt động</span>,
+    },
+  ];
+
   const { data, status, error, totalElements, number, size } = useSelector(
     (state) => state.category
   );
+  console.log("loi", error);
+  console.log("status", status);
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [catUpdate, setCatUpdate] = useState(null);
   const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
   const [reload, setReload] = useState(false);
   const [actionType, setActionType] = useState("");
@@ -60,32 +80,30 @@ export default function CategoryManager() {
   // Thêm danh mục bằng cách dispatch addCategory action
   const handleAddCategory = async (newCategory) => {
     try {
-      await dispatch(addCategory(newCategory)); // Dispatch action thêm danh mục
-      setIsModalVisible(false); // Đóng modal sau khi thêm
-      setSelectedCategory(null); // Reset form
-      setReload(!reload);
+      await dispatch(addCategory(newCategory));
+      setIsModalVisible(false);
+      dispatch(findAllCategory({ page: 0, size: 3 }));
     } catch (error) {
-      message.error("Có lỗi xảy ra khi thêm danh mục."); // Hiển thị thông báo lỗi nếu có
+      message.error("Có lỗi xảy ra khi thêm danh mục.");
     }
   };
 
   // phan trang
   const handleChangePage = (page, pageSize) => {
-    console.log(page);
-    console.log("size", size);
     dispatch(changePageCategory(page - 1));
   };
   // delete
   const handleDeleteCategory = (category) => {
-    setSelectedCategory(category);
+    setCatUpdate(category);
     setActionType("delete");
     setIsConfirmationVisible(true);
   };
 
   //ham init Update lay du lieu len form
   const handleEditCategory = (category) => {
-    setSelectedCategory(category);
+    setCatUpdate(category);
     setIsEditModalVisible(true);
+    console.log(category);
   };
 
   //ham update
@@ -123,20 +141,35 @@ export default function CategoryManager() {
   // Thêm vào khi modal chỉnh sửa đóng
   const handleCloseEditModal = () => {
     setIsEditModalVisible(false);
-    setSelectedCategory(null);
+    setCatUpdate(null);
   };
 
   const handleConfirmDelete = () => {
-    if (selectedCategory) {
-      dispatch(deleteCategory(selectedCategory.id));
+    if (catUpdate) {
+      dispatch(deleteCategory(catUpdate.id));
       setReload(!reload);
     }
     setIsConfirmationVisible(false); // Đóng modal xác nhận
   };
 
+  // change status category
+  const handleBlockCategory = (category) => {
+    // Đổi trạng thái status
+    const formData = { status: category.status === true ? false : true };
+    // Gọi action categoryStatusChange
+    dispatch(categoryStatusChange({ categoryId: category.id, formData }))
+      .then(() => {
+        message.success(`Danh mục ${category.name} đã bị chặn thành công.`);
+        setReload(!reload);
+      })
+      .catch((error) => {
+        console.error("Chi tiết lỗi:", error); // Log lỗi chi tiết ra console để kiểm tra
+        message.error(`Có lỗi xảy ra khi chặn danh mục: ${error}`);
+      });
+  };
+
   return (
     <>
-      {/* <div>{status === "pending" ? "Loading..." : ""}</div> */}
       <div>
         {data ? (
           <div className="container mx-auto p-6 max-w-6xl">
@@ -148,7 +181,12 @@ export default function CategoryManager() {
             </div>
             {/* search */}
             <div className="mb-4 flex justify-between items-center">
-              <Dropdown placement="bottom">
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottom"
+              >
                 <Button className="border-none shadow-none">
                   <FaFilter
                     size={20}
@@ -196,10 +234,10 @@ export default function CategoryManager() {
                       </td>
                       <td className="px-4 h-11">{item.description}</td>
                       <td className="px-4 h-11">
-                        {true ? ( // Kiểm tra trạng thái
-                          <Tag color="green">Đang hoạt động</Tag>
+                        {item.status === false ? ( // Nếu status là false thì bị chặn
+                          <Tag color="red">khong hoat dong</Tag>
                         ) : (
-                          <Tag color="red">Ngừng hoạt động</Tag>
+                          <Tag color="green">Đang hoạt động</Tag> // Nếu status là true thì đang hoạt động
                         )}
                       </td>
                       <td className="px-4 h-11">
@@ -212,9 +250,9 @@ export default function CategoryManager() {
                         >
                           <Button
                             className="border-none shadow-none focus:shadow-none focus:bg-none"
-                            onClick={() => setSelectedCategory(item)}
+                            onClick={() => setCatUpdate(item)}
                           >
-                            Sửa
+                            <PiDotsThreeOutlineFill className="category_active" />
                           </Button>
                         </Dropdown>
                       </td>
@@ -266,11 +304,13 @@ export default function CategoryManager() {
               visible={isModalVisible}
               onClose={handleCloseAddModal}
               onAdd={handleAddCategory}
+              error={error}
             />
             <UpdateCategory
               visible={isEditModalVisible}
-              onClose={handleCloseEditModal} // Dùng hàm reset khi đóng modal
+              onClose={handleCloseEditModal}
               onSave={handleSave}
+              catUpdate={catUpdate}
             />
           </div>
         ) : (
