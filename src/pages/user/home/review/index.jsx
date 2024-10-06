@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 export default function Review() {
   return (
     <>
-      <section className="block p-0 px-5 w-full max-w-[1200px] mx-auto z-20 mt-14 mb-14">
+      <section className="block p-0 px-5 w-full max-w-[1300px] mx-auto z-20 mt-14 mb-14">
         <div className="w-full flex flex-col items-center justify-between relative z-10">
           <Swiper
             navigation={true}
@@ -19,9 +19,7 @@ export default function Review() {
             <SwiperSlide>
               <div className="flex flex-col items-center justify-center text-center w-full bg-gray-200">
                 <p className="mt-8 mb-8">
-                  <i
-                    className="bi bi-chat-quote text-[36px] mr-[10px] text-blue-500"
-                  ></i>
+                  <i className="bi bi-chat-quote text-[36px] mr-[10px] text-blue-500"></i>
                 </p>
                 <p className="font-bold w-[800px]">
                   Being an avid language learner, I've always sought ways to
@@ -34,9 +32,7 @@ export default function Review() {
             <SwiperSlide>
               <div className="flex flex-col items-center justify-center text-center w-full bg-gray-200">
                 <p className="mt-8 mb-8">
-                  <i
-                    className="bi bi-chat-quote text-[36px] mr-[10px] text-blue-500"
-                  ></i>
+                  <i className="bi bi-chat-quote text-[36px] mr-[10px] text-blue-500"></i>
                 </p>
                 <p className="font-bold max-w-[800px]">
                   Being an avid language learner, I've always sought ways to

@@ -49,3 +49,18 @@ export const updateCategory = createAsyncThunk(
     }
   }
 );
+
+export const categoryStatusChange = createAsyncThunk(
+  "category/categoryStatusChange ",
+  async ({ categoryId, formData }, thunkAPI) => {
+    try {
+      const response = await formAxios.put(
+        `/admin/category/changeStatus/${categoryId}`,
+        formData
+      );
+      return response.data; // Trả về dữ liệu đã được cập nhật
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);

@@ -191,7 +191,7 @@ export default function CheckOut() {
           </div>
 
           {/* phan mind-line dai het */}
-          <div className="mind-line"></div>
+          {/* <div className="mind-line"></div> */}
           {/* phan ben phai  nay thi man hinh giu nguyen khi chuot croll thi khong di theo chuot*/}
           <div className="right-checkout">
             <div className="checkout_detail-items">

@@ -1,11 +1,63 @@
 import React from "react";
-
+import "./banner.css";
 export default function BannerArea() {
   return (
-    <section className="block p-0 w-full max-w-[1200px] m-[0_auto] z-20 mt-14">
-      <div className="w-full relative z-[10]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="flex flex-col items-center justify-center p-4  rounded-md">
+    <section className="block p-0 w-full max-w-[1300px] m-[0_auto] z-20 mt-20">
+      <div className="banner-container">
+        {/* items */}
+        <div className="banner-items">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <a href="" className="banner-link">
+                  <img
+                    src="https://minimalin-demo.myshopify.com/cdn/shop/files/electronics-banner_9_470x.png?v=1708774566"
+                    className="banner-img"
+                  />
+                </a>
+              </div>
+              <div class="flip-card-back">
+                <p class="title">BACK</p>
+                <p>Leave Me</p>
+              </div>
+            </div>
+          </div>
+          {/* item */}
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <a href="" className="banner-link">
+                  <img src="/images/macbook_air2.png" className="banner-img" />
+                </a>
+              </div>
+              <div class="flip-card-back">
+                <p class="title">BACK</p>
+                <p>Leave Me</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <a href="" className="banner-link">
+                  <img src="/images/macbook_air2.png" className="banner-img" />
+                </a>
+              </div>
+              <div class="flip-card-back">
+                <p class="title">BACK</p>
+                <p>Leave Me</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+  <div className="flex flex-col items-center justify-center p-4  rounded-md">
           <div>
               <a href="">
                 <img
@@ -26,7 +78,7 @@ export default function BannerArea() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center p-4 rounded-md sm:col-span-2 lg:col-span-1">
-            {/* Căn giữa trên màn hình vừa */}
+         
             <div>
               <a href="">
                 <img
@@ -36,8 +88,4 @@ export default function BannerArea() {
               </a>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+ */

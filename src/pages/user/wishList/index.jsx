@@ -21,7 +21,7 @@ export default function WishList() {
       <div className="wish_container">
         <div className="wish_header">
           <h1 className="wish_title">Your Shopping Cart</h1>
-          <div className="wish_link">
+          {/* <div className="wish_link">
             <Breadcrumb
               separator=">"
               items={[
@@ -35,7 +35,7 @@ export default function WishList() {
               ]}
               className="wish_link-icon"
             />
-          </div>
+          </div> */}
         </div>
         <div className="wish_content">
           <div className="wish_content-items">

@@ -3,20 +3,26 @@ import { Modal, Button, Input, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import ConfirmationUpdate from "../../../../components/model/ConfirmationUpdate";
 
-export default function UpdateCategory({ visible, onClose, category, onSave }) {
+export default function UpdateCategory({
+  visible,
+  onClose,
+  onSave,
+  catUpdate,
+}) {
+  console.log(catUpdate);
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
   const [description, setDescription] = useState("");
-  const [confirmVisible, setConfirmVisible] = useState(false); // Trạng thái modal xác nhận
+  const [confirmVisible, setConfirmVisible] = useState(false);
 
   // Lấy dữ liệu từ category lên form khi modal mở
   useEffect(() => {
-    if (category) {
-      setName(category.name);
-      setFile(category.file); // giả sử file là đối tượng chứa thông tin file hình ảnh
-      setDescription(category.description);
+    if (catUpdate) {
+      setName(catUpdate.name);
+      setFile(catUpdate.file);
+      setDescription(catUpdate.description);
     }
-  }, [category]);
+  }, [catUpdate]);
 
   const handleUpload = ({ file }) => {
     setFile(file);
@@ -30,7 +36,7 @@ export default function UpdateCategory({ visible, onClose, category, onSave }) {
     }
 
     const updatedCategoryData = {
-      categoryId: category.id, // ID của danh mục cần cập nhật
+      categoryId: catUpdate.id, // ID của danh mục cần cập nhật
       formData: formData, // Dữ liệu cần cập nhật
     };
 
@@ -67,11 +73,11 @@ export default function UpdateCategory({ visible, onClose, category, onSave }) {
         <div className="mb-4">
           <label className="block font-medium mb-2">Ảnh danh muc</label>
           {/* Hiển thị ảnh cũ nếu có và nếu người dùng chưa chọn ảnh mới */}
-          {category?.image && !file && (
+          {catUpdate?.image && !file && (
             <>
               <p>Ảnh Cũ</p>
               <img
-                src={category.image}
+                src={catUpdate.image}
                 alt="Current category"
                 style={{ width: "120px", height: "auto" }}
               />

@@ -1,33 +1,50 @@
 import { Badge, Dropdown } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import CartList from "../../../../pages/user/cartList";
 
 export default function ForUsers() {
+  const [cartShow, setCartShow] = useState(false);
+  // Hàm để đóng giỏ hàng
+  const closeCart = () => {
+    setCartShow(false);
+  };
+
   const items = [
     {
       key: "1",
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="#">
+        <Link
+          to="/user-detail"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="#"
+        >
           My Accounts
-        </a>
+        </Link>
       ),
     },
     {
       key: "2",
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="#">
+        <Link
+          to="/wish-list"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="#"
+        >
           WishList
-        </a>
+        </Link>
       ),
     },
     {
       key: "3",
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="#">
+        <Link to="/" target="_blank" rel="noopener noreferrer" href="#">
           Sign Out
-        </a>
+        </Link>
       ),
     },
     {
@@ -51,10 +68,15 @@ export default function ForUsers() {
         >
           <FaRegUser className="text-[28px] cursor-pointer" />
         </Dropdown>
+        {/* Icon Giỏ Hàng */}
         <Badge count={10}>
-          <IoCartOutline className="text-[30px] cursor-pointer" />
+          <IoCartOutline
+            className="text-[30px] cursor-pointer"
+            onClick={() => setCartShow(!cartShow)}
+          />
         </Badge>
       </div>
+      {cartShow && <CartList closeCart={closeCart} />}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addCategory,
+  categoryStatusChange,
   deleteCategory,
   findAllCategory,
   updateCategory,
@@ -22,6 +23,9 @@ const categorySlice = createSlice({
     changePageCategory: (state, action) => {
       state.number = action.payload;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     // Thời điểm tải dữ liệu => Chưa có dữ liệu
@@ -40,7 +44,8 @@ const categorySlice = createSlice({
       })
       .addCase(findAllCategory.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload.message.name;
+        console.log(action.payload.message.name);
       });
 
     // Xử lý thêm mới danh mục
@@ -52,7 +57,6 @@ const categorySlice = createSlice({
       .addCase(addCategory.fulfilled, (state, action) => {
         console.log("Category added successfully", action.payload);
         state.status = "successfully";
-        state.data.push(action.payload);
       })
       .addCase(addCategory.rejected, (state, action) => {
         state.status = "failed";
@@ -98,8 +102,27 @@ const categorySlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       });
+
+    // Thêm xử lý thay đổi status danh mục
+    builder
+      .addCase(categoryStatusChange.pending, (state) => {
+        state.status = "pending"; // Đặt trạng thái khi đang xử lý
+      })
+      .addCase(categoryStatusChange.fulfilled, (state, action) => {
+        state.data = state.data.map((category) =>
+          category.id === action.payload.id
+            ? { ...category, status: action.payload.status } // Cập nhật trạng thái chính xác từ server
+            : category
+        );
+        state.status = "succeeded";
+      })
+      .addCase(categoryStatusChange.rejected, (state, action) => {
+        state.status = "failed"; // Đặt trạng thái khi thất bại
+        state.error = action.payload; // Gán lỗi vào state
+      });
   },
 });
 
-export const { changePageCategory } = categorySlice.actions;
+export const { changePageCategory, clearError } = categorySlice.actions;
+
 export default categorySlice.reducer;

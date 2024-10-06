@@ -2,28 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Alert, Button, Input, Modal, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addCategory,
-  findAllCategory,
-} from "../../../../services/categoryService";
+import { addCategory } from "../../../../services/categoryService";
 import SuccessModal from "../../../../components/model/ SuccessModal";
+import { clearError } from "../../../../redux/slices/categorySlice";
 
-const AddCategoryModal = ({ visible, onClose }) => {
+const AddCategoryModal = ({ visible, onClose, error }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(true);
   const [file, setFile] = useState(null);
-  const [successModalVisible, setSuccessModalVisible] = useState(false); // State cho modal thành công
-  const [errorMessage, setErrorMessage] = useState(null); // State lưu lỗi
+  const [fileList, setFileList] = useState([]); // Quản lý danh sách file
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
-  const handleUpload = (info) => {
-    setFile(info.file);
+  const handleUpload = ({ file }) => {
+    setFile(file);
   };
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
     formData.append("status", status);
+
     if (file) {
       formData.append("image", file); // Thêm file vào FormData
     }
@@ -33,14 +33,11 @@ const AddCategoryModal = ({ visible, onClose }) => {
       .then((response) => {
         // Kiểm tra phản hồi từ server
         if (response.error) {
-          throw new Error(response.error); // Ném lỗi nếu server phản hồi lỗi
+          throw new Error(response.error);
         }
-        setSuccessModalVisible(true); // Hiển thị modal thành công
-        onClose(); // Đóng modal khi thêm thành công
-        dispatch(findAllCategory({ page: 0, size: 3 }));
-        setName("");
-        setDescription("");
-        setFile(null);
+        setSuccessModalVisible(true);
+        handleModalClose();
+        onClose();
       })
       .catch((error) => {
         // Bắt lỗi nếu có phản hồi lỗi từ server
@@ -57,13 +54,13 @@ const AddCategoryModal = ({ visible, onClose }) => {
   };
 
   const handleModalClose = () => {
-    setName(""); // Reset tên
-    setDescription(""); // Reset mô tả
-    setFile(null); // Reset file ảnh
-    setErrorMessage(null); // Reset lỗi (nếu có)
-    onClose(); // Gọi hàm onClose để đóng modal
+    setName("");
+    setDescription("");
+    setFile();
+    setErrorMessage(null);
+    onClose();
+    dispatch(clearError());
   };
-
   return (
     <>
       <SuccessModal
@@ -96,13 +93,14 @@ const AddCategoryModal = ({ visible, onClose }) => {
         )}
         <div>
           <label className="block font-medium mb-2">Tên</label>
-          <Input onChange={(e) => setName(e.target.value)} />
+          <Input value={name} onChange={(e) => setName(e.target.value)} />
+          {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
         <div className="mb-4">
           <label className="block font-medium mb-2">Ảnh sản phẩm</label>
           <Upload
-            action="/api/upload"
             listType="picture"
+            fileList={file ? [file] : []}
             file={file}
             onChange={handleUpload}
             beforeUpload={() => false}
@@ -112,7 +110,10 @@ const AddCategoryModal = ({ visible, onClose }) => {
         </div>
         <div className="mb-4">
           <label className="block font-medium mb-2">Mô tả</label>
-          <Input.TextArea onChange={(e) => setDescription(e.target.value)} />
+          <Input.TextArea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
       </Modal>
     </>
