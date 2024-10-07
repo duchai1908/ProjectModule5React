@@ -10,11 +10,15 @@ import Cookies from "js-cookie";
 import { loadUserFromCookie } from "../../services/authService";
 const { Header, Sider, Content } = Layout;
 export default function AdminLayout() {
-  // const dispatch = useDispatch();
-  // useEffect(()=>{
-  //   const token = JSON.parse(Cookies.get("token"));
-  //   dispatch(loadUserFromCookie(token));  
-  // }, [])
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (Cookies.get("token") != null) {
+      const token = JSON.parse(Cookies.get("token"));
+      dispatch(loadUserFromCookie(token));
+    }
+  }, []);
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },

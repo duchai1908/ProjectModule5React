@@ -9,6 +9,8 @@ import {
   findProductDetailByProductId,
 } from "../../../services/productDetailService";
 import { getProductById } from "../../../services/productService";
+import { getAllPISC } from "../../../services/piscService";
+import "./productDetail.css";
 
 export default function ProductDetail() {
   // const [product, setProduct] = useState("huhu");
@@ -23,30 +25,24 @@ export default function ProductDetail() {
     status: productDetailListStatus,
     error: productDetailListError,
   } = useSelector((state) => state.productDetail);
+  const {
+    data: pisc,
+    status: piscStatus,
+    error: piscError,
+  } = useSelector((state) => state.PISC);
   const dispatch = useDispatch();
 
-  // call api to get product detail by product id
-  // useEffect(() => {
-  //   dispatch(
-  //     findProductDetailByProductId({
-  //       id: id,
-  //     })
-  //   );
-  // }, [dispatch, id]);
+  const [piscValue, setPiscValue] = useState(null);
 
   // call api to get product by product id
   useEffect(() => {
-    // dispatch(
-    //   getProductById({
-    //     id: id,
-    //   })
-    // );
     const fetchData = async () => {
       try {
         // Sử dụng Promise.all để gọi cả 2 API cùng một lúc
         await Promise.all([
           dispatch(getProductById({ id: id })),
           dispatch(findProductDetailByProductId({ id: id })),
+          dispatch(getAllPISC({ productId: id })),
         ]);
       } catch (error) {
         console.error("Error fetching product and details:", error);
@@ -54,7 +50,16 @@ export default function ProductDetail() {
     };
 
     fetchData();
+    // if (pisc) {
+    //   setProduct(pisc);
+    // }
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (pisc) {
+      setPiscValue(pisc);
+    }
+  }, [pisc]);
   const product = {
     images: [
       "https://i.pinimg.com/736x/bb/03/be/bb03be3373d101ad3e175fd10bb74afd.jpg",
@@ -103,11 +108,14 @@ export default function ProductDetail() {
 
   return (
     <>
+      {/* {piscValue ? <>Co DU lieu</> : <>ko co</>} */}
       <div className="mb-[120px]">
+        {/* code day */}
         <ProductMainContent
           product={product}
           productDetailList={productDetailList}
           productR={productR}
+          piscValue={piscValue}
         />
         {/* Description, review, Shipping */}
         <ProductRelate product={product} />

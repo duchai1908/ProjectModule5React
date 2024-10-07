@@ -111,7 +111,7 @@ const productDetailSlice = createSlice({
         state.error = action.payload;
       })
 
-      //call api to get product detail by product id
+      //call api to get product details by product id
       .addCase(findProductDetailByProductId.pending, (state, action) => {
         state.status = "pending";
       })

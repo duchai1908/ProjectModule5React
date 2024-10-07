@@ -14,6 +14,8 @@ const ProductDetailManager = React.lazy(() =>
 const CustomerManagerPage = React.lazy(() =>
   import("../pages/admin/customerManager")
 );
+const ColorManager = React.lazy(() => import("../pages/admin/colorManager"));
+const SizeManager = React.lazy(() => import("../pages/admin/sizeManager"));
 // const CategoryManagerPage = React.lazy(() =>
 //   import("../pages/admin/categoryManager")
 // );
@@ -41,6 +43,14 @@ const PrivateRoutes = [
       {
         path: "product-detail-manager/:id",
         element: <LazyLoader children={<ProductDetailManager />} />,
+      },
+      {
+        path: "color-manager",
+        element: <LazyLoader children={<ColorManager />} />,
+      },
+      {
+        path: "size-manager",
+        element: <LazyLoader children={<SizeManager />} />,
       },
     ],
   },

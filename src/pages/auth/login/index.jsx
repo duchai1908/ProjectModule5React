@@ -25,6 +25,7 @@ export default function Login() {
    * Auth: Duc Hai (03/10/2024)
    */
   const validateData = (name, value) => {
+    console.log("validateData", name, value);
     let invalid = true;
     switch (name) {
       case "username":
@@ -74,16 +75,17 @@ export default function Login() {
    * Auth: Duc Hai (03/10/2024)
    */
   const handleSubmit = async (e) => {
+    console.log("vao");
     e.preventDefault();
     const userNameValid = validateData("username", user.username);
     const passwordValid = validateData("password", user.password);
+    console.log(userNameValid, passwordValid);
     if (userNameValid && passwordValid) {
       try {
         // do login trong service đang sử dụng trạng thái bất đồng bộ nên phải dùng unwrapping result actions ( trả ra kết quả của action)
         // dispatch: dùng để gửi action từ UI lên reducer
         const resultAction = await dispatch(login(user));
         const originalPromiseResult = unwrapResult(resultAction);
-
         console.log("original", originalPromiseResult);
 
         if (
@@ -97,9 +99,9 @@ export default function Login() {
         }
         notification.success({
           message: "Đăng nhập thành công",
-          // description: response.data.data.message
         });
       } catch (error) {
+        console.log(error);
         const responsError = error?.response?.data?.message;
         // message.error(responsError);
         setInvalidLogin(responsError);
