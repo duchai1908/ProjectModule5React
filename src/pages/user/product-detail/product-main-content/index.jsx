@@ -12,7 +12,7 @@ import {
 import { TbTruckDelivery } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
-const ProductMainContent = ({ product, productDetailList }) => {
+const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
 
@@ -33,24 +33,27 @@ const ProductMainContent = ({ product, productDetailList }) => {
 
   useEffect(() => {
     console.log("check list: ", productDetailList);
+    console.log("check list piscValue: ", piscValue);
     // Extract colors and sizes from productDetailList
-    const colors = productDetailList.map((detail) => detail.color);
-    const sizes = productDetailList.map((detail) => detail.size);
+    let colors;
+    let sizes;
+    if (piscValue) {
+      // colors = piscValue.colors.map((detail) => (detail.color));
+      // sizes = piscValue.sizes.map((detail) => detail.size);
 
-    // Set the extracted colors and sizes to state
-    setListColors(colors);
-    setListSizes(sizes);
+      // Set the extracted colors and sizes to state
+      setListColors(piscValue.colors);
+      setListSizes(piscValue.sizes);
+
+      setSelectedColor(piscValue.colors[0].color);
+
+      setSelectedSize(piscValue.sizes[0].size);
+    }
 
     console.log(colors);
     console.log(sizes);
     // Set the initial selected color and size if available
-    if (colors.length > 0) {
-      setSelectedColor(colors[0].color);
-    }
-    if (sizes.length > 0) {
-      setSelectedSize(sizes[0].size);
-    }
-  }, [productDetailList]);
+  }, [productDetailList, piscValue]);
 
   //create quantity value
   const [number, setNumber] = useState(1);
@@ -73,37 +76,71 @@ const ProductMainContent = ({ product, productDetailList }) => {
           afterChange={(current) => setActiveIndex(current)}
           className="rounded-xl"
         >
-          {images.map((image, index) => (
-            <div key={index}>
-              <div
-                className="w-full h-[370px] md:h-[570px] bg-cover bg-center"
-                style={{ backgroundImage: `url(${image})` }}
-              />
-            </div>
-          ))}
+          {piscValue &&
+            piscValue.images.map((image, index) => (
+              <div key={index}>
+                <div
+                  className="w-full h-[370px] md:h-[570px] bg-cover bg-center"
+                  style={{ backgroundImage: `url(${image})` }}
+                />
+              </div>
+            ))}
         </Carousel>
-
         <div className="flex justify-between md:justify-center md:gap-8 mt-4">
-          {images.map((image, index) => (
-            <div
-              key={index}
-              onClick={() => handleThumbnailClick(index)}
-              className={`cursor-pointer rounded-lg overflow-hidden transition-transform ${
-                activeIndex === index
-                  ? "scale-125 border-2 border-blue-500"
-                  : ""
-              }`}
-            >
-              <img
-                src={image}
-                alt={`Thumbnail ${index + 1}`}
-                className="w-[80px] h-[80px] object-cover"
-              />
-            </div>
-          ))}
+          {piscValue &&
+            piscValue.images.map((image, index) => (
+              <div
+                key={index}
+                onClick={() => handleThumbnailClick(index)}
+                className={`cursor-pointer rounded-lg overflow-hidden transition-transform ${
+                  activeIndex === index
+                    ? "scale-125 border-2 border-blue-500"
+                    : ""
+                }`}
+              >
+                <img
+                  src={image}
+                  alt={`Thumbnail ${index + 1}`}
+                  className="w-[80px] h-[80px] object-cover"
+                />
+              </div>
+            ))}
         </div>
         <div className="absolute top-2 left-2">
-          <FaHeart className="text-pink-500 text-[32px] cursor-pointer" />
+          {/* <FaHeart className="text-pink-500 text-[32px] cursor-pointer" /> */}
+          {/* From Uiverse.io by catraco  */}
+          <div title="Like" className="heart-container">
+            <input id="Give-It-An-Id" className="checkbox" type="checkbox" />
+            <div className="svg-container">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="svg-outline"
+                viewBox="0 0 24 24"
+              >
+                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="svg-filled"
+                viewBox="0 0 24 24"
+              >
+                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height={100}
+                width={100}
+                className="svg-celebrate"
+              >
+                <polygon points="10,10 20,20" />
+                <polygon points="10,50 20,50" />
+                <polygon points="20,80 30,70" />
+                <polygon points="90,10 80,20" />
+                <polygon points="90,50 80,50" />
+                <polygon points="80,80 70,70" />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 

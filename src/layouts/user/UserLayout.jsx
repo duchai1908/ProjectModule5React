@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 // import HeaderLayout from './header'
 import FooterLayout from "./footer";
@@ -13,8 +12,10 @@ import { loadUserFromCookie } from "../../services/authService";
 export default function UserLayout() {
   const dispatch = useDispatch();
   useEffect(() => {
-    const token = JSON.parse(Cookies.get("token"));
-    dispatch(loadUserFromCookie(token));
+    if (Cookies.get("token") != null) {
+      const token = JSON.parse(Cookies.get("token"));
+      dispatch(loadUserFromCookie(token));
+    }
   }, []);
   return (
     <>
