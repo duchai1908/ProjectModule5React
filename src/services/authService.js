@@ -7,9 +7,9 @@ export const register = (user) => {
   return response;
 };
 
+
 export const login = createAsyncThunk("auth/sign-in", async (user) => {
   const response = await jsonAxios.post("auth/sign-in", user);
-
   Cookies.set("token", JSON.stringify(response.data));
   return response;
 });
