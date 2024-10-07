@@ -1,4 +1,4 @@
-.container {
+.container-content {
   background-image: url("../../../../../public/images/back.jpg");
   background-size: cover;
   background-position: center;
@@ -8,7 +8,7 @@
   margin-top: 100px;
 }
 
-.container::before {
+.container-content::before {
   position: absolute;
   content: "";
   top: 0;

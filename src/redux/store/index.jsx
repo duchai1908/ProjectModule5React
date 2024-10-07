@@ -10,7 +10,6 @@ import colorSlice from "../slices/colorSlice";
 
 import cartSlice from "../slices/cartSlice";
 
-
 const store = configureStore({
   reducer: {
     category: categorySlice,
@@ -19,7 +18,6 @@ const store = configureStore({
     productDetail: productDetailSlice,
     product: productSlice,
     colorStore: colorSlice,
-
     cart: cartSlice,
   },
 });
