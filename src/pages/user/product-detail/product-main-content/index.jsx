@@ -11,10 +11,13 @@ import {
 } from "react-icons/fa"; // Import the check icon from react-icons
 import { TbTruckDelivery } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addProductToCart } from "../../../../redux/slices/cartSlice";
 
 const ProductMainContent = ({ product, productDetailList }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleThumbnailClick = (index) => {
     setActiveIndex(index);
@@ -60,6 +63,21 @@ const ProductMainContent = ({ product, productDetailList }) => {
     if (value > 0) {
       setNumber(value);
     }
+  };
+
+  // Hàm thêm sản phẩm vào giỏ hàng
+  const handleAddToCart = () => {
+    // color size -> productDetailId;
+    const productToAdd = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: number,
+      color: selectedColor,
+      size: selectedSize,
+    };
+
+    dispatch(addProductToCart(productToAdd)); // Gọi action thêm sản phẩm vào giỏ hàng
   };
 
   // useEffect({},number)
@@ -195,9 +213,9 @@ const ProductMainContent = ({ product, productDetailList }) => {
             </div>
             <div className="flex mt-4 ml-3 gap-5 cart_button">
               <button type="button" className="cart_button-item">
-                <Link to="/cart-detail" className="cart_link">
+                <div className="cart_link" onClick={handleAddToCart}>
                   Add to cart
-                </Link>
+                </div>
               </button>
               <button type="button" className="cart_button-item">
                 <Link className="cart_link">Check out</Link>
