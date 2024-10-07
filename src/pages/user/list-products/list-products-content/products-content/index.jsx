@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { changePageProductDetail } from "../../../../../redux/slices/productDetailSlice";
 import { useDispatch } from "react-redux";
 import { changePageProduct } from "../../../../../redux/slices/productSlice";
+import { addToWishlist } from "../../../../../services/wishList";
 
 export default function ProductsPanagation({
   data,
@@ -20,23 +21,29 @@ export default function ProductsPanagation({
   totalElements,
 }) {
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     handleFilterValue(value);
   };
   const onSearch = (value) => {
-    console.log("Value: ", value);
-
     handleSearch(value);
-
-    console.log("trong con:", productDetails);
   };
 
   const dispatch = useDispatch();
   // Function to handle page change
   const handleChangePage = async (page, pageSize) => {
-    console.log("Page changed to:", page);
     dispatch(changePageProduct(page - 1)); // Adjusting for 0-based index
   };
+
+  /**
+   * 
+   * @param {*} productId id cua san pham
+   * @description them san pham vao danh sach yeu thich
+   * Auth: Duc Hai (07/10/2024)
+   */
+  const handleAddWishlist = async (productId) =>{
+    const response = await addToWishlist(productId);
+    console.log(response);
+    
+  }
 
   return (
     <>
@@ -108,7 +115,7 @@ export default function ProductsPanagation({
                           <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-gray-200 hover:text-black hover:border-white">
                             <FaShoppingCart className="text-lg" />
                           </button>
-                          <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-white hover:text-red-600 hover:border-white">
+                          <button onClick={()=>handleAddWishlist(product.id)} className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-white hover:text-red-600 hover:border-white">
                             <FaHeart className="text-lg" />
                           </button>
                         </>
