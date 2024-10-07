@@ -42,6 +42,9 @@ export default function SidebarAdmin() {
         <Menu.Item key="/admin/color-manager" icon={<StockOutlined />}>
           <Link to="/admin/color-manager">Color Manager</Link>
         </Menu.Item>
+        <Menu.Item key="/admin/size-manager" icon={<StockOutlined />}>
+          <Link to="/admin/size-manager">Size Manager</Link>
+        </Menu.Item>
         <Menu.Item key="/admin/charts" icon={<StockOutlined />}>
           <Link to="/admin/charts">Charts</Link>
         </Menu.Item>
