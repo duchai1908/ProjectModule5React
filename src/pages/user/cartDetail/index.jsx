@@ -1,7 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./cartDetail.css";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteAllCart,
+  deleteCart,
+  findAllCart,
+} from "../../../services/cartService";
+import ConfirmationModal from "../../../components/model/ConfirmationModal";
 export default function CartDetail() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isClearingCart, setIsClearingCart] = useState(false); // XOA TAT CA
+  const [cartItemIdToDelete, setCartItemIdToDelete] = useState(null); // Lưu trữ id của sản phẩm muốn xóa
+  const dispatch = useDispatch();
+
+  // Lấy listCart từ Redux store
+  const { data: listCart, status } = useSelector((state) => state.cart);
+  console.log(listCart);
+  if (!listCart || listCart.length === 0) {
+    return <p>Your cart is empty.</p>; // Hiển thị thông báo khi giỏ hàng trống
+  }
+  // Hàm xử lý xóa item khỏi giỏ hàng chi tiet
+
+  const showDeleteConfirmation = (id) => {
+    setCartItemIdToDelete(id); // Lưu id của sản phẩm muốn xóa
+    setIsModalVisible(true); // khi bam thi mo model de xac nhan co xoa khong
+    setIsClearingCart(false); // Đặt thành false để xóa item
+  };
+  // xac nhan xoa khi mo form de xac nhan
+
+  const handleConfirmDelete = () => {
+    if (isClearingCart) {
+      dispatch(deleteAllCart()).then(() => {
+        setIsModalVisible(false); // Đóng modal
+        dispatch(findAllCart()); // Cập nhật lại danh sách giỏ hàng
+      });
+    } else {
+      console.log(cartItemIdToDelete);
+      if (cartItemIdToDelete) {
+        dispatch(deleteCart(cartItemIdToDelete)).then(() => {
+          setIsModalVisible(false); // Đóng modal
+          dispatch(findAllCart()); // Cập nhật lại danh sách giỏ hàng
+        }); // Gọi action xóa sản phẩm
+      }
+    }
+  };
+  // khi bam cancel thi chi dong form
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false); // xoa x roi dong form
+  };
+
+  const handleClearCart = () => {
+    setIsClearingCart(true); // Đặt thành true để xóa toàn bộ giỏ hàng
+    setIsModalVisible(true);
+  };
+
   return (
     <>
       <div className="cartDetail_container">
@@ -12,78 +66,51 @@ export default function CartDetail() {
           <div className="cartDetail_table">
             <table>
               <tbody>
-                {/* cart item  start*/}
-                <tr>
-                  <td className="cartDetail_img">
-                    <Link>
-                      <img
-                        src="https://minimalin-demo.myshopify.com/cdn/shop/files/e1_22_compact.png?v=1708945190"
-                        alt=""
-                      />
-                    </Link>
-                  </td>
-                  <td className="cartDetail_product-title">
-                    <Link to="#" className="link_title-product">
-                      Rb. ECO 5MP Dome CC Camera
-                    </Link>
-                    <p>blue</p>
-                    <p>size: L</p>
-                  </td>
-                  <td className="cartDetail_product-price">975.000₫</td>
-                  <td className="cartDetail_control-quantity">
-                    <div className="cart_quantity-box">
-                      <div className="cart_quantity-minus">-</div>
-                      <input
-                        className="cart_quantity-control"
-                        type="text"
-                        value="1"
-                      />
-                      <div className="cart_quantity-plus">+</div>
-                    </div>
-                  </td>
-                  <td className="cartDetail_total">2000000</td>
-                  <td className="cartDetail_close">
-                    <div className="cartDetail_icon-close">
-                      <i class="bx bx-x"></i>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="cartDetail_img">
-                    <Link>
-                      <img
-                        src="https://minimalin-demo.myshopify.com/cdn/shop/files/e1_22_compact.png?v=1708945190"
-                        alt=""
-                      />
-                    </Link>
-                  </td>
-                  <td className="cartDetail_product-title">
-                    <Link to="#" className="link_title-product">
-                      Rb. ECO 5MP Dome CC Camera
-                    </Link>
-                    <p>blue</p>
-                    <p>size: L</p>
-                  </td>
-                  <td className="cartDetail_product-price">975.000₫</td>
-                  <td className="cartDetail_control-quantity">
-                    <div className="cart_quantity-box">
-                      <div className="cart_quantity-minus">-</div>
-                      <input
-                        className="cart_quantity-control"
-                        type="text"
-                        value="1"
-                      />
-                      <div className="cart_quantity-plus">+</div>
-                    </div>
-                  </td>
-                  <td className="cartDetail_total">2000000</td>
-                  <td className="cartDetail_close">
-                    <div className="cartDetail_icon-close">
-                      <i class="bx bx-x"></i>
-                    </div>
-                  </td>
-                </tr>
-                {/* cart item  end*/}
+                {listCart.data.data.map((item) => (
+                  <tr key={item.id}>
+                    <td className="cartDetail_img">
+                      <Link>
+                        <img
+                          src={item.productDetail.product.image}
+                          alt={item.productDetail.name}
+                        />
+                      </Link>
+                    </td>
+                    <td className="cartDetail_product-title">
+                      <Link to="#" className="link_title-product">
+                        {item.productDetail.name}
+                      </Link>
+                      <p>{item.productDetail.color.color}</p>
+                      <p>Size: {item.productDetail.size.size}</p>
+                    </td>
+                    <td className="cartDetail_product-price">
+                      {item.productDetail.price}₫
+                    </td>
+                    <td className="cartDetail_control-quantity">
+                      <div className="cart_quantity-box">
+                        <div className="cart_quantity-minus">-</div>
+                        <input
+                          className="cart_quantity-control"
+                          type="text"
+                          value={item.quantity}
+                          readOnly
+                        />
+                        <div className="cart_quantity-plus">+</div>
+                      </div>
+                    </td>
+                    <td className="cartDetail_total">
+                      {item.productDetail.price * item.quantity}₫
+                    </td>
+                    <td
+                      className="cartDetail_close"
+                      onClick={() => showDeleteConfirmation(item.id)} // Truyền item.id vào hàm
+                    >
+                      <div className="cartDetail_icon-close">
+                        <i class="bx bx-x"></i>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -91,7 +118,12 @@ export default function CartDetail() {
             <button className="cartDetail_button-item">
               <Link to="/list-products">Continue Shopping</Link>
             </button>
-            <button className="cartDetail_button-item">Clear Cart</button>
+            <button
+              className="cartDetail_button-item"
+              onClick={handleClearCart}
+            >
+              Clear Cart
+            </button>
           </div>
 
           <div className="cartDetail_total-box">
@@ -140,6 +172,21 @@ export default function CartDetail() {
           </div>
         </div>
       </div>
+      <ConfirmationModal
+        visible={isModalVisible}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        title={
+          isClearingCart
+            ? "Xác nhận xóa toàn bộ giỏ hàng"
+            : "Xác nhận xóa sản phẩm"
+        }
+        content={
+          isClearingCart
+            ? "Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?"
+            : "Bạn có chắc chắn muốn xóa sản phẩm này?"
+        }
+      />
     </>
   );
 }

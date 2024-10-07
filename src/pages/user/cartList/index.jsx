@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./cartList.css";
 
 import { Link } from "react-router-dom";
 import CartItem from "../cartItem";
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCart } from "../../../services/cartService";
-
+import { deleteCart, findAllCart } from "../../../services/cartService";
 export default function CartList({ closeCart }) {
   const { data: listCart, status } = useSelector((state) => state.cart);
-  console.log("listCart", listCart.data, status);
+  // console.log("listCart", listCart, status);
   const dispatch = useDispatch();
   useEffect(() => {
     // Gọi API lấy danh sách cart
@@ -16,30 +15,32 @@ export default function CartList({ closeCart }) {
       dispatch(findAllCart());
     }
   }, [status, dispatch]);
+
+  // Hàm xóa sản phẩm
+  const handleDeleteItem = (id) => {
+    dispatch(deleteCart(id)).then(() => {
+      dispatch(findAllCart());
+    }); // Gọi action xóa sản phẩm khỏi giỏ hàng
+  };
   return (
     <>
       <div className="cart_container">
         <div className="cart_box">
           <div className="cart_header">
-            <p>your cart</p>
+            <p>Your cart</p>
             <div className="cart_close" onClick={closeCart}>
               <i class="bx bx-x"></i>
             </div>
           </div>
           <div className="cart_line"></div>
           <div className="cart_items">
-            {/* Kiểm tra trạng thái trước khi render */}
             {status === "pending" && <p>Loading...</p>}
-            {status === "successful" && listCart?.data?.length > 0 ? ( // Check if data exists and has items
-              listCart.data.map((item) => (
+            {status === "successful" && listCart?.data?.data.length > 0 ? (
+              listCart.data.data.map((item) => (
                 <CartItem
                   key={item.id}
-                  item={{
-                    name: item.productDetail.name,
-                    quantity: item.quantity,
-                    price: item.productDetail.price,
-                    image: item.productDetail.image, // Assuming the image is available
-                  }}
+                  item={item}
+                  onDelete={() => handleDeleteItem(item.id)}
                 />
               ))
             ) : (
@@ -47,7 +48,6 @@ export default function CartList({ closeCart }) {
             )}
             {status === "failed" && <p>Error loading cart items</p>}
           </div>
-
           <div className="cart_footer">
             <div className="cart_line"></div>
             <div className="cart_total">
