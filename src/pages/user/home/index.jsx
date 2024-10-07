@@ -10,12 +10,10 @@ import Review from "./review";
 import { useSelector } from "react-redux";
 import ContentHome from "./contentText";
 
-
 export default function Home() {
-
-  const data = useSelector((state)=> state.auth)
+  const data = useSelector((state) => state.auth);
   console.log(data);
-  
+
   return (
     <>
       <Slider />

@@ -5,7 +5,7 @@ import { Button } from "antd";
 export default function ContentHome() {
   return (
     <section content-banner>
-      <div className="container">
+      <div className="container-content">
         <div className="content">
           <div className="content-left">
             <h3>Exclusive Collection</h3>

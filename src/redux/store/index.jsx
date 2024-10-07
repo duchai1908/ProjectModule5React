@@ -9,7 +9,6 @@ import productSlice from "../slices/productSlice";
 
 import cartSlice from "../slices/cartSlice";
 
-
 const store = configureStore({
   reducer: {
     category: categorySlice,
@@ -17,9 +16,7 @@ const store = configureStore({
     customer: customerSlice,
     productDetail: productDetailSlice,
     product: productSlice,
-
     cart: cartSlice,
-
   },
 });
 export default store;

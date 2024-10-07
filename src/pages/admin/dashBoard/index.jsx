@@ -10,7 +10,6 @@ export default function DashBoard() {
   const data = useSelector((state) => state.auth);
   console.log("adu ", data);
 
-
   return (
     <>
       <div className="container">
