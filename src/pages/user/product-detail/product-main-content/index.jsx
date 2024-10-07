@@ -187,38 +187,40 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
         <div className="mt-4">
           <h3 className="font-bold mb-3">Colors:</h3>
           <ul className="flex gap-3 list-none">
-            {listColors.map((color) => (
-              <li
-                key={color.color}
-                className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer bg-${color.color}-500`}
-                onClick={() => setSelectedColor(color.color)}
-              >
-                {/* If this color is selected, show the check icon */}
-                {selectedColor === color.color && (
-                  <FaCheck className="absolute top-[-5px] right-[-5px] text-white text-[12px] bg-blue-500 rounded-full" />
-                )}
-              </li>
-            ))}
+            {listColors &&
+              listColors.map((color) => (
+                <li
+                  key={color.color}
+                  className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer bg-${color.color}-500`}
+                  onClick={() => setSelectedColor(color.color)}
+                >
+                  {/* If this color is selected, show the check icon */}
+                  {selectedColor === color.color && (
+                    <FaCheck className="absolute top-[-5px] right-[-5px] text-white text-[12px] bg-blue-500 rounded-full" />
+                  )}
+                </li>
+              ))}
           </ul>
         </div>
         <div className="w-full h-[1px] bg-gray-200 my-1"></div>
         <div className="mt-4">
           <h3 className="font-bold mb-3">Sizes:</h3>
           <ul className="flex gap-3 list-none">
-            {listSizes.map((size) => (
-              <li
-                key={size.size}
-                className={`relative  cursor-pointer p-3 rounded-xl`}
-                style={{ border: "1px solid black" }}
-                onClick={() => setSelectedSize(size.size)}
-              >
-                <p>{size.size}</p>
-                {/* If this color is selected, show the check icon */}
-                {selectedSize === size.size && (
-                  <FaCheck className="absolute top-[-5px] right-[-5px] p-[2px] text-white text-[20px] bg-blue-500 rounded-full" />
-                )}
-              </li>
-            ))}
+            {listSizes &&
+              listSizes.map((size) => (
+                <li
+                  key={size.size}
+                  className={`relative  cursor-pointer p-3 rounded-xl`}
+                  style={{ border: "1px solid black" }}
+                  onClick={() => setSelectedSize(size.size)}
+                >
+                  <p>{size.size}</p>
+                  {/* If this color is selected, show the check icon */}
+                  {selectedSize === size.size && (
+                    <FaCheck className="absolute top-[-5px] right-[-5px] p-[2px] text-white text-[20px] bg-blue-500 rounded-full" />
+                  )}
+                </li>
+              ))}
           </ul>
         </div>
         <hr className="mt-3" />
