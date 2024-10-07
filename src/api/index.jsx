@@ -37,5 +37,5 @@ const handleAddInterceptors = (instance) => {
   // response
 };
 
-handleAddInterceptors(jsonAxios);
+// handleAddInterceptors(jsonAxios);
 handleAddInterceptors(formAxios);
