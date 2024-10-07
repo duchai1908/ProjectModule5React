@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Button, Layout, theme } from "antd";
 import { Outlet } from "react-router-dom";
 import SidebarAdmin from "./sidebar";
 import HeaderAdmin from "./header";
 import "./admin.css";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { loadUserFromCookie } from "../../services/authService";
 const { Header, Sider, Content } = Layout;
 export default function AdminLayout() {
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    const token = JSON.parse(Cookies.get("token"));
+    dispatch(loadUserFromCookie(token));  
+  }, [])
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },

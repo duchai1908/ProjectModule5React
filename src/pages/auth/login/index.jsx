@@ -1,45 +1,112 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
-import { Button, Input } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../../services/authService";
+import { Alert, Button, Input, message, notification } from "antd";
+import { login } from "../../../services/authService";
+import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 export default function Login() {
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const [userNameError, setUserNameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [invalidLogin, setInvalidLogin] = useState("");
   const dispatch = useDispatch();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Khởi tạo useNavigate
-  const { user, status, error } = useSelector((state) => state.auth);
-  console.log("User:", user);
-  console.log("Status:", status);
-  console.log("Error:", error);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (username && password) {
-      console.log("Login Data:", { username, password });
 
-      try {
-        const resultAction = await dispatch(loginUser({ username, password }));
-
-        if (loginUser.fulfilled.match(resultAction)) {
-          console.log("Login successful!", resultAction.payload);
-          navigate("/product-detail/:id");
+  /**
+   *
+   * @param {*} name tên các trường trong form
+   * @param {*} value giá trị các trường trong form
+   * @returns trả về giá trị true hoặc false nếu lỗi xảy ra khi validate
+   * @description kiểm tra tính hợp lệ của username và password
+   * Auth: Duc Hai (03/10/2024)
+   */
+  const validateData = (name, value) => {
+    let invalid = true;
+    switch (name) {
+      case "username":
+        if (!value) {
+          setUserNameError("Tên đăng nhập không được để trống");
+          invalid = false;
         } else {
-          console.log("Login failed!", resultAction.error);
+          setUserNameError("");
         }
-      } catch (error) {
-        console.log("An error occurred during login:", error);
-      }
-    } else {
-      console.log("Username or Password is empty");
+        break;
+      case "password":
+        if (!value) {
+          setPasswordError("Mật khẩu không được để trống");
+          invalid = false;
+        } else {
+          setPasswordError("");
+        }
+        break;
+
+      default:
+        break;
     }
+    return invalid;
   };
 
-  useEffect(() => {
-    if (status === "failed") {
-      console.log("Login failed with error:", error);
+  /**
+   *
+   * @param {*} e event
+   * @description Lấy giá trị từng ô input
+   * @author Duc Hai (03/10/2024)
+   */
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setUser({
+      ...user,
+      [name]: value,
+    });
+
+    validateData(name, value);
+  };
+
+  /**
+   *
+   * @param {*} e sự kiện khi tương tác với form
+   * @description gọi API để kiểm tra đăng nhập
+   * Auth: Duc Hai (03/10/2024)
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userNameValid = validateData("username", user.username);
+    const passwordValid = validateData("password", user.password);
+    if (userNameValid && passwordValid) {
+      try {
+        // do login trong service đang sử dụng trạng thái bất đồng bộ nên phải dùng unwrapping result actions ( trả ra kết quả của action)
+        // dispatch: dùng để gửi action từ UI lên reducer
+        const resultAction = await dispatch(login(user));
+        const originalPromiseResult = unwrapResult(resultAction);
+
+        console.log("original", originalPromiseResult);
+
+        if (
+          originalPromiseResult.data.data.roles.some(
+            (item) => item === "ROLE_ADMIN"
+          )
+        ) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+        notification.success({
+          message: "Đăng nhập thành công",
+          // description: response.data.data.message
+        });
+      } catch (error) {
+        const responsError = error?.response?.data?.message;
+        // message.error(responsError);
+        setInvalidLogin(responsError);
+      }
     }
-  }, [status, error]);
+  };
 
   return (
     <>
@@ -48,29 +115,55 @@ export default function Login() {
           <h2>Login</h2>
           <div className="form-auth">
             <form onSubmit={handleSubmit}>
-              <div className="control">
+
+              <div className="control relative">
                 <Input
                   type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your email"
+                  onChange={handleChange}
+                  name="username"
+                  status={userNameError ? "error" : ""}
+                  id="username"
+                  placeholder="Enter your username"
                   className="control_item"
                 ></Input>
+                {userNameError && (
+                  <p className="absolute bottom-[-8px] ml-8 text-red-600">
+                    {userNameError}
+                  </p>
+                )}
               </div>
-              <div className="control password">
+              <div className="control password mt-1">
                 <Input.Password
+                  id="password"
+                  onChange={handleChange}
+                  status={passwordError ? "error" : ""}
+                  name="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   className="control_item"
                 ></Input.Password>
+                {passwordError && (
+                  <p className="absolute bottom-[-8px] ml-8 text-red-600">
+                    {passwordError}
+                  </p>
+                )}
+                {invalidLogin && (
+                  <Alert className="mt-8" type="error" message={invalidLogin} />
+                  // <p className="absolute bottom-[-8px] ml-8 text-red-600">
+                  //   {invalidLogin}
+                  // </p>
+                )}
               </div>
               <Link to="/change">
-                <span className="link-change_password">change password?</span>
+                <p className="link-change_password link-login mt-3">
+                  Forgot your password?
+                </p>
               </Link>
               <div className="btn">
-                <Button className="button" type="primary" htmlType="submit">
+
+                <Button className="button" htmlType="submit">
                   Login
                 </Button>
               </div>

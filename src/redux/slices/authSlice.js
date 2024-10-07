@@ -1,35 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser } from "../../services/authService";
-console.log("chay vao day");
+import { loadUserFromCookie, login } from "../../services/authService";
+import Cookies from "js-cookie";
 const authSlice = createSlice({
-  name: "auth",
-  initialState: {
-    user: null, // Lưu thông tin người dùng
-    accessToken: null, // Lưu accessToken
-    status: "idle",
-    error: null,
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(loginUser.pending, (state) => {
-        console.log("pending");
-        state.status = "loading";
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        console.log("fulfilled");
-        console.log("Payload:", action.payload); // Thêm log này để xem nội dung của payload
-        state.status = "succeeded";
-        state.user = action.payload; // Lưu thông tin người dùng
-        state.accessToken = action.payload.accessToken; // Lưu toke;
-        state.error = null;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        console.log("error");
-        state.status = "failed";
-        state.error = action.payload; // Lưu lại thông báo lỗi
-      });
-  },
-});
+    name: "auth",
+    initialState:{
+        status: "idle",
+        data: null,
+        error: null,
+    },
+    reducers: {
+        logout: (state) => {
+            Cookies.remove("token");
+            state.data = null;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(login.pending, (state,action) =>{
+            state.status = "pending";
+        })
 
+        .addCase(login.fulfilled, (state,action) => {
+            state.status = "successfully";
+            state.data = action.payload;
+        })
+
+        .addCase(login.rejected, (state, action) =>{
+            state.status = "failed";
+            state.error = action.error.message;
+        })
+
+        .addCase(loadUserFromCookie.fulfilled, (state,action) => {
+            state.data = action.payload;
+        })
+    }
+});
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
