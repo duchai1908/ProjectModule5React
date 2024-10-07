@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./cartList.css";
 
 import { Link } from "react-router-dom";
 import CartItem from "../cartItem";
+import { useDispatch, useSelector } from "react-redux";
+import { findAllCart } from "../../../services/cartService";
 
 export default function CartList({ closeCart }) {
+  const { data: listCart, status } = useSelector((state) => state.cart);
+  console.log("listCart", listCart.data, status);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // Gọi API lấy danh sách cart
+    if (status === "idle") {
+      dispatch(findAllCart());
+    }
+  }, [status, dispatch]);
   return (
     <>
       <div className="cart_container">
@@ -17,12 +28,24 @@ export default function CartList({ closeCart }) {
           </div>
           <div className="cart_line"></div>
           <div className="cart_items">
-            {/* cartItem  start*/}
-            <CartItem />
-            <CartItem />
-            <CartItem />
-            <CartItem />
-            {/* cartItem end*/}
+            {/* Kiểm tra trạng thái trước khi render */}
+            {status === "pending" && <p>Loading...</p>}
+            {status === "successful" && listCart?.data?.length > 0 ? ( // Check if data exists and has items
+              listCart.data.map((item) => (
+                <CartItem
+                  key={item.id}
+                  item={{
+                    name: item.productDetail.name,
+                    quantity: item.quantity,
+                    price: item.productDetail.price,
+                    image: item.productDetail.image, // Assuming the image is available
+                  }}
+                />
+              ))
+            ) : (
+              <p>No items in cart</p> // If no items present
+            )}
+            {status === "failed" && <p>Error loading cart items</p>}
           </div>
 
           <div className="cart_footer">

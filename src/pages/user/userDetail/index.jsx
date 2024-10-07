@@ -29,17 +29,25 @@ export default function UserDetail() {
     },
   };
 
-  const dispatch = useDispatch();
-  // Lấy dữ liệu từ Redux store bằng useSelector
-  const { data, status, totalElements, size, number, error } = useSelector(
-    (state) => state.customer
-  );
+  const { user, status, error } = useSelector((state) => state.auth);
 
-  // Gọi hàm fetch data khi component được mount
   useEffect(() => {
-    dispatch(findAllCustomers({ page: number, size, keySearch: "" }));
-  }, [dispatch, number, size]);
+    console.log("User detail page loaded");
+    console.log("User data:", user); // Kiểm tra dữ liệu người dùng
+  }, [user]);
 
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!user) {
+    return <div>No user data available</div>; // Thông báo nếu không có dữ liệu người dùng
+  }
+  console.log("user", user);
   return (
     <>
       <div className="user-container">
@@ -70,16 +78,14 @@ export default function UserDetail() {
                 </Upload>
               </div>
               <div className="user-name">
-                <h1></h1>
+                <h1>{user?.username}</h1>
                 <SlNote />
               </div>
               <div className="user-day">06/06/1996</div>
             </div>
             <div className="user-info">
-              <div className="user-phone">SDT: 012345678</div>
-              <div className="user-address">
-                DIA CHI: cay-long xuyen-binh giang-hd
-              </div>
+              <div className="user-phone">SDT: {user?.phone}</div>
+              <div className="user-address">DIA CHI: {user?.address}</div>
             </div>
             <div className="user_line"></div>
             <div className="user-detail">
@@ -102,7 +108,7 @@ export default function UserDetail() {
                 </li>
                 <li className="user-item">
                   <IoMdLogOut />
-                  <Link>Đăng Xuất</Link>
+                  <Link to="/">Đăng Xuất</Link>
                 </li>
               </ul>
             </div>
@@ -179,7 +185,7 @@ export default function UserDetail() {
                   />
                 </div>
               </div>
-              <div className="checkout_address-input button">
+              <div className="checkout_address-input">
                 <button className="checkout-button">Save</button>
               </div>
             </form>

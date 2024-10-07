@@ -104,6 +104,7 @@ export default function ProductDetail() {
   return (
     <>
       <div className="mb-[120px]">
+        {/* code day */}
         <ProductMainContent
           product={product}
           productDetailList={productDetailList}

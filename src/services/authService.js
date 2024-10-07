@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
 import { jsonAxios } from "../api";
 import Cookies from "js-cookie";
 
@@ -23,3 +24,4 @@ export const loadUserFromCookie = createAsyncThunk(
     return token;
   }
 );
+

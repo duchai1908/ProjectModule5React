@@ -194,7 +194,7 @@ const ProductMainContent = ({ product, productDetailList }) => {
             <div className="flex mt-4 ml-3 gap-5 cart_button">
               <button type="button" className="cart_button-item">
                 <Link to="/cart-detail" className="cart_link">
-                  View cart
+                  Add to cart
                 </Link>
               </button>
               <button type="button" className="cart_button-item">
