@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
@@ -115,7 +114,6 @@ export default function Login() {
           <h2>Login</h2>
           <div className="form-auth">
             <form onSubmit={handleSubmit}>
-
               <div className="control relative">
                 <Input
                   type="text"
@@ -139,8 +137,6 @@ export default function Login() {
                   status={passwordError ? "error" : ""}
                   name="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   className="control_item"
                 ></Input.Password>
@@ -162,7 +158,6 @@ export default function Login() {
                 </p>
               </Link>
               <div className="btn">
-
                 <Button className="button" htmlType="submit">
                   Login
                 </Button>

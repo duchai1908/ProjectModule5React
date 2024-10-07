@@ -112,8 +112,12 @@ export default function Register() {
       delete user.confirmPassword;
       try {
         setIsLoading(true);
+        console.log(user);
+
         // Submit forrm
         const response = await register(user);
+        console.log(response);
+
         if (response.status == 201) {
           // CHuyển hướng về đăng nhập
           navigate("/login");
@@ -123,11 +127,9 @@ export default function Register() {
             message: "Thành công",
             description: response.data,
           });
-
-          
         }
       } catch (error) {
-        const responsError = error?.response?.data?.message?.username;    
+        const responsError = error?.response?.data?.message?.username;
         // message.error(responsError);
         setInvalidRegister(responsError);
       }
@@ -196,8 +198,12 @@ export default function Register() {
                 {confirmPasswordError && (
                   <p className="error_register">{confirmPasswordError}</p>
                 )}
-                 {invalidRegister && (
-                  <Alert className="mt-8" type="error" message={invalidRegister} />
+                {invalidRegister && (
+                  <Alert
+                    className="mt-8"
+                    type="error"
+                    message={invalidRegister}
+                  />
                 )}
               </div>
               <div className="btn">
