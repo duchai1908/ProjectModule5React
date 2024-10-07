@@ -41,6 +41,8 @@ const ProductMainContent = ({ product, productDetailList }) => {
     setListColors(colors);
     setListSizes(sizes);
 
+    console.log(colors);
+    console.log(sizes);
     // Set the initial selected color and size if available
     if (colors.length > 0) {
       setSelectedColor(colors[0].color);
