@@ -25,7 +25,10 @@ const handleAddInterceptors = (instance) => {
   instance.interceptors.request.use(
     (config) => {
       // const cookies = new Cookies();
-      const data = JSON.parse(Cookies.get("token") || "null");
+
+      const data = JSON.parse(Cookies.get("token")|| 'null') ;
+
+
       console.log("data = " + data);
       if (data) {
         config.headers.Authorization = `Bearer ${data.data.accessToken}`;
