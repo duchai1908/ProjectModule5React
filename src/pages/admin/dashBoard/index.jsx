@@ -4,10 +4,13 @@ import ChartComponent from "../../../components/charts/ChartComponent";
 import LineChartComponent from "../../../components/charts/LineChartComponent";
 import TableComponent from "../../../components/charts/TalbeComponent";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
+
 export default function DashBoard() {
   const data = useSelector((state) => state.auth);
-  console.log("adu ",data);
-  
+  console.log("adu ", data);
+
+
   return (
     <>
       <div className="container">
