@@ -6,8 +6,9 @@ import {
   deleteAllCart,
   deleteCart,
   findAllCart,
+  updateCartQuantity,
 } from "../../../services/cartService";
-import Cookies from "js-cookie";
+
 import ConfirmationModal from "../../../components/model/ConfirmationModal";
 export default function CartDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -62,8 +63,15 @@ export default function CartDetail() {
     setIsModalVisible(true);
   };
 
-  const data = JSON.parse(Cookies.get("token") || "null");
-  console.log("data = " + data);
+  //update quantity
+
+  const handleUpdateQuantity = (cartId, newQuantity) => {
+    console.log(cartId, newQuantity);
+    dispatch(updateCartQuantity({ newQuantity, cartId }));
+    dispatch(findAllCart()); // Cập nhật lại danh sách giỏ hàng
+  };
+
+  // goi coupon goi API backend  tai day
 
   return (
     <>
@@ -98,14 +106,30 @@ export default function CartDetail() {
                       </td>
                       <td className="cartDetail_control-quantity">
                         <div className="cart_quantity-box">
-                          <div className="cart_quantity-minus">-</div>
+                          <div
+                            className="cart_quantity-minus"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              handleUpdateQuantity(item.id, item.quantity - 1)
+                            }
+                          >
+                            -
+                          </div>
                           <input
                             className="cart_quantity-control"
                             type="text"
                             value={item.quantity}
                             readOnly
                           />
-                          <div className="cart_quantity-plus">+</div>
+                          <div
+                            className="cart_quantity-plus"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              handleUpdateQuantity(item.id, item.quantity + 1)
+                            }
+                          >
+                            +
+                          </div>
                         </div>
                       </td>
                       <td className="cartDetail_total">

@@ -7,12 +7,14 @@ import customerSlice from "../slices/customerSlice";
 import productDetailSlice from "../slices/productDetailSlice";
 import productSlice from "../slices/productSlice";
 import colorSlice from "../slices/colorSlice";
-
 import cartSlice from "../slices/cartSlice";
 import sizeSlice from "../slices/sizeSlice";
 import productAndImageAndSizeAndColor from "../slices/productImageColorSizeSlice";
 import productRelateSlice from "../slices/productRelateSlice";
+import couponSlice from "../slices/couponSlice";
+import addressSlice from "../slices/addressSlice";
 import productDetailAndImageSlice from "../slices/productDetailAndImageSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -26,7 +28,10 @@ const store = configureStore({
     sizeStore: sizeSlice,
     PISC: productAndImageAndSizeAndColor,
     productRelate: productRelateSlice,
+    coupon: couponSlice,
+    address: addressSlice,
     PDI: productDetailAndImageSlice,
+
   },
 });
 export default store;
