@@ -10,6 +10,7 @@ import { changePageProductDetail } from "../../../../../redux/slices/productDeta
 import { useDispatch } from "react-redux";
 import { changePageProduct } from "../../../../../redux/slices/productSlice";
 import { addToWishlist } from "../../../../../services/wishList";
+import { formatCurrencyVND } from "../../../../../utils/formatMoney";
 
 export default function ProductsPanagation({
   data,
@@ -34,16 +35,15 @@ export default function ProductsPanagation({
   };
 
   /**
-   * 
+   *
    * @param {*} productId id cua san pham
    * @description them san pham vao danh sach yeu thich
    * Auth: Duc Hai (07/10/2024)
    */
-  const handleAddWishlist = async (productId) =>{
+  const handleAddWishlist = async (productId) => {
     const response = await addToWishlist(productId);
     console.log(response);
-    
-  }
+  };
 
   return (
     <>
@@ -58,6 +58,10 @@ export default function ProductsPanagation({
               // }}
               onChange={handleChange}
               options={[
+                {
+                  value: "none",
+                  label: "Mặc định",
+                },
                 {
                   value: "aToZ",
                   label: "Alphabetically, A-Z",
@@ -115,7 +119,10 @@ export default function ProductsPanagation({
                           <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-gray-200 hover:text-black hover:border-white">
                             <FaShoppingCart className="text-lg" />
                           </button>
-                          <button onClick={()=>handleAddWishlist(product.id)} className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-white hover:text-red-600 hover:border-white">
+                          <button
+                            onClick={() => handleAddWishlist(product.id)}
+                            className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-white hover:text-red-600 hover:border-white"
+                          >
                             <FaHeart className="text-lg" />
                           </button>
                         </>
@@ -135,10 +142,10 @@ export default function ProductsPanagation({
                           </p>
                         </Link>
                         <p className="mb-3 line-through">
-                          {productDetail.price} vnd
+                          {formatCurrencyVND(productDetail.price)}
                         </p>
                         <p className="mb-3 font-bold">
-                          {productDetail.price} vnd
+                          {formatCurrencyVND(productDetail.price)}
                         </p>
                       </>
                     ) : (
@@ -151,12 +158,12 @@ export default function ProductsPanagation({
                       </>
                     )}
 
-                    <ul className="flex justify-center list-none gap-3">
+                    {/* <ul className="flex justify-center list-none gap-3">
                       <li className="cursor-pointer rounded-full w-[16px] h-[16px] bg-blue-500"></li>
                       <li className="cursor-pointer rounded-full w-[16px] h-[16px] bg-red-500"></li>
                       <li className="cursor-pointer rounded-full w-[16px] h-[16px] bg-green-500"></li>
                       <li className="cursor-pointer rounded-full w-[16px] h-[16px] bg-yellow-500"></li>
-                    </ul>
+                    </ul> */}
                   </div>
                   <div className="my-3 flex justify-center gap-2">
                     <FaStar className="text-yellow-300" />

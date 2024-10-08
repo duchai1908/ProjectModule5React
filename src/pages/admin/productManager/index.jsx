@@ -458,8 +458,8 @@ const ProductManager = () => {
                     </td>
                     <td className="px-4 h-11">{item.category.name}</td>
                     <td className="px-4 h-11 text-center">{item.sale}</td>
-                    <td className="px-4 h-11 text-center">{item.created_at}</td>
-                    <td className="px-4 h-11 text-center">{item.updated_at}</td>
+                    <td className="px-4 h-11 text-center">{item.createdAt}</td>
+                    <td className="px-4 h-11 text-center">{item.updatedAt}</td>
                     <td className="px-4 h-11">
                       {item.status ? (
                         <Tag color="green">Đang hoạt động</Tag>

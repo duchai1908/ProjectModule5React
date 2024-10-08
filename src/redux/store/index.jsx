@@ -13,6 +13,8 @@ import productAndImageAndSizeAndColor from "../slices/productImageColorSizeSlice
 import productRelateSlice from "../slices/productRelateSlice";
 import couponSlice from "../slices/couponSlice";
 import addressSlice from "../slices/addressSlice";
+import productDetailAndImageSlice from "../slices/productDetailAndImageSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -28,6 +30,8 @@ const store = configureStore({
     productRelate: productRelateSlice,
     coupon: couponSlice,
     address: addressSlice,
+    PDI: productDetailAndImageSlice,
+
   },
 });
 export default store;

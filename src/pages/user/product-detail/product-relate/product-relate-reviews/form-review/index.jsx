@@ -1,17 +1,80 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input } from "antd";
+import { useParams } from "react-router-dom";
+import { addReviewProduct } from "../../../../../../services/review";
 
-export default function FormReviewUsers() {
+export default function FormReviewUsers({handleReload}) {
+  const {id} = useParams();
+  const[rating,setRating] = useState(null);
+  const[comment,setComment]= useState("");
+  const[error,setError] = useState("");
+  const[review,setReview] = useState({});
+  
+  const handleRating = (e)=>{
+    setRating(e.target.value);
+  }
+  const handleComment = (event) => {
+    setComment(event.target.value); 
+  };
+  /**
+   * @description gọi api thêm đánh giá
+   */
+  useEffect(()=>{
+    if(Object.keys(review).length > 0){
+      const fetchAddReview = async () => {
+        try {
+          const response = await addReviewProduct(review);
+          //  window.location.reload();
+          handleReload();
+        } catch (error) {
+          console.error("Error fetching review: ", error.response);
+        }
+      }
+      // tạo hàm để gọi api bất đồng bộ review
+      fetchAddReview();
+    }
+  },[review])
+
+  /**
+   * 
+   * @param {*} e sự kiện khi submit form
+   * @description gửi đánh giá sản phẩm
+   * Auth: Duc Hai (07/10/2024)
+   */
+  const handleSubmitReview = (e)=>{
+    e.preventDefault();
+      let check = true;
+      if(rating == null){
+        setError("Bạn phải đánh giá sản phẩm này")
+        check = false;
+      }else if(comment == ""){
+        setError("Bạn chưa viết đánh giá cho sản phẩm này")
+        check = false;
+      }  
+      const productId = id?.id || id;
+      if(check == true){
+        setReview({
+          "rating": +rating,
+          "comment": comment,
+          "productId": +productId,
+        })
+        console.log("check:");
+        
+      }
+  }
+
+  
   return (
     <>
-      <form action="">
+    
+      <form action="" onSubmit={(e)=>handleSubmitReview(e)}>
         <div>
           <p className="text-[24px] font-bold text-center my-5">
             Write a review
           </p>
           <p className="text-[20px] text-center my-5">Rating</p>
           <div class="radio">
-            <input id="rating-5" type="radio" name="rating" value="5" />
+            <input id="rating-5" type="radio" name="rating" value="5" onChange={(e)=>handleRating(e)}/>
             <label for="rating-5" title="5 stars">
               <svg
                 viewBox="0 0 576 512"
@@ -22,7 +85,7 @@ export default function FormReviewUsers() {
               </svg>
             </label>
 
-            <input id="rating-4" type="radio" name="rating" value="4" />
+            <input id="rating-4" type="radio" name="rating" value="4" onChange={(e)=>handleRating(e)} />
             <label for="rating-4" title="4 stars">
               <svg
                 viewBox="0 0 576 512"
@@ -33,7 +96,7 @@ export default function FormReviewUsers() {
               </svg>
             </label>
 
-            <input id="rating-3" type="radio" name="rating" value="3" />
+            <input id="rating-3" type="radio" name="rating" value="3" onChange={(e)=>handleRating(e)} />
             <label for="rating-3" title="3 stars">
               <svg
                 viewBox="0 0 576 512"
@@ -44,7 +107,7 @@ export default function FormReviewUsers() {
               </svg>
             </label>
 
-            <input id="rating-2" type="radio" name="rating" value="2" />
+            <input id="rating-2" type="radio" name="rating" value="2" onChange={(e)=>handleRating(e)} />
             <label for="rating-2" title="2 stars">
               <svg
                 viewBox="0 0 576 512"
@@ -55,7 +118,7 @@ export default function FormReviewUsers() {
               </svg>
             </label>
 
-            <input id="rating-1" type="radio" name="rating" value="1" />
+            <input id="rating-1" type="radio" name="rating" value="1" onChange={(e)=>handleRating(e)} />
             <label for="rating-1" title="1 star">
               <svg
                 viewBox="0 0 576 512"
@@ -70,10 +133,15 @@ export default function FormReviewUsers() {
             <p>Review</p>
           </div>
           <div className="flex justify-center text-[20px]">
-            <Input.TextArea rows={4} className="input-review w-[70%]" />
+            <Input.TextArea rows={4} className="input-review w-[70%]" onChange={handleComment}/>
+            
           </div>
+          {error && (
+              <p className="text-center text-red-500 mt-2">{error}</p>
+            )}
+
           <div className="flex justify-center my-5">
-            <Button>Submit Comment</Button>
+            <Button htmlType="submit">Submit Comment</Button>
           </div>
         </div>
       </form>

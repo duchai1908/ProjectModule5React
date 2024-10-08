@@ -1,11 +1,12 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Input, Modal, Upload } from "antd";
+import { Button, Image, Input, Modal, Upload } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   findAllProductDetail,
   updateProductDetail,
 } from "../../../../services/productDetailService";
+import { getAllPDI } from "../../../../services/pdi";
 
 const UpdateProductDetailModal = ({
   visible,
@@ -14,6 +15,12 @@ const UpdateProductDetailModal = ({
   id,
 }) => {
   console.log("curren update:", currentProductUpdate);
+  const {
+    data: productDetailAndImage,
+    status: productDetailAndImageStatus,
+    error: productDetailAndImageError,
+  } = useSelector((state) => state.PDI);
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -33,10 +40,10 @@ const UpdateProductDetailModal = ({
       setPrice(currentProductUpdate.price);
       setColorId(currentProductUpdate.color.id);
       setSizeId(currentProductUpdate.size.id);
+
+      dispatch(getAllPDI({ productDetailId: currentProductUpdate?.id }));
     }
   }, [currentProductUpdate]);
-
-  const dispatch = useDispatch();
 
   const handleUpload = (info) => {
     setFile([...file, info.file]);
@@ -131,7 +138,21 @@ const UpdateProductDetailModal = ({
           >
             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
           </Upload>
-          <img src={currentProductUpdate.product.image} alt="" />
+          {/* <img src={productDetailAndImage?.images?.[0]} alt="" /> */}
+          <div className="mt-3">
+            <h1>Ảnh hiện tại</h1>
+            <div className="flex overflow-x-auto space-x-4">
+              {productDetailAndImage?.images?.map((imgg, i) => (
+                <Image
+                  key={i}
+                  width={100}
+                  height={100}
+                  src={imgg}
+                  className="object-cover rounded-md"
+                />
+              ))}
+            </div>
+          </div>
         </div>
         <div className="mb-4">
           <label className="block font-medium mb-2">Mô tả</label>
