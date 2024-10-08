@@ -44,8 +44,13 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
 
     if (piscValue && piscValue.colors && piscValue.sizes) {
       // Set the extracted colors and sizes to state
-      setListColors(piscValue.colors);
-      setListSizes(piscValue.sizes);
+      setListColors(piscValue?.colors);
+      setListSizes(piscValue?.sizes);
+      if (piscValue?.colors?.length > 0) {
+        setSelectedColor(piscValue?.colors[0].color);
+
+
+        //setSelectedSize(piscValue?.sizes[0].size);
 
       // Chỉ lấy màu và kích thước nếu chúng tồn tại
       if (piscValue.colors.length > 0) {
@@ -67,6 +72,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
       setNumber(value);
     }
   };
+  //hihhi
 
   // Hàm tìm `ProductDetail` dựa trên màu sắc và kích thước
   const findProductDetail = (color, size) => {
@@ -143,6 +149,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           )}
         </Carousel>
         <div className="flex justify-between md:justify-center md:gap-8 mt-4">
+
           {piscValue && piscValue.images && piscValue.images.length > 0 ? (
             piscValue.images.map((image, index) => (
               <div
