@@ -11,6 +11,8 @@ import {
 import { getProductById } from "../../../services/productService";
 import { getAllPISC } from "../../../services/piscService";
 import "./productDetail.css";
+import { getAllProductRelateByCateId } from "../../../services/productRelateService";
+import { jsonAxios } from "../../../api";
 
 export default function ProductDetail() {
   // const [product, setProduct] = useState("huhu");
@@ -30,9 +32,16 @@ export default function ProductDetail() {
     status: piscStatus,
     error: piscError,
   } = useSelector((state) => state.PISC);
+  const {
+    data: productRLate,
+    status: productRLateStatus,
+    error: productRLateError,
+  } = useSelector((state) => state.productRelate);
   const dispatch = useDispatch();
 
   const [piscValue, setPiscValue] = useState(null);
+
+  const [productDetailRelateList, setProductDetailRelateList] = useState([]);
 
   // call api to get product by product id
   useEffect(() => {
@@ -50,9 +59,6 @@ export default function ProductDetail() {
     };
 
     fetchData();
-    // if (pisc) {
-    //   setProduct(pisc);
-    // }
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -60,6 +66,26 @@ export default function ProductDetail() {
       setPiscValue(pisc);
     }
   }, [pisc]);
+  const loadData = () => {
+    jsonAxios
+      .get(`/admin/productDetail`)
+      .then((resp) => {
+        const data = resp.data.data;
+        setProductDetailRelateList(data);
+      })
+      .catch((err) => {
+        // Xử lý lỗi
+      });
+  };
+  useEffect(() => {
+    if (productR) {
+      if (productR?.category?.id) {
+        dispatch(getAllProductRelateByCateId({ id: productR?.category?.id }));
+      }
+    }
+    console.log("productRLate", productRLate);
+    loadData();
+  }, [productR]);
   const product = {
     images: [
       "https://i.pinimg.com/736x/bb/03/be/bb03be3373d101ad3e175fd10bb74afd.jpg",
@@ -119,7 +145,11 @@ export default function ProductDetail() {
         />
         {/* Description, review, Shipping */}
         <ProductRelate product={product} />
-        <SameProductsProductDetail listSameProducts={listSameProducts} />
+        <SameProductsProductDetail
+          listSameProducts={listSameProducts}
+          productRelate={productRLate}
+          productDetailRelateList={productDetailRelateList}
+        />
       </div>
     </>
   );
