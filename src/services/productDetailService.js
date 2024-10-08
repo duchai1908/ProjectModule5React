@@ -15,7 +15,6 @@ export const findAllProductDetailByNothing = createAsyncThunk(
   "admin/productDetail",
   async () => {
     const response = await jsonAxios.get(`/admin/productDetail`);
-    console.log("product detail data:", response.data);
     return response.data;
   }
 );
