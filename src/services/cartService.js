@@ -4,8 +4,10 @@ import { formAxios, jsonAxios } from "../api";
 export const findAllCart = createAsyncThunk("user/cart", async () => {
   console.log("Fetching cart...");
   const response = await jsonAxios.get(`/user/cart`);
-  return response;
+  console.log("repons", response.data);
+  return response.data;
 });
+
 // delete item cart
 
 export const deleteCart = createAsyncThunk(
@@ -40,7 +42,7 @@ export const addItemProductToCart = createAsyncThunk(
   "cart/addProductToCart",
   async (newProductToCart, { rejectWithValue }) => {
     try {
-      const response = await jsonAxios.post(`/user/cart/`, newProductToCart);
+      const response = await jsonAxios.post(`/user/cart`, newProductToCart);
       console.log(response);
       return response.data;
     } catch (error) {
