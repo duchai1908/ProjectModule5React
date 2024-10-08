@@ -33,7 +33,7 @@ const productSlice = createSlice({
       // Thời điểm đã có dữ liệu
       .addCase(findAllProductWithCondition.fulfilled, (state, action) => {
         state.status = "successfully";
-        console.log(action.payload);
+        // console.log(action.payload);
         state.totalElements = action.payload.data.totalElements;
         state.number = action.payload.data.number;
         state.size = action.payload.data.size;

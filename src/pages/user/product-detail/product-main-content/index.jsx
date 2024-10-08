@@ -37,10 +37,12 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [listColors, setListColors] = useState([]);
   const [listSizes, setListSizes] = useState([]);
   const [listImages, setListImages] = useState([]);
+ 
 
   // State to track the selected color (default is red)
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
+
 
   //listSize by color
   const [listSizeByCondition, setListSizeByCondition] = useState([]);
