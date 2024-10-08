@@ -29,14 +29,15 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [listColors, setListColors] = useState([]);
   const [listSizes, setListSizes] = useState([]);
   const [listImages, setListImages] = useState([]);
+ 
 
   // State to track the selected color (default is red)
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
 
   useEffect(() => {
-    console.log("check list: ", productDetailList);
-    console.log("check list piscValue: ", piscValue);
+    // console.log("check list: ", productDetailList);
+    // console.log("check list piscValue: ", piscValue);
     // Extract colors and sizes from productDetailList
     let colors;
     let sizes;
@@ -53,8 +54,8 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
       setSelectedSize(piscValue.sizes[0].size);
     }
 
-    console.log(colors);
-    console.log(sizes);
+    // console.log(colors);
+    // console.log(sizes);
     // Set the initial selected color and size if available
   }, [productDetailList, piscValue]);
 

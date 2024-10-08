@@ -29,12 +29,12 @@ export const findAllProductWithCondition = createAsyncThunk(
   // }
   "admin/products",
   async ({ page, size, search, sortOption }) => {
-    console.log("search: ", search);
-    console.log("sortOption: ", sortOption);
+    // console.log("search: ", search);
+    // console.log("sortOption: ", sortOption);
     const response = await jsonAxios.get(
       `/admin/products?page=${page}&size=${size}&productName=${search}&sortOption=${sortOption}`
     );
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   }
 );
