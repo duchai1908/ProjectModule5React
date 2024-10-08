@@ -13,6 +13,10 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addProductToCart } from "../../../../redux/slices/cartSlice";
+import {
+  addItemProductToCart,
+  findAllCart,
+} from "../../../../services/cartService";
 
 const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -37,25 +41,21 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   useEffect(() => {
     console.log("check list: ", productDetailList);
     console.log("check list piscValue: ", piscValue);
-    // Extract colors and sizes from productDetailList
-    let colors;
-    let sizes;
-    if (piscValue) {
-      // colors = piscValue.colors.map((detail) => (detail.color));
-      // sizes = piscValue.sizes.map((detail) => detail.size);
 
+    if (piscValue && piscValue.colors && piscValue.sizes) {
       // Set the extracted colors and sizes to state
       setListColors(piscValue.colors);
       setListSizes(piscValue.sizes);
 
-      setSelectedColor(piscValue.colors[0].color);
+      // Chỉ lấy màu và kích thước nếu chúng tồn tại
+      if (piscValue.colors.length > 0) {
+        setSelectedColor(piscValue.colors[0].color);
+      }
 
-      setSelectedSize(piscValue.sizes[0].size);
+      if (piscValue.sizes.length > 0) {
+        setSelectedSize(piscValue.sizes[0].size);
+      }
     }
-
-    console.log(colors);
-    console.log(sizes);
-    // Set the initial selected color and size if available
   }, [productDetailList, piscValue]);
 
   //create quantity value
@@ -69,39 +69,55 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   };
 
   // Hàm tìm `ProductDetail` dựa trên màu sắc và kích thước
-  const findProductDetail = () => {
-    console.log("vao");
-    console.log("size", selectedSize);
-    console.log("color", selectedColor);
-    return productDetailList.find(
-      (detail) =>
-        detail.color.color === selectedColor &&
-        detail.size.size === selectedSize
+  const findProductDetail = (color, size) => {
+    console.log(
+      `Đang tìm kiếm sản phẩm với Màu: ${color}, Kích thước: ${size}`
     );
+
+    return productDetailList.find((product) => {
+      console.log(
+        `Kiểm tra sản phẩm: Màu: ${product.color.color}, Kích thước: ${product.size.size}`
+      );
+      return (
+        product.color.color.toLowerCase().trim() ===
+          color.toLowerCase().trim() &&
+        product.size.size.toLowerCase().trim() === size.toLowerCase().trim()
+      );
+    });
   };
 
-  // Hàm thêm sản phẩm vào giỏ hàng
   const handleAddToCart = () => {
-    const selectedProductDetail = findProductDetail();
-    console.log("current", selectedProductDetail);
-    if (selectedProductDetail) {
-      const productToAdd = {
-        id: selectedProductDetail.id, // Lấy ID từ `ProductDetail`
-        name: selectedProductDetail.name,
-        price: selectedProductDetail.price, // Sử dụng giá từ `ProductDetail`
-        quantity: number,
-        color: selectedColor,
-        size: selectedSize,
-      };
+    const selectedProductDetail = findProductDetail(
+      selectedColor.trim(),
+      selectedSize.trim()
+    );
 
-      dispatch(addProductToCart(productToAdd)); // Gọi action thêm sản phẩm vào giỏ hàng
-    } else {
+    if (!selectedProductDetail) {
       console.log(
         "Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn"
       );
+      return;
+    } else {
+      console.log("Sản phẩm chi tiết đã tìm thấy:", selectedProductDetail);
     }
+
+    const productToAdd = {
+      id: selectedProductDetail.id,
+      name: selectedProductDetail.name,
+      price: selectedProductDetail.price,
+      quantity: number,
+      color: selectedColor,
+      size: selectedSize,
+    };
+
+    console.log("Product to add:", productToAdd);
+    dispatch(addProductToCart(productToAdd));
+    dispatch(addItemProductToCart(productToAdd)).then(() => {
+      dispatch(findAllCart()); // Gọi lại để cập nhật danh sách cart sau khi thêm
+    });
   };
 
+  //
   // useEffect({},number)
   return (
     <div className="m-5 md:flex md:gap-8">
@@ -113,7 +129,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           afterChange={(current) => setActiveIndex(current)}
           className="rounded-xl"
         >
-          {piscValue &&
+          {piscValue && piscValue.images && piscValue.images.length > 0 ? (
             piscValue.images.map((image, index) => (
               <div key={index}>
                 <div
@@ -121,10 +137,13 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
                   style={{ backgroundImage: `url(${image})` }}
                 />
               </div>
-            ))}
+            ))
+          ) : (
+            <div>No images available</div> // Thông báo khi không có hình ảnh
+          )}
         </Carousel>
         <div className="flex justify-between md:justify-center md:gap-8 mt-4">
-          {piscValue &&
+          {piscValue && piscValue.images && piscValue.images.length > 0 ? (
             piscValue.images.map((image, index) => (
               <div
                 key={index}
@@ -141,7 +160,10 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
                   className="w-[80px] h-[80px] object-cover"
                 />
               </div>
-            ))}
+            ))
+          ) : (
+            <div>No thumbnails available</div> // Thông báo khi không có hình thu nhỏ
+          )}
         </div>
         <div className="absolute top-2 left-2">
           {/* <FaHeart className="text-pink-500 text-[32px] cursor-pointer" /> */}
@@ -206,40 +228,44 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
         <div className="mt-4">
           <h3 className="font-bold mb-3">Colors:</h3>
           <ul className="flex gap-3 list-none">
-            {listColors &&
+            {listColors && listColors.length > 0 ? (
               listColors.map((color) => (
                 <li
                   key={color.color}
                   className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer bg-${color.color}-500`}
                   onClick={() => setSelectedColor(color.color)}
                 >
-                  {/* If this color is selected, show the check icon */}
                   {selectedColor === color.color && (
                     <FaCheck className="absolute top-[-5px] right-[-5px] text-white text-[12px] bg-blue-500 rounded-full" />
                   )}
                 </li>
-              ))}
+              ))
+            ) : (
+              <div>No colors available</div> // Thông báo khi không có màu
+            )}
           </ul>
         </div>
         <div className="w-full h-[1px] bg-gray-200 my-1"></div>
         <div className="mt-4">
           <h3 className="font-bold mb-3">Sizes:</h3>
           <ul className="flex gap-3 list-none">
-            {listSizes &&
+            {listSizes && listSizes.length > 0 ? (
               listSizes.map((size) => (
                 <li
                   key={size.size}
-                  className={`relative  cursor-pointer p-3 rounded-xl`}
+                  className={`relative cursor-pointer p-3 rounded-xl`}
                   style={{ border: "1px solid black" }}
                   onClick={() => setSelectedSize(size.size)}
                 >
                   <p>{size.size}</p>
-                  {/* If this color is selected, show the check icon */}
                   {selectedSize === size.size && (
                     <FaCheck className="absolute top-[-5px] right-[-5px] p-[2px] text-white text-[20px] bg-blue-500 rounded-full" />
                   )}
                 </li>
-              ))}
+              ))
+            ) : (
+              <div>No sizes available</div> // Thông báo khi không có kích thước
+            )}
           </ul>
         </div>
         <hr className="mt-3" />
