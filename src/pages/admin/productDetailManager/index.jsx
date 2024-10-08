@@ -20,6 +20,11 @@ export default function ProductDetailManager() {
   const { data, status, error, totalElements, number, size } = useSelector(
     (state) => state.productDetail
   );
+  const {
+    data: productCurrentt,
+    status: productCurrenttStatus,
+    error: productCurrenttError,
+  } = useSelector((state) => state.product);
 
   const dispatch = useDispatch();
   //for model add
@@ -116,11 +121,6 @@ export default function ProductDetailManager() {
                           onClick: () => handleEdit(item), // Pass the item to the edit handler
                         },
                         {
-                          key: "5",
-                          label: <span>Chặn</span>,
-                          onClick: () => handleBlock(item), // Pass the item to the block handler
-                        },
-                        {
                           key: "6",
                           label: <span>Xóa</span>,
                           onClick: () => handleDelete(item), // Pass the item to the delete handler
@@ -135,12 +135,12 @@ export default function ProductDetailManager() {
                           <td className="px-4 h-11">{item.name}</td>
                           <td className="px-4 h-11">
                             <div className="flex my-3">
-                              {/* <Image
+                              <Image
                                 width={150}
                                 height={150}
-                                src={item.product.image}
-                                className="object-cover rounded-md"   
-                              /> */}
+                                src={item?.product?.image}
+                                className="object-cover rounded-md"
+                              />
                             </div>
                           </td>
                           <td className="px-4 h-11 text-center">
@@ -150,17 +150,17 @@ export default function ProductDetailManager() {
                             {item.price}
                           </td>
                           <td className="px-4 h-11 text-left">
-                            {/* {item.color.color} */}
+                            {item?.color?.color}
                           </td>
                           <td className="px-4 h-11 text-left">
-                            {/* {item.size.size} */}
+                            {item?.size?.size}
                           </td>
                           <td className="px-4 h-11">
-                            {/* {item.product.status ? (
-                              <Tag color="green">Đang hoạt động</Tag>
+                            {item?.stock > 0 ? (
+                              <Tag color="green">Còn hàng</Tag>
                             ) : (
-                              <Tag color="red">Ngừng hoạt động</Tag>
-                            )} */}
+                              <Tag color="red">Hết hàng</Tag>
+                            )}
                           </td>
                           <td className="px-4 h-11 text-center ">
                             <Dropdown

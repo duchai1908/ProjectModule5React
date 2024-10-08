@@ -17,6 +17,10 @@ import {
   addItemProductToCart,
   findAllCart,
 } from "../../../../services/cartService";
+import {
+  formatCurrencyVND,
+  newDateArrive,
+} from "../../../../utils/formatMoney";
 
 const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -261,28 +265,37 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
       </div>
       {/* Right Side: Product Information */}
       <div className="flex-1 md:pl-5 md:pr-5 mt-[120px] md:mt-0">
-        <h1 className="text-[40px] font-bold">Name Product</h1>
+        <h1 className="text-[40px] font-bold">{piscValue?.product?.name}</h1>
         <div className="flex gap-3 items-baseline">
-          <p className="text-[28px] text-gray-500 line-through">Price</p>
-          <p className="text-[32px] text-blue-500">Price</p>
-          <p className="text-[16px] bg-gray-300 ml-[-8px]">-10%</p>
+          <p className="text-[28px] text-gray-500 line-through">
+            {formatCurrencyVND(productDetailList[0]?.price)}
+          </p>
+          <p className="text-[32px] text-blue-500">
+            {formatCurrencyVND(
+              productDetailList[0]?.price -
+                productDetailList[0]?.price * (piscValue?.product?.sale / 100)
+            )}
+          </p>
+          <p className="text-[16px] bg-gray-300 ml-[-8px]">
+            -{piscValue?.product?.sale}%
+          </p>
         </div>
 
-        <p className="mt-2">Description lorem ipsum dolor sit amet.</p>
+        <p className="mt-2">{piscValue?.product?.description}</p>
 
         <div className="mt-4">
-          <div className="flex mb-3">
+          {/* <div className="flex mb-3">
             <p className="font-bold">Availability:</p>
             <p className="text-blue-500 ml-2">11 left in stock</p>
-          </div>
+          </div> */}
           <div className="flex mb-3">
-            <p className="font-bold">Type:</p>
-            <p className="ml-2">Category Type</p>
+            <p className="font-bold">Loại:</p>
+            <p className="ml-2">{piscValue?.product?.category?.name}</p>
           </div>
         </div>
         <div className="w-full h-[1px] bg-gray-200 my-1"></div>
         <div className="mt-4">
-          <h3 className="font-bold mb-3">Colors:</h3>
+          <h3 className="font-bold mb-3">Màu:</h3>
           <ul className="flex gap-3 list-none">
             {listColors && listColors.length > 0 ? (
               listColors.map((color) => (
@@ -304,7 +317,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
         </div>
         <div className="w-full h-[1px] bg-gray-200 my-1"></div>
         <div className="mt-4">
-          <h3 className="font-bold mb-3">Sizes:</h3>
+          <h3 className="font-bold mb-3">Kích cỡ:</h3>
           <ul className="flex gap-3 list-none">
             {listSizes && listSizes.length > 0 ? (
               listSizes.map((size) => {
@@ -386,24 +399,24 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
         <div className="mt-4 flex gap-4 items-center">
           <TbTruckDelivery className="text-[32px]" />
           <p className="text-[16px]">
-            Estimated Delivery Date :{" "}
-            <span className="font-bold">02 - 04 October, 2024.</span>
+            Ngày giao hàng dự kiến :{" "}
+            <span className="font-bold">{newDateArrive()}</span>
           </p>
         </div>
         <div className="w-full h-[1px] bg-gray-200 my-1"></div>
         {/* return information */}
         <div className="mt-4">
-          <p className="text-[16px] font-bold">Return rules summary</p>
+          <p className="text-[16px] font-bold">Tóm tắt quy định trả hàng</p>
           <ul className="list-disc pl-4">
-            <li className="mt-2">Returns accepted for 30 days</li>
-            <li className="mt-2">Free return shipping</li>
-            <li className="mt-2">No restocking fee</li>
-            <li className="mt-2">No final sale items</li>
+            <li className="mt-2">Chấp nhận trả hàng trong vòng 30 ngày</li>
+            <li className="mt-2">Miễn phí vận chuyển trả hàng</li>
+            <li className="mt-2">Không thu phí lưu kho</li>
+            <li className="mt-2">Không có mặt hàng bán cuối cùng</li>
           </ul>
         </div>
         <hr className="mt-3" />
         <div className="flex mt-4">
-          <p>Share:</p>
+          <p>Chia sẻ qua:</p>
           <div className="flex">
             <FaFacebookF className="ml-3 mr-1" />
             <p>Facebook</p>

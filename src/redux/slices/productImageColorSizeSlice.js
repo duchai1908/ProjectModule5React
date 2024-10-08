@@ -27,7 +27,6 @@ const productAndImageAndSizeAndColor = createSlice({
       })
       .addCase(getAllPISC.fulfilled, (state, action) => {
         state.status = "successfully";
-        // console.log("successfully");
         state.data = action.payload.data; // Add to top of list
       })
       .addCase(getAllPISC.rejected, (state, action) => {
