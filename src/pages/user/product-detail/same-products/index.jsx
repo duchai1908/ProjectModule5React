@@ -10,6 +10,7 @@ import { Pagination, Navigation } from "swiper/modules";
 
 import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
 import { Link } from "react-router-dom";
+import { formatCurrencyVND } from "../../../../utils/formatMoney";
 
 export default function SameProductsProductDetail({
   listSameProducts,
@@ -43,45 +44,85 @@ export default function SameProductsProductDetail({
               className="mySwiper"
             >
               {productRelate?.map((product, index) => {
-                return (
-                  <SwiperSlide key={index}>
-                    <div
-                      key={index}
-                      className="w-full h-auto text-center border rounded-lg"
-                    >
+                // Tìm productDetail đầu tiên khớp với product.id
+                const productDetail = productDetailRelateList?.find(
+                  (productDetailsItem) =>
+                    productDetailsItem?.product?.id === product?.id
+                );
+                if (product != productDetail) {
+                  return (
+                    <SwiperSlide key={index}>
                       <div
-                        className="relative h-[300px] rounded-t-md bg-cover bg-center transition duration-300 ease-in-out hover:bg-black hover:bg-opacity-50"
-                        style={{
-                          backgroundImage: `url('${product.image}')`,
-                        }}
+                        key={index}
+                        className="w-full h-auto text-center border rounded-lg"
                       >
-                        {/* Button container */}
-                        <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
-                          <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-gray-200 hover:text-black hover:border-white">
-                            <FaShoppingCart className="text-lg" />
-                          </button>
-                          <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-white hover:text-red-600 hover:border-white">
-                            <FaHeart className="text-lg" />
-                          </button>
+                        <div
+                          className="relative h-[300px] rounded-t-md bg-cover bg-center transition duration-300 ease-in-out hover:bg-black hover:bg-opacity-50"
+                          style={{
+                            backgroundImage: `url('${product.image}')`,
+                          }}
+                        >
+                          {/* Button container */}
+                          <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
+                            <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-gray-200 hover:text-black hover:border-white">
+                              <FaShoppingCart className="text-lg" />
+                            </button>
+                            <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-white hover:text-red-600 hover:border-white">
+                              <FaHeart className="text-lg" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="mt-5">
+                          {productDetail ? (
+                            <>
+                              <Link to={`/product-detail/${product.id}`}>
+                                <p className="cursor-pointer hover:text-blue-500 mb-3  font-bold">
+                                  {product.name}
+                                </p>
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <p className="cursor-not-allowed text-gray-500  font-bold">
+                                {product.name}
+                              </p>
+                            </>
+                          )}
+                          {productDetail?.price ? (
+                            <>
+                              <p className="mb-3 line-through">
+                                {formatCurrencyVND(productDetail?.price)} vnd
+                              </p>
+                              <p className="mb-3 font-bold">
+                                {formatCurrencyVND(productDetail?.price)} vnd
+                              </p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="mb-3 line-through opacity-0">
+                                555 vnd
+                              </p>
+                              <p className="mb-3 font-bold">Không sẵn hàng</p>
+                            </>
+                          )}
+                          {/* <p className="mb-3 line-through">
+                            {productDetail?.price} vnd
+                          </p>
+                          <p className="mb-3 font-bold">
+                            {productDetail?.price} vnd
+                          </p> */}
+                        </div>
+                        <div className="my-3 flex justify-center gap-2">
+                          <FaStar className="text-yellow-300" />
+                          <p>3.3/5</p>
                         </div>
                       </div>
-
-                      <div className="mt-5">
-                        <Link to={`/product-detail/${product.id}`}>
-                          <p className="cursor-pointer hover:text-blue-500 mb-3  font-bold">
-                            {product.name}
-                          </p>
-                        </Link>
-                        <p className="mb-3 line-through">{product.price} vnd</p>
-                        <p className="mb-3 font-bold">{product.price} vnd</p>
-                      </div>
-                      <div className="my-3 flex justify-center gap-2">
-                        <FaStar className="text-yellow-300" />
-                        <p>3.3/5</p>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                );
+                    </SwiperSlide>
+                  );
+                } else {
+                  return <></>;
+                }
               })}
             </Swiper>
 
