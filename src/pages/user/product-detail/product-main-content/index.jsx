@@ -45,12 +45,13 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
       // sizes = piscValue.sizes.map((detail) => detail.size);
 
       // Set the extracted colors and sizes to state
-      setListColors(piscValue.colors);
-      setListSizes(piscValue.sizes);
+      setListColors(piscValue?.colors);
+      setListSizes(piscValue?.sizes);
+      if (piscValue?.colors?.length > 0) {
+        setSelectedColor(piscValue?.colors[0].color);
 
-      setSelectedColor(piscValue.colors[0].color);
-
-      setSelectedSize(piscValue.sizes[0].size);
+        setSelectedSize(piscValue?.sizes[0].size);
+      }
     }
 
     console.log(colors);
@@ -67,6 +68,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
       setNumber(value);
     }
   };
+  //hihhi
 
   // Hàm thêm sản phẩm vào giỏ hàng
   const handleAddToCart = () => {
@@ -95,7 +97,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           className="rounded-xl"
         >
           {piscValue &&
-            piscValue.images.map((image, index) => (
+            piscValue?.images?.map((image, index) => (
               <div key={index}>
                 <div
                   className="w-full h-[370px] md:h-[570px] bg-cover bg-center"
@@ -106,7 +108,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
         </Carousel>
         <div className="flex justify-between md:justify-center md:gap-8 mt-4">
           {piscValue &&
-            piscValue.images.map((image, index) => (
+            piscValue?.images?.map((image, index) => (
               <div
                 key={index}
                 onClick={() => handleThumbnailClick(index)}
@@ -188,7 +190,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           <h3 className="font-bold mb-3">Colors:</h3>
           <ul className="flex gap-3 list-none">
             {listColors &&
-              listColors.map((color) => (
+              listColors?.map((color) => (
                 <li
                   key={color.color}
                   className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer bg-${color.color}-500`}
@@ -207,7 +209,7 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           <h3 className="font-bold mb-3">Sizes:</h3>
           <ul className="flex gap-3 list-none">
             {listSizes &&
-              listSizes.map((size) => (
+              listSizes?.map((size) => (
                 <li
                   key={size.size}
                   className={`relative  cursor-pointer p-3 rounded-xl`}
