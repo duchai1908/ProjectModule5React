@@ -7,16 +7,22 @@ import {
   deleteCart,
   findAllCart,
 } from "../../../services/cartService";
+import Cookies from "js-cookie";
 import ConfirmationModal from "../../../components/model/ConfirmationModal";
 export default function CartDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isClearingCart, setIsClearingCart] = useState(false); // XOA TAT CA
-  const [cartItemIdToDelete, setCartItemIdToDelete] = useState(null); // Lưu trữ id của sản phẩm muốn xóa
+  const [isClearingCart, setIsClearingCart] = useState(false);
+  const [cartItemIdToDelete, setCartItemIdToDelete] = useState(null);
   const dispatch = useDispatch();
 
   // Lấy listCart từ Redux store
-  const { data: listCart, status } = useSelector((state) => state.cart);
-  console.log(listCart);
+  const {
+    data: listCart,
+    status,
+    totalPrice,
+  } = useSelector((state) => state.cart);
+  console.log("totalPrice", totalPrice);
+  // console.log("listDetail", listCart);
   if (!listCart || listCart.length === 0) {
     return <p>Your cart is empty.</p>; // Hiển thị thông báo khi giỏ hàng trống
   }
@@ -56,6 +62,9 @@ export default function CartDetail() {
     setIsModalVisible(true);
   };
 
+  const data = JSON.parse(Cookies.get("token") || "null");
+  console.log("data = " + data);
+
   return (
     <>
       <div className="cartDetail_container">
@@ -66,51 +75,52 @@ export default function CartDetail() {
           <div className="cartDetail_table">
             <table>
               <tbody>
-                {listCart.data.data.map((item) => (
-                  <tr key={item.id}>
-                    <td className="cartDetail_img">
-                      <Link>
-                        <img
-                          src={item.productDetail.product.image}
-                          alt={item.productDetail.name}
-                        />
-                      </Link>
-                    </td>
-                    <td className="cartDetail_product-title">
-                      <Link to="#" className="link_title-product">
-                        {item.productDetail.name}
-                      </Link>
-                      <p>{item.productDetail.color.color}</p>
-                      <p>Size: {item.productDetail.size.size}</p>
-                    </td>
-                    <td className="cartDetail_product-price">
-                      {item.productDetail.price}₫
-                    </td>
-                    <td className="cartDetail_control-quantity">
-                      <div className="cart_quantity-box">
-                        <div className="cart_quantity-minus">-</div>
-                        <input
-                          className="cart_quantity-control"
-                          type="text"
-                          value={item.quantity}
-                          readOnly
-                        />
-                        <div className="cart_quantity-plus">+</div>
-                      </div>
-                    </td>
-                    <td className="cartDetail_total">
-                      {item.productDetail.price * item.quantity}₫
-                    </td>
-                    <td
-                      className="cartDetail_close"
-                      onClick={() => showDeleteConfirmation(item.id)} // Truyền item.id vào hàm
-                    >
-                      <div className="cartDetail_icon-close">
-                        <i class="bx bx-x"></i>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {listCart &&
+                  listCart?.data?.map((item) => (
+                    <tr key={item.id}>
+                      <td className="cartDetail_img">
+                        <Link>
+                          <img
+                            src={item.productDetail.product.image}
+                            alt={item.productDetail.name}
+                          />
+                        </Link>
+                      </td>
+                      <td className="cartDetail_product-title">
+                        <Link to="#" className="link_title-product">
+                          {item.productDetail.name}
+                        </Link>
+                        <p>{item.productDetail.color.color}</p>
+                        <p>Size: {item.productDetail.size.size}</p>
+                      </td>
+                      <td className="cartDetail_product-price">
+                        {item.productDetail.price}₫
+                      </td>
+                      <td className="cartDetail_control-quantity">
+                        <div className="cart_quantity-box">
+                          <div className="cart_quantity-minus">-</div>
+                          <input
+                            className="cart_quantity-control"
+                            type="text"
+                            value={item.quantity}
+                            readOnly
+                          />
+                          <div className="cart_quantity-plus">+</div>
+                        </div>
+                      </td>
+                      <td className="cartDetail_total">
+                        {item.productDetail.price * item.quantity}₫
+                      </td>
+                      <td
+                        className="cartDetail_close"
+                        onClick={() => showDeleteConfirmation(item.id)} // Truyền item.id vào hàm
+                      >
+                        <div className="cartDetail_icon-close">
+                          <i class="bx bx-x"></i>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -143,7 +153,7 @@ export default function CartDetail() {
                     <th>Subtotal</th>
                     <td className="cart_amount">
                       <span class="amount">
-                        <span id="bk-cart-subtotal-price">3.400.000₫</span>
+                        <span id="bk-cart-subtotal-price">{totalPrice}</span>
                       </span>
                     </td>
                   </tr>

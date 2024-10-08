@@ -12,7 +12,11 @@ import {
 import { TbTruckDelivery } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addProductToCart } from "../../../../redux/slices/cartSlice";
+
+import {
+  addItemProductToCart,
+  findAllCart,
+} from "../../../../services/cartService";
 
 const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -35,28 +39,30 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
 
+
+  //listSize by color
+  const [listSizeByCondition, setListSizeByCondition] = useState([]);
+
   useEffect(() => {
-    // console.log("check list: ", productDetailList);
-    // console.log("check list piscValue: ", piscValue);
-    // Extract colors and sizes from productDetailList
-    let colors;
-    let sizes;
-    if (piscValue) {
-      // colors = piscValue.colors.map((detail) => (detail.color));
-      // sizes = piscValue.sizes.map((detail) => detail.size);
-
+    if (piscValue && piscValue.colors && piscValue.sizes) {
       // Set the extracted colors and sizes to state
-      setListColors(piscValue.colors);
-      setListSizes(piscValue.sizes);
+      setListColors(piscValue?.colors);
+      setListSizes(piscValue?.sizes);
+      if (piscValue?.colors?.length > 0) {
+        setSelectedColor(piscValue?.colors[0].color);
 
-      setSelectedColor(piscValue.colors[0].color);
+        //setSelectedSize(piscValue?.sizes[0].size);
 
-      setSelectedSize(piscValue.sizes[0].size);
+        // Chỉ lấy màu và kích thước nếu chúng tồn tại
+        if (piscValue.colors.length > 0) {
+          setSelectedColor(piscValue.colors[0].color);
+        }
+
+        if (piscValue.sizes.length > 0) {
+          setSelectedSize(piscValue.sizes[0].size);
+        }
+      }
     }
-
-    // console.log(colors);
-    // console.log(sizes);
-    // Set the initial selected color and size if available
   }, [productDetailList, piscValue]);
 
   //create quantity value
@@ -68,25 +74,98 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
       setNumber(value);
     }
   };
+  //hihhi
+  useEffect(() => {}, [listSizeByCondition]);
+  // Hàm tìm `ProductDetail` dựa trên màu sắc và kích thước
+  const findProductDetail = (color, size) => {
+    return productDetailList.find((product) => {
+      console.log(
+        `Kiểm tra sản phẩm: Màu: ${product.color.color}, Kích thước: ${product.size.size}`
+      );
+      return (
+        product.color.color.toLowerCase().trim() ===
+          color.toLowerCase().trim() &&
+        product.size.size.toLowerCase().trim() === size.toLowerCase().trim()
+      );
+    });
+  };
 
-  // Hàm thêm sản phẩm vào giỏ hàng
   const handleAddToCart = () => {
-    // color size -> productDetailId;
+    // Kiểm tra xem người dùng đã chọn số lượng, kích thước và màu sắc chưa
+    if (number <= 0) {
+      alert("Vui lòng chọn số lượng sản phẩm!");
+      return;
+    }
+    if (!selectedSize) {
+      alert("Vui lòng chọn kích thước sản phẩm!");
+      return;
+    }
+    if (!selectedColor) {
+      alert("Vui lòng chọn màu sắc sản phẩm!");
+      return;
+    }
+    const selectedProductDetail = findProductDetail(
+      selectedColor.trim(),
+      selectedSize.trim()
+    );
+
+    if (!selectedProductDetail) {
+      alert("Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn");
+      console.log(
+        "Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn"
+      );
+      return;
+    } else {
+      console.log("Sản phẩm chi tiết đã tìm thấy:", selectedProductDetail);
+      alert("success full");
+    }
+
     const productToAdd = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
+      productDetailId: selectedProductDetail.id,
+      name: selectedProductDetail.name,
+      price: selectedProductDetail.price,
       quantity: number,
       color: selectedColor,
       size: selectedSize,
     };
 
-    dispatch(addProductToCart(productToAdd)); // Gọi action thêm sản phẩm vào giỏ hàng
+    console.log("Product to add:", productToAdd);
+    dispatch(addItemProductToCart(productToAdd)).then(() => {
+      dispatch(findAllCart()); // Gọi lại để cập nhật danh sách cart sau khi thêm
+    });
   };
 
-  // useEffect({},number)
+  const handleChangeColor = (colorName, e) => {
+    setSelectedColor(colorName);
+    console.log("details: ", productDetailList);
+
+    // Filter out only the product details that match the color
+    const filteredList = productDetailList.filter(
+      (productDetail) => productDetail.color.color === colorName
+    );
+    console.log("list size normal", listSizes);
+    setListSizeByCondition(filteredList);
+    console.log("Filtered List: ", filteredList);
+  };
+
+  const [colorHasSize, setColorHasSize] = useState(null);
+
+  //
+  useEffect(() => {
+    if (selectedColor) {
+      setColorHasSize(
+        productDetailList
+          .filter(
+            (productDetail) => productDetail.color.color === selectedColor
+          )
+          .map((productDetail) => productDetail.size)
+      );
+    }
+  }, [selectedColor]);
+
   return (
     <div className="m-5 md:flex md:gap-8">
+      {console.log("color has sizes = ", colorHasSize)}
       {/* Left Side: Carousel and Thumbnails */}
       <div className="flex-1 h-[370px] md:w-[570px] md:h-[570px] relative  ">
         <Carousel
@@ -95,35 +174,53 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           afterChange={(current) => setActiveIndex(current)}
           className="rounded-xl"
         >
-          {piscValue &&
-            piscValue.images.map((image, index) => (
-              <div key={index}>
-                <div
-                  className="w-full h-[370px] md:h-[570px] bg-cover bg-center"
-                  style={{ backgroundImage: `url(${image})` }}
-                />
-              </div>
-            ))}
+          {piscValue && piscValue.images && piscValue.images.length > 0 ? (
+            piscValue.images.map((image, index) => {
+              if (index < 4) {
+                return (
+                  <div key={index}>
+                    <div
+                      className="w-full h-[370px] md:h-[570px] bg-cover bg-center"
+                      style={{ backgroundImage: `url(${image})` }}
+                    />
+                  </div>
+                );
+              } else {
+                return <></>;
+              }
+            })
+          ) : (
+            <div>No images available</div> // Thông báo khi không có hình ảnh
+          )}
         </Carousel>
         <div className="flex justify-between md:justify-center md:gap-8 mt-4">
-          {piscValue &&
-            piscValue.images.map((image, index) => (
-              <div
-                key={index}
-                onClick={() => handleThumbnailClick(index)}
-                className={`cursor-pointer rounded-lg overflow-hidden transition-transform ${
-                  activeIndex === index
-                    ? "scale-125 border-2 border-blue-500"
-                    : ""
-                }`}
-              >
-                <img
-                  src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="w-[80px] h-[80px] object-cover"
-                />
-              </div>
-            ))}
+          {piscValue && piscValue.images && piscValue.images.length > 0 ? (
+            piscValue.images.map((image, index) => {
+              if (index < 4) {
+                return (
+                  <div
+                    key={index}
+                    onClick={() => handleThumbnailClick(index)}
+                    className={`cursor-pointer rounded-lg overflow-hidden transition-transform ${
+                      activeIndex === index
+                        ? "scale-125 border-2 border-blue-500"
+                        : ""
+                    }`}
+                  >
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="w-[80px] h-[80px] object-cover"
+                    />
+                  </div>
+                );
+              } else {
+                return <></>;
+              }
+            })
+          ) : (
+            <div>No thumbnails available</div> // Thông báo khi không có hình thu nhỏ
+          )}
         </div>
         <div className="absolute top-2 left-2">
           {/* <FaHeart className="text-pink-500 text-[32px] cursor-pointer" /> */}
@@ -162,7 +259,6 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           </div>
         </div>
       </div>
-
       {/* Right Side: Product Information */}
       <div className="flex-1 md:pl-5 md:pr-5 mt-[120px] md:mt-0">
         <h1 className="text-[40px] font-bold">Name Product</h1>
@@ -188,38 +284,63 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
         <div className="mt-4">
           <h3 className="font-bold mb-3">Colors:</h3>
           <ul className="flex gap-3 list-none">
-            {listColors.map((color) => (
-              <li
-                key={color.color}
-                className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer bg-${color.color}-500`}
-                onClick={() => setSelectedColor(color.color)}
-              >
-                {/* If this color is selected, show the check icon */}
-                {selectedColor === color.color && (
-                  <FaCheck className="absolute top-[-5px] right-[-5px] text-white text-[12px] bg-blue-500 rounded-full" />
-                )}
-              </li>
-            ))}
+            {listColors && listColors.length > 0 ? (
+              listColors.map((color) => (
+                <li
+                  key={color.color}
+                  className={`relative w-[24px] h-[24px] rounded-[10px] cursor-pointer bg-${color.color}-500`}
+                  // onClick={() => setSelectedColor(color.color)}
+                  onClick={() => handleChangeColor(color.color)}
+                >
+                  {selectedColor === color.color && (
+                    <FaCheck className="absolute top-[-5px] right-[-5px] text-white text-[12px] bg-blue-500 rounded-full" />
+                  )}
+                </li>
+              ))
+            ) : (
+              <div>No colors available</div> // Thông báo khi không có màu
+            )}
           </ul>
         </div>
         <div className="w-full h-[1px] bg-gray-200 my-1"></div>
         <div className="mt-4">
           <h3 className="font-bold mb-3">Sizes:</h3>
           <ul className="flex gap-3 list-none">
-            {listSizes.map((size) => (
-              <li
-                key={size.size}
-                className={`relative  cursor-pointer p-3 rounded-xl`}
-                style={{ border: "1px solid black" }}
-                onClick={() => setSelectedSize(size.size)}
-              >
-                <p>{size.size}</p>
-                {/* If this color is selected, show the check icon */}
-                {selectedSize === size.size && (
-                  <FaCheck className="absolute top-[-5px] right-[-5px] p-[2px] text-white text-[20px] bg-blue-500 rounded-full" />
-                )}
-              </li>
-            ))}
+            {listSizes && listSizes.length > 0 ? (
+              listSizes.map((size) => {
+                if (colorHasSize?.map((item) => item.id).includes(size.id)) {
+                  return (
+                    <li
+                      key={size.size}
+                      className={`relative cursor-pointer p-3 rounded-xl`}
+                      style={{ border: "1px solid black" }}
+                      onClick={() => setSelectedSize(size.size)}
+                    >
+                      <p>{size.size}</p>
+                      {selectedSize === size.size && (
+                        <FaCheck className="absolute top-[-5px] right-[-5px] p-[2px] text-white text-[20px] bg-blue-500 rounded-full" />
+                      )}
+                    </li>
+                  );
+                } else {
+                  return (
+                    <li
+                      key={size.size}
+                      className={`relative p-3 rounded-xl opacity-20 cursor-not-allowed`}
+                      style={{ border: "1px solid black" }}
+                      // onClick={() => setSelectedSize(size.size)}
+                    >
+                      <p>{size.size}</p>
+                      {selectedSize === size.size && (
+                        <FaCheck className="absolute top-[-5px] right-[-5px] p-[2px] text-white text-[20px] bg-blue-500 rounded-full" />
+                      )}
+                    </li>
+                  );
+                }
+              })
+            ) : (
+              <div>No sizes available</div> // Thông báo khi không có kích thước
+            )}
           </ul>
         </div>
         <hr className="mt-3" />

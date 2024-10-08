@@ -10,25 +10,12 @@ const initialValue = {
   status: "idle",
   data: [],
   error: null,
+  totalPrice: 0,
 };
 export const cartSlice = createSlice({
   name: "cart",
   initialState: initialValue,
-  reducers: {
-    addProductToCart: (state, action) => {
-      console.log("cartdata", action.payload);
-      const itemExists = state.data.find(
-        (item) => item.id === action.payload.id
-      );
-      if (itemExists) {
-        // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
-        itemExists.quantity += action.payload.quantity;
-      } else {
-        // Nếu không, thêm sản phẩm mới vào giỏ hàng
-        state.data.push(action.payload);
-      }
-    },
-  },
+  reducers: {},
 
   extraReducers: (builder) => {
     builder
@@ -37,9 +24,24 @@ export const cartSlice = createSlice({
         console.log("Pending");
       })
       .addCase(findAllCart.fulfilled, (state, action) => {
-        console.log("action: " + action.payload);
+        console.log("API payload:", action.payload.data);
+        console.log("State sau khi :", state.data);
         state.status = "successful";
         state.data = action.payload;
+
+        const totalQuantity = action.payload.data.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+        state.totalQuantity = totalQuantity;
+        console.log(totalQuantity);
+        // Tính tổng giá trị
+        const totalPrice = action.payload.data.reduce(
+          (total, item) => total + item.productDetail.price * item.quantity,
+          0
+        );
+        state.totalPrice = totalPrice;
+        console.log("Tổng giá trị:", totalPrice);
       })
       .addCase(findAllCart.rejected, (state, action) => {
         state.status = "failed";
@@ -92,5 +94,5 @@ export const cartSlice = createSlice({
       });
   },
 });
-export const { addProductToCart } = cartSlice.actions; // Xuất action addProductToCart
+
 export default cartSlice.reducer;

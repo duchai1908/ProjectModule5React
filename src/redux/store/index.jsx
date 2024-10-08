@@ -11,6 +11,7 @@ import colorSlice from "../slices/colorSlice";
 import cartSlice from "../slices/cartSlice";
 import sizeSlice from "../slices/sizeSlice";
 import productAndImageAndSizeAndColor from "../slices/productImageColorSizeSlice";
+import productRelateSlice from "../slices/productRelateSlice";
 
 const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
     cart: cartSlice,
     sizeStore: sizeSlice,
     PISC: productAndImageAndSizeAndColor,
+    productRelate: productRelateSlice,
   },
 });
 export default store;
