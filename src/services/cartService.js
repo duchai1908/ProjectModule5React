@@ -50,3 +50,18 @@ export const addItemProductToCart = createAsyncThunk(
     }
   }
 );
+
+//update quantity of cart
+export const updateCartQuantity = createAsyncThunk(
+  "cart/updateCartQuantity",
+  async ({ newQuantity, cartId }, thunkAPI) => {
+    try {
+      const response = await jsonAxios.put(
+        `/user/cart/changeQuantity/${newQuantity}/${cartId}`
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);

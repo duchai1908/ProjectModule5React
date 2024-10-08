@@ -4,6 +4,7 @@ import {
   deleteAllCart,
   deleteCart,
   findAllCart,
+  updateCartQuantity,
 } from "../../services/cartService";
 
 const initialValue = {
@@ -11,7 +12,9 @@ const initialValue = {
   data: [],
   error: null,
   totalPrice: 0,
+  totalQuantity: 0,
 };
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState: initialValue,
@@ -89,6 +92,19 @@ export const cartSlice = createSlice({
         state.status = "successful";
       })
       .addCase(addItemProductToCart.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });
+
+    // update products to cart
+    builder
+      .addCase(updateCartQuantity.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(updateCartQuantity.fulfilled, (state, action) => {
+        state.status = "successful";
+      })
+      .addCase(updateCartQuantity.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
