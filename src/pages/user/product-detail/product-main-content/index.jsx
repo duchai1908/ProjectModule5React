@@ -12,7 +12,7 @@ import {
 import { TbTruckDelivery } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addProductToCart } from "../../../../redux/slices/cartSlice";
+
 import {
   addItemProductToCart,
   findAllCart,
@@ -49,16 +49,16 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
       if (piscValue?.colors?.length > 0) {
         setSelectedColor(piscValue?.colors[0].color);
 
-
         //setSelectedSize(piscValue?.sizes[0].size);
 
-      // Chỉ lấy màu và kích thước nếu chúng tồn tại
-      if (piscValue.colors.length > 0) {
-        setSelectedColor(piscValue.colors[0].color);
-      }
+        // Chỉ lấy màu và kích thước nếu chúng tồn tại
+        if (piscValue.colors.length > 0) {
+          setSelectedColor(piscValue.colors[0].color);
+        }
 
-      if (piscValue.sizes.length > 0) {
-        setSelectedSize(piscValue.sizes[0].size);
+        if (piscValue.sizes.length > 0) {
+          setSelectedSize(piscValue.sizes[0].size);
+        }
       }
     }
   }, [productDetailList, piscValue]);
@@ -93,22 +93,37 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   };
 
   const handleAddToCart = () => {
+    // Kiểm tra xem người dùng đã chọn số lượng, kích thước và màu sắc chưa
+    if (number <= 0) {
+      alert("Vui lòng chọn số lượng sản phẩm!");
+      return;
+    }
+    if (!selectedSize) {
+      alert("Vui lòng chọn kích thước sản phẩm!");
+      return;
+    }
+    if (!selectedColor) {
+      alert("Vui lòng chọn màu sắc sản phẩm!");
+      return;
+    }
     const selectedProductDetail = findProductDetail(
       selectedColor.trim(),
       selectedSize.trim()
     );
 
     if (!selectedProductDetail) {
+      alert("Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn");
       console.log(
         "Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn"
       );
       return;
     } else {
       console.log("Sản phẩm chi tiết đã tìm thấy:", selectedProductDetail);
+      alert("success full");
     }
 
     const productToAdd = {
-      id: selectedProductDetail.id,
+      productDetailId: selectedProductDetail.id,
       name: selectedProductDetail.name,
       price: selectedProductDetail.price,
       quantity: number,
@@ -117,7 +132,6 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
     };
 
     console.log("Product to add:", productToAdd);
-    dispatch(addProductToCart(productToAdd));
     dispatch(addItemProductToCart(productToAdd)).then(() => {
       dispatch(findAllCart()); // Gọi lại để cập nhật danh sách cart sau khi thêm
     });
@@ -149,7 +163,6 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
           )}
         </Carousel>
         <div className="flex justify-between md:justify-center md:gap-8 mt-4">
-
           {piscValue && piscValue.images && piscValue.images.length > 0 ? (
             piscValue.images.map((image, index) => (
               <div

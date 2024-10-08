@@ -11,13 +11,18 @@ import Cookies from "js-cookie";
 import ConfirmationModal from "../../../components/model/ConfirmationModal";
 export default function CartDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isClearingCart, setIsClearingCart] = useState(false); // XOA TAT CA
-  const [cartItemIdToDelete, setCartItemIdToDelete] = useState(null); // Lưu trữ id của sản phẩm muốn xóa
+  const [isClearingCart, setIsClearingCart] = useState(false);
+  const [cartItemIdToDelete, setCartItemIdToDelete] = useState(null);
   const dispatch = useDispatch();
 
   // Lấy listCart từ Redux store
-  const { data: listCart, status } = useSelector((state) => state.cart);
-  console.log(listCart);
+  const {
+    data: listCart,
+    status,
+    totalPrice,
+  } = useSelector((state) => state.cart);
+  console.log("totalPrice", totalPrice);
+  // console.log("listDetail", listCart);
   if (!listCart || listCart.length === 0) {
     return <p>Your cart is empty.</p>; // Hiển thị thông báo khi giỏ hàng trống
   }
@@ -71,7 +76,7 @@ export default function CartDetail() {
             <table>
               <tbody>
                 {listCart &&
-                  listCart.data.data.map((item) => (
+                  listCart?.data?.map((item) => (
                     <tr key={item.id}>
                       <td className="cartDetail_img">
                         <Link>
@@ -148,7 +153,7 @@ export default function CartDetail() {
                     <th>Subtotal</th>
                     <td className="cart_amount">
                       <span class="amount">
-                        <span id="bk-cart-subtotal-price">3.400.000₫</span>
+                        <span id="bk-cart-subtotal-price">{totalPrice}</span>
                       </span>
                     </td>
                   </tr>

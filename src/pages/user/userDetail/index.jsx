@@ -11,7 +11,6 @@ import { MdPublishedWithChanges } from "react-icons/md";
 
 import { FaPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function UserDetail() {
   const props = {
@@ -29,25 +28,6 @@ export default function UserDetail() {
     },
   };
 
-  const { user, status, error } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    console.log("User detail page loaded");
-    console.log("User data:", user); // Kiểm tra dữ liệu người dùng
-  }, [user]);
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!user) {
-    return <div>No user data available</div>; // Thông báo nếu không có dữ liệu người dùng
-  }
-  console.log("user", user);
   return (
     <>
       <div className="user-container">
@@ -78,14 +58,14 @@ export default function UserDetail() {
                 </Upload>
               </div>
               <div className="user-name">
-                <h1>{user?.username}</h1>
+                <h1>nguyen thi vien</h1>
                 <SlNote />
               </div>
               <div className="user-day">06/06/1996</div>
             </div>
             <div className="user-info">
-              <div className="user-phone">SDT: {user?.phone}</div>
-              <div className="user-address">DIA CHI: {user?.address}</div>
+              <div className="user-phone">SDT: 098765432</div>
+              <div className="user-address">DIA CHI: hai duong</div>
             </div>
             <div className="user_line"></div>
             <div className="user-detail">

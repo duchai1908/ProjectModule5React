@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import "./cartList.css";
-
 import { Link } from "react-router-dom";
 import CartItem from "../cartItem";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCart, findAllCart } from "../../../services/cartService";
 export default function CartList({ closeCart }) {
   const { data: listCart, status } = useSelector((state) => state.cart);
-  // console.log("listCart", listCart, status);
+  const totalPrice = useSelector((state) => state.cart.totalPrice);
+  console.log("totalPrice", totalPrice);
+  console.log("listCart", listCart, status);
   const dispatch = useDispatch();
   useEffect(() => {
     // Gọi API lấy danh sách cart
@@ -20,7 +21,7 @@ export default function CartList({ closeCart }) {
   const handleDeleteItem = (id) => {
     dispatch(deleteCart(id)).then(() => {
       dispatch(findAllCart());
-    }); // Gọi action xóa sản phẩm khỏi giỏ hàng
+    });
   };
   return (
     <>
@@ -35,8 +36,10 @@ export default function CartList({ closeCart }) {
           <div className="cart_line"></div>
           <div className="cart_items">
             {status === "pending" && <p>Loading...</p>}
-            {status === "successful" && listCart?.data?.data.length > 0 ? (
-              listCart.data.data.map((item) => (
+            {status === "successful" &&
+            Array.isArray(listCart?.data) &&
+            listCart.data.length > 0 ? (
+              listCart.data.map((item) => (
                 <CartItem
                   key={item.id}
                   item={item}
@@ -44,7 +47,7 @@ export default function CartList({ closeCart }) {
                 />
               ))
             ) : (
-              <p>No items in cart</p> // If no items present
+              <p>No items in cart</p> // Nếu không có sản phẩm nào
             )}
             {status === "failed" && <p>Error loading cart items</p>}
           </div>
@@ -52,7 +55,7 @@ export default function CartList({ closeCart }) {
             <div className="cart_line"></div>
             <div className="cart_total">
               <h4 className="cart_total_title">Subtotal:</h4>
-              <span className="cart_price_total">20.000.000 vnd</span>
+              <span className="cart_price_total">{totalPrice} vnd</span>
             </div>
             <div className="cart_line"></div>
             <div className="cart_button">
