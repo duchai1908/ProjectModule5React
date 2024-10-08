@@ -29,7 +29,7 @@ const handleAddInterceptors = (instance) => {
       const data = JSON.parse(Cookies.get("token")|| 'null') ;
 
 
-      console.log("data = " + data);
+      // console.log("data = " + data);
       if (data) {
         config.headers.Authorization = `Bearer ${data.data.accessToken}`;
       }
