@@ -60,7 +60,7 @@ export default function ForUsers() {
         {
           key: "1",
           label: (
-            <Link to="/user-detail" target="_blank" rel="noopener noreferrer">
+            <Link to="/user-detail" rel="noopener noreferrer">
               My Accounts
             </Link>
           ),
@@ -68,7 +68,7 @@ export default function ForUsers() {
         {
           key: "2",
           label: (
-            <Link to="/wish-list" target="_blank" rel="noopener noreferrer">
+            <Link to="/wish-list" rel="noopener noreferrer">
               WishList
             </Link>
           ),

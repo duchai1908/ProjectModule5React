@@ -69,7 +69,6 @@ const PublicRoutes = [
       },
     ],
   },
-
   //test
   {
     path: "test",
