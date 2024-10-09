@@ -103,7 +103,7 @@ export default function CategoryManager() {
   const handleEditCategory = (category) => {
     setCatUpdate(category);
     setIsEditModalVisible(true);
-    console.log(category);
+    // console.log(category);
   };
 
   //ham update
@@ -163,7 +163,6 @@ export default function CategoryManager() {
         setReload(!reload);
       })
       .catch((error) => {
-        console.error("Chi tiết lỗi:", error); // Log lỗi chi tiết ra console để kiểm tra
         message.error(`Có lỗi xảy ra khi chặn danh mục: ${error}`);
       });
   };
@@ -311,6 +310,7 @@ export default function CategoryManager() {
               onClose={handleCloseEditModal}
               onSave={handleSave}
               catUpdate={catUpdate}
+              error={error}
             />
           </div>
         ) : (

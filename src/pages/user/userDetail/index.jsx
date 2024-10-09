@@ -11,6 +11,7 @@ import { MdPublishedWithChanges } from "react-icons/md";
 
 import { FaPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function UserDetail() {
   const props = {
@@ -27,7 +28,9 @@ export default function UserDetail() {
       }
     },
   };
-
+  // Lấy thông tin người dùng từ Redux
+  const user = useSelector((state) => state.auth.data);
+  console.log("user", user);
   return (
     <>
       <div className="user-container">
@@ -54,18 +57,26 @@ export default function UserDetail() {
             <div className="user-profile">
               <div className="user_upload">
                 <Upload {...props} className="upload-img">
-                  <Button className="upload-button" icon={<FaPlus />}></Button>
+                  <Button className="upload-button" icon={<FaPlus />}>
+                    <img src={user.data.image} alt="" />
+                  </Button>
                 </Upload>
               </div>
               <div className="user-name">
-                <h1>nguyen thi vien</h1>
+                <h1>{user.data.username}</h1>
                 <SlNote />
               </div>
-              <div className="user-day">06/06/1996</div>
+              <div className="user-day">
+                {user ? user.data.dob : "Ngày sinh"}
+              </div>
             </div>
             <div className="user-info">
-              <div className="user-phone">SDT: 098765432</div>
-              <div className="user-address">DIA CHI: hai duong</div>
+              <div className="user-phone">
+                Phone: {user ? user.data.phone : "phone"}
+              </div>
+              <div className="user-address">
+                Address : {user ? user.data.address : "address"}
+              </div>
             </div>
             <div className="user_line"></div>
             <div className="user-detail">
@@ -169,30 +180,6 @@ export default function UserDetail() {
                 <button className="checkout-button">Save</button>
               </div>
             </form>
-          </div>
-        </div>
-        <div className="footer">
-          <div className="user_line"></div>
-          <div className="footer-bottom">
-            <div className="flex flex-col md:flex-row items-center justify-between p-8 w-full max-w-[1200px] mx-auto z-20">
-              <div className="text-center md:text-left">
-                &#169; <strong>Minimalin</strong>. All rights reserved.
-              </div>
-              <div className="flex flex-col md:flex-row gap-4 md:gap-6 mt-4 md:mt-0">
-                <a href="#" className="hover:text-blue-500">
-                  Privacy Policy
-                </a>
-                <a href="#" className="hover:text-blue-500">
-                  Refund Policy
-                </a>
-                <a href="#" className="hover:text-blue-500">
-                  Shipping Policy
-                </a>
-                <a href="#" className="hover:text-blue-500">
-                  Terms of Service
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </div>

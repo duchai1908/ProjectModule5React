@@ -43,6 +43,7 @@ export const updateCategory = createAsyncThunk(
         `/admin/category/${categoryId}`,
         formData
       );
+      console.log("categoryUpdate", response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);

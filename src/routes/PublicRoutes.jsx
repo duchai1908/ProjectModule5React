@@ -63,12 +63,13 @@ const PublicRoutes = [
         path: "register",
         element: <LazyLoader children={<RegisterPage />} />,
       },
+      {
+        path: "user-detail",
+        element: <LazyLoader children={<UserDetailPage />} />,
+      },
     ],
   },
-  {
-    path: "user-detail",
-    element: <LazyLoader children={<UserDetailPage />} />,
-  },
+
   //test
   {
     path: "test",

@@ -8,6 +8,7 @@ export default function UpdateCategory({
   onClose,
   onSave,
   catUpdate,
+  error,
 }) {
   console.log(catUpdate);
   const [name, setName] = useState("");
@@ -68,6 +69,7 @@ export default function UpdateCategory({
         <div>
           <label className="block font-medium mb-2">Tên</label>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
+          {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
 
         <div className="mb-4">
