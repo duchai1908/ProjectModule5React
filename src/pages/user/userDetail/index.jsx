@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./userDetail.css";
 import { Breadcrumb } from "antd";
 import { SlNote } from "react-icons/sl";
@@ -11,8 +11,13 @@ import { MdPublishedWithChanges } from "react-icons/md";
 
 import { FaPlus } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import UserInformationPage from "./userInformation";
+import UserOrderHistoryPage from "./userOrderHistory";
+import { useSelector } from "react-redux";
 
 export default function UserDetail() {
+  //take user value
+  const data = useSelector((state) => state.auth);
   const props = {
     name: "file",
     action: "/upload.do",
@@ -26,6 +31,12 @@ export default function UserDetail() {
         alert(`${info.file.name} file upload failed.`);
       }
     },
+  };
+
+  const [isOpen, setIsOpen] = useState(1);
+  const handleChangePage = (key) => {
+    console.log("key:", key);
+    setIsOpen(key);
   };
 
   return (
@@ -70,106 +81,46 @@ export default function UserDetail() {
             <div className="user_line"></div>
             <div className="user-detail">
               <ul className="user-items">
-                <li className="user-item">
+                <li
+                  className="user-item cursor-pointer"
+                  onClick={() => handleChangePage(1)}
+                >
                   <FaBarcode className="user_icon-side" />
                   <Link>Mã ưu đãi</Link>
                 </li>
-                <li className="user-item">
+                <li
+                  className="user-item cursor-pointer"
+                  onClick={() => handleChangePage(2)}
+                >
                   <LuShoppingBag />
                   <Link>Đơn Hàng</Link>
                 </li>
-                <li className="user-item">
+                <li
+                  className="user-item cursor-pointer"
+                  onClick={() => handleChangePage(3)}
+                >
                   <FaRegHeart />
                   <Link>Yêu thích</Link>
                 </li>
-                <li className="user-item">
+                <li
+                  className="user-item cursor-pointer"
+                  onClick={() => handleChangePage(4)}
+                >
                   <MdPublishedWithChanges />
                   <Link>change Password</Link>
                 </li>
-                <li className="user-item">
+                <li className="user-item cursor-pointer">
                   <IoMdLogOut />
                   <Link to="/">Đăng Xuất</Link>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="user_main-right">
-            <div className="title_right">
-              <h2>Thông Tin Tài Khoản</h2>
-            </div>
-            <div className="user_line"></div>
-            <form className="user_form">
-              <div className="checkout_address-payment">
-                <h3>Giới tính</h3>
-                <div className="selector-gender">
-                  <label className="cyberpunk-checkbox-label">
-                    <input
-                      type="radio"
-                      className="cyberpunk-checkbox"
-                      name="sex"
-                      value="male"
-                    />
-                    Nam
-                  </label>
-                  <label className="cyberpunk-checkbox-label">
-                    <input
-                      type="radio"
-                      className="cyberpunk-checkbox"
-                      name="sex"
-                      value="female"
-                    />
-                    Nữ
-                  </label>
-                  <label className="cyberpunk-checkbox-label">
-                    <input
-                      type="radio"
-                      className="cyberpunk-checkbox"
-                      name="sex"
-                      value="other"
-                    />
-                    Khác
-                  </label>
-                </div>
-              </div>
-              <div className="checkout_delivery">
-                <p>Full name</p>
-                <div className="checkout_address-input">
-                  <input
-                    type="text"
-                    className="checkout_address-item"
-                    placeholder="Enter your full name "
-                  />
-                </div>
-                <p>Phone</p>
-                <div className="checkout_address-input">
-                  <input
-                    type="text"
-                    className="checkout_address-item"
-                    placeholder="Enter your phone number"
-                  />
-                </div>
-                <p>Address</p>
-                <div className="checkout_address-input">
-                  <input
-                    type="text"
-                    className="checkout_address-item"
-                    placeholder="Enter your address"
-                  />
-                </div>
-                <p>Ngày Sinh</p>
-                <div className="checkout_address-input">
-                  <input
-                    type="date"
-                    className="checkout_address-item"
-                    placeholder="Enter your birthday"
-                  />
-                </div>
-              </div>
-              <div className="checkout_address-input">
-                <button className="checkout-button">Save</button>
-              </div>
-            </form>
-          </div>
+          {/* Conditional rendering based on isOpen */}
+          {isOpen === 1 && <UserInformationPage />}
+          {isOpen === 2 && <UserOrderHistoryPage />}
+          {isOpen === 3 && <>hang 3</>}
+          {isOpen === 4 && <>hang 4</>}
         </div>
         <div className="footer">
           <div className="user_line"></div>

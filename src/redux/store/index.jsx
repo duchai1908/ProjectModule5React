@@ -14,7 +14,7 @@ import productRelateSlice from "../slices/productRelateSlice";
 import couponSlice from "../slices/couponSlice";
 import addressSlice from "../slices/addressSlice";
 import productDetailAndImageSlice from "../slices/productDetailAndImageSlice";
-
+import userOrderSlice from "../slices/userOrderSlice";
 
 const store = configureStore({
   reducer: {
@@ -31,7 +31,7 @@ const store = configureStore({
     coupon: couponSlice,
     address: addressSlice,
     PDI: productDetailAndImageSlice,
-
+    userOrder: userOrderSlice,
   },
 });
 export default store;
