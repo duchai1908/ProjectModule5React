@@ -18,7 +18,14 @@ const initialValue = {
 export const cartSlice = createSlice({
   name: "cart",
   initialState: initialValue,
-  reducers: {},
+  reducers: {
+    clearCart: (state) => {
+      // Đặt lại giỏ hàng thành mảng rỗng
+      state.data = [];
+      state.totalPrice = 0;
+      state.totalQuantity = 0;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -110,5 +117,5 @@ export const cartSlice = createSlice({
       });
   },
 });
-
+export const { clearCart } = cartSlice.actions; // Xuất action clearCart
 export default cartSlice.reducer;

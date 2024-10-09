@@ -1,23 +1,27 @@
 import React, { useEffect } from "react";
 import "./checkout.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCoupon } from "../../../services/couponService";
 import { findAllAddress } from "../../../services/addressService";
+import { addOrder } from "../../../services/checkoutService";
+import { clearCart } from "../../../redux/slices/cartSlice";
+import { notification } from "antd";
 
 export default function CheckOut() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isCardChecked, setIsCardChecked] = useState(false);
-  const [isSameAsShippingChecked, setIsSameAsShippingChecked] = useState(false); // Trạng thái cho checkbox "Same as shipping address"
-  const [selectedAddress, setSelectedAddress] = useState(""); // State cho địa chỉ đã chọn
-  const [finalPrice, setFinalPrice] = useState(0); // Giá sau khi áp dụng giảm giá
+  const [isSameAsShippingChecked, setIsSameAsShippingChecked] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState("");
   const [couponCode, setCouponCode] = useState(""); // Mã coupon
 
   // State cho địa chỉ giao hàng
   const [receiveName, setReceiveName] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [note, setNote] = useState(""); // Ghi chú của người dùng
 
   // Lấy listCart từ Redux store
   const {
@@ -26,67 +30,114 @@ export default function CheckOut() {
     totalQuantity,
   } = useSelector((state) => state.cart);
   const { data: couponData } = useSelector((state) => state.coupon);
+
   // Lấy dữ liệu địa chỉ từ Redux
   const { data: addressList, status: addressStatus } = useSelector(
     (state) => state.address
   );
-  // console.log("listDetail", listCart);
-  if (!listCart || listCart.length === 0) {
-    return <p>Your cart is empty.</p>; // Hiển thị thông báo khi giỏ hàng trống
-  }
+  console.log("address", addressList);
+
   useEffect(() => {
     dispatch(findAllAddress()); // Gọi API để lấy danh sách địa chỉ khi component mount
   }, [dispatch]);
 
   // Hàm xử lý khi nhấn "Apply"
   const handleApplyCoupon = async (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form submit
+    e.preventDefault();
     if (couponCode) {
       // Gọi API để lấy thông tin giảm giá từ coupon
       dispatch(getCoupon(couponCode));
-      alert("success!");
+      // Hiển thị thông báo thành công bằng Ant Design
+      notification.success({
+        message: "Success!",
+        description: "Mã coupon đã được áp dụng thành công.",
+      });
     } else {
-      alert("Vui lòng nhập mã coupon.");
+      // Hiển thị thông báo lỗi bằng Ant Design
+      notification.error({
+        message: "Lỗi",
+        description: "Vui lòng nhập mã coupon.",
+      });
     }
   };
 
-  // const handleCompleteOrder = () => {
-  //   // Bạn có thể xử lý logic cho việc hoàn tất đơn hàng tại đây
-  //   console.log("Địa chỉ đã chọn:", selectedAddress);
-  // };
+  // Hàm xử lý hoàn tất đặt hàng
+  const handleCompleteOrder = (e) => {
+    e.preventDefault();
 
-  // Xử lý checkbox
+    if (!selectedAddress?.id) {
+      alert("Please select an address.");
+      return;
+    }
+
+    const orderRequest = {
+      note,
+      addressId: selectedAddress.id,
+      couponId: couponData.data?.id,
+    };
+
+    console.log("orderRequest", orderRequest);
+
+    dispatch(addOrder(orderRequest)).then((response) => {
+      if (response.meta.requestStatus === "fulfilled") {
+        notification.success({
+          message: "Success!",
+          description: "Đơn hàng đã được đặt thành công!",
+        });
+        // Xóa giỏ hàng
+        dispatch(clearCart());
+        // Chuyển hướng đến tr
+
+        navigate("/");
+      } else {
+        notification.error({
+          message: "Lỗi",
+          description: "Đặt hàng không thành công.!",
+        });
+      }
+    });
+  };
+
   // Hàm xử lý checkbox
   const handleCheckbox = (checkbox) => {
     if (checkbox === "sameAsShipping") {
       setIsSameAsShippingChecked(true);
       setIsCardChecked(false);
 
-      // Lấy thông tin từ địa chỉ đầu tiên
       const firstAddress = addressList.data[0];
       if (firstAddress) {
+        setSelectedAddress(firstAddress);
         setReceiveName(firstAddress.receiveName);
         setDeliveryAddress(firstAddress.address);
         setPhoneNumber(firstAddress.phone);
+      } else {
+        console.warn("No addresses available.");
       }
     } else if (checkbox === "differentBilling") {
       setIsCardChecked(true);
       setIsSameAsShippingChecked(false);
-      setReceiveName(""); // Đặt lại khi chọn địa chỉ khác
-      setDeliveryAddress(""); // Đặt lại khi chọn địa chỉ khác
-      setPhoneNumber(""); // Đặt lại khi chọn địa chỉ khác
+      setReceiveName("");
+      setDeliveryAddress("");
+      setPhoneNumber("");
     }
   };
 
   // Cập nhật thông tin khi chọn địa chỉ từ dropdown
   const handleAddressChange = (e) => {
-    const selected = addressList.data[e.target.selectedIndex - 1]; // -1 vì option đầu tiên là "Chọn địa chỉ"
-    if (selected) {
-      setReceiveName(selected.receiveName);
-      setDeliveryAddress(selected.address);
-      setPhoneNumber(selected.phone);
+    const selectedId = parseInt(e.target.value, 10);
+
+    const selectedAddress = addressList.data.find(
+      (address) => address.id === selectedId
+    );
+    console.log(selectedAddress);
+    if (selectedAddress) {
+      setSelectedAddress(selectedAddress);
+      setReceiveName(selectedAddress.receiveName);
+      setDeliveryAddress(selectedAddress.address);
+      setPhoneNumber(selectedAddress.phone);
     }
   };
+
   return (
     <>
       <div className="checkout_container">
@@ -96,7 +147,11 @@ export default function CheckOut() {
             <div className="checkout_content">
               <main className="checkout_items">
                 {/* dien vao form */}
-                <form action="" className="checkout_form">
+                <form
+                  action=""
+                  className="checkout_form"
+                  onSubmit={handleCompleteOrder}
+                >
                   <div className="address_first">
                     <div className="checkout_contact">
                       <div className="checkout_form-contact">
@@ -106,7 +161,9 @@ export default function CheckOut() {
                       <input
                         type="text"
                         className="checkout_email"
-                        placeholder="Enter your mail"
+                        placeholder="Enter your note"
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
                       />
                     </div>
 
@@ -140,27 +197,27 @@ export default function CheckOut() {
                           onChange={(e) => setPhoneNumber(e.target.value)}
                         />
                       </div>
-                      <label className="cyberpunk-checkbox-label">
+                      {/* <label className="cyberpunk-checkbox-label">
                         <input type="checkbox" className="cyberpunk-checkbox" />
                         Save this information for next time
-                      </label>
+                      </label> */}
                     </div>
 
-                    <div className="checkout_shipping-method">
+                    {/* <div className="checkout_shipping-method">
                       <h3>Shipping method</h3>
                       <div className="checkout_shipping">
                         <p>International Shipping</p>
                         <h3>₫4,000</h3>
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="checkout_address-payment">
+                    {/* <div className="checkout_address-payment">
                       <h3>Payment</h3>
                       <label className="cyberpunk-checkbox-label">
                         <input type="checkbox" className="cyberpunk-checkbox" />
                         Cash on Delivery (COD)
                       </label>
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="checkout_billing">
@@ -201,8 +258,8 @@ export default function CheckOut() {
                           onChange={handleAddressChange}
                         >
                           <option value="">-- Chọn địa chỉ --</option>
-                          {addressList?.data?.map((address, index) => (
-                            <option key={index} value={address}>
+                          {addressList?.data?.map((address) => (
+                            <option key={address.id} value={address.id}>
                               {address.receiveName} - {address.address} -
                               {address.phone}
                             </option>
@@ -250,7 +307,9 @@ export default function CheckOut() {
                   </div>
 
                   <div className="checkout_address-input_button">
-                    <button className="checkout-button">Complete order</button>
+                    <button className="checkout-button" type="submit">
+                      Complete order
+                    </button>
                   </div>
                 </form>
               </main>

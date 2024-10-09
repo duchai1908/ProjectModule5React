@@ -14,6 +14,7 @@ import productRelateSlice from "../slices/productRelateSlice";
 import couponSlice from "../slices/couponSlice";
 import addressSlice from "../slices/addressSlice";
 import productDetailAndImageSlice from "../slices/productDetailAndImageSlice";
+import checkoutSlice from "../slices/checkoutSlice";
 import userOrderSlice from "../slices/userOrderSlice";
 
 const store = configureStore({
@@ -31,6 +32,7 @@ const store = configureStore({
     coupon: couponSlice,
     address: addressSlice,
     PDI: productDetailAndImageSlice,
+    checkout: checkoutSlice,
     userOrder: userOrderSlice,
   },
 });

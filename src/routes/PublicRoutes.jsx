@@ -69,10 +69,6 @@ const PublicRoutes = [
       },
     ],
   },
-  // {
-  //   path: "user-detail",
-  //   element: <LazyLoader children={<UserDetailPage />} />,
-  // },
   //test
   {
     path: "test",

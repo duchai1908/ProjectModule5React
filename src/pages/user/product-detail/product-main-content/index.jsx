@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Carousel, Button, Badge, InputNumber } from "antd";
+import { Carousel, Button, Badge, InputNumber, notification } from "antd";
 import {
   FaCheck,
   FaPlus,
@@ -37,12 +37,10 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const [listColors, setListColors] = useState([]);
   const [listSizes, setListSizes] = useState([]);
   const [listImages, setListImages] = useState([]);
- 
 
   // State to track the selected color (default is red)
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
-
 
   //listSize by color
   const [listSizeByCondition, setListSizeByCondition] = useState([]);
@@ -97,15 +95,24 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
   const handleAddToCart = () => {
     // Kiểm tra xem người dùng đã chọn số lượng, kích thước và màu sắc chưa
     if (number <= 0) {
-      alert("Vui lòng chọn số lượng sản phẩm!");
+      notification.error({
+        message: "Lỗi",
+        description: "Vui lòng chọn số lượng sản phẩm!",
+      });
       return;
     }
     if (!selectedSize) {
-      alert("Vui lòng chọn kích thước sản phẩm!");
+      notification.error({
+        message: "Lỗi",
+        description: "Vui lòng chọn kích thước sản phẩm!",
+      });
       return;
     }
     if (!selectedColor) {
-      alert("Vui lòng chọn màu sắc sản phẩm!");
+      notification.error({
+        message: "Lỗi",
+        description: "Vui lòng chọn màu sắc sản phẩm!",
+      });
       return;
     }
     const selectedProductDetail = findProductDetail(
@@ -114,14 +121,17 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
     );
 
     if (!selectedProductDetail) {
-      alert("Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn");
-      console.log(
-        "Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn"
-      );
+      notification.error({
+        message: "Lỗi",
+        description:
+          "Không tìm thấy chi tiết sản phẩm với màu và kích thước đã chọn.",
+      });
       return;
     } else {
-      console.log("Sản phẩm chi tiết đã tìm thấy:", selectedProductDetail);
-      alert("success full");
+      notification.success({
+        message: "Success!",
+        description: "Bạn đã cho vào giỏ hàng thành công!",
+      });
     }
 
     const productToAdd = {
@@ -390,7 +400,9 @@ const ProductMainContent = ({ product, productDetailList, piscValue }) => {
                 </div>
               </button>
               <button type="button" className="cart_button-item">
-                <Link className="cart_link">Check out</Link>
+                <Link className="cart_link" to="/checkout">
+                  Check out
+                </Link>
               </button>
             </div>
           </div>
