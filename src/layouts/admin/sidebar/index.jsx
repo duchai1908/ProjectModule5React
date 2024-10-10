@@ -48,9 +48,12 @@ export default function SidebarAdmin() {
         <Menu.Item key="/admin/size-manager" icon={<GatewayOutlined />}>
           <Link to="/admin/size-manager">Size Manager</Link>
         </Menu.Item>
-        {/* <Menu.Item key="/admin/banner-manager" icon={<FileImageOutlined />}>
-          <Link to="/admin/banner-manager">Banner Manager</Link>
-        </Menu.Item> */}
+        <Menu.Item key="/admin/coupon-manager" icon={<StockOutlined />}>
+          <Link to="/admin/coupon-manager">Coupon Manager</Link>
+        </Menu.Item>
+        <Menu.Item key="/admin/comment-manager" icon={<StockOutlined />}>
+          <Link to="/admin/comment-manager">Comment Manager</Link>
+        </Menu.Item>
         <Menu.Item key="/admin/charts" icon={<StockOutlined />}>
           <Link to="/admin/charts">Charts</Link>
         </Menu.Item>

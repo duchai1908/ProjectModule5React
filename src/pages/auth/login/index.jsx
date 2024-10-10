@@ -1,11 +1,42 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
-import { Alert, Button, Input, message, notification } from "antd";
+import { Alert, Button, Form, Input, message, Modal, notification } from "antd";
 import { login } from "../../../services/authService";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { forgotPasword } from "../../../services/forgotPassword";
 export default function Login() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [forgotPasswordError, setForgotPasswordError] = useState("");
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const [form] = Form.useForm();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const onFinish = async (values)=>{
+    try{
+      const data = await forgotPasword(values);
+      if(data.status == 200){
+        notification.success({
+          message: "Lấy mật khẩu thành công",
+          description: "Kiểm tra mail để lấy mật khẩu"
+        })
+      }
+    }catch(error){
+      notification.error({
+        message:error.response.data.message,
+        duration:2
+      }) 
+      setIsModalOpen(false);
+    }
+      
+      form.resetFields();
+      
+  }
+
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -15,6 +46,7 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState("");
   const [invalidLogin, setInvalidLogin] = useState("");
   const dispatch = useDispatch();
+ 
 
   /**
    *
@@ -154,8 +186,8 @@ export default function Login() {
                   // </p>
                 )}
               </div>
-              <Link to="/change">
-                <p className="link-change_password link-login mt-3">
+              <Link >
+                <p className="link-change_password link-login mt-3" onClick={showModal}>
                   Forgot your password?
                 </p>
               </Link>
@@ -172,6 +204,55 @@ export default function Login() {
               </div>
             </form>
           </div>
+          <Modal
+            title="Lấy lại mật khẩu"
+            open={isModalOpen}
+            onCancel={handleCancel}
+            footer={[
+              <Button key="back" onClick={handleCancel}>
+                Huỷ
+              </Button>,
+              <Button key="submit" type="primary" onClick={() => form.submit()}>
+                Gửi
+              </Button>,
+            ]}
+          >
+            <Form
+              name="basic"
+              onFinish={onFinish}
+              form={form}
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              style={{ maxWidth: 600 }}
+            >
+              <Form.Item
+                label="Username"
+                name="username"
+                className="mt-4"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập username!",
+                  },
+                ]}
+              >
+                <Input placeholder="Vui lòng nhập username"/>
+              </Form.Item>
+              <Form.Item
+                label="Email"
+                name="email"
+                className="mt-4"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập email!",
+                  },
+                ]}
+              >
+                <Input placeholder="Vui lòng nhập email"/>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
       </div>
     </>

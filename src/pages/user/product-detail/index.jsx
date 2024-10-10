@@ -132,6 +132,10 @@ export default function ProductDetail() {
     },
   ];
 
+  useEffect(()=>{
+    window.scrollTo({top:0,behavior:'smooth'})
+  },[])
+
   return (
     <>
       {/* {piscValue ? <>Co DU lieu</> : <>ko co</>} */}

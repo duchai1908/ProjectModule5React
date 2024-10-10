@@ -6,8 +6,10 @@ import { Link, useNavigate } from "react-router-dom";
 import CartList from "../../../../pages/user/cartList";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../redux/slices/authSlice";
+
 import { FaUser, FaHeart } from "react-icons/fa";
 import { IoLogOut, IoLogIn } from "react-icons/io5";
+
 
 export default function ForUsers() {
   const [cartShow, setCartShow] = useState(false);
