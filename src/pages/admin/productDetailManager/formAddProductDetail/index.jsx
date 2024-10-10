@@ -53,6 +53,28 @@ const AddProductDetailModal = ({
   }, [onClose]);
 
   const handleSubmit = async () => {
+    if (name === "") {
+      notification.error({ message: "Tên đang bị trống", duration: 300 });
+      return;
+    }
+    if (description === "") {
+      notification.error({ message: "Mô tả đang bị trống", duration: 300 });
+      return;
+    }
+    if (stock < 0) {
+      notification.error({
+        message: "Số lượng phải lớn hơn hoặc bằng 0",
+        duration: 300,
+      });
+      return;
+    }
+    if (price < 0) {
+      notification.error({
+        message: "Giá phải lớn hơn hoặc bằng 0",
+        duration: 300,
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
@@ -154,18 +176,10 @@ const AddProductDetailModal = ({
       {/* Add additional fields for color, size, product if required */}
       <div className="mb-4">
         <label className="block font-medium mb-2">Mã màu</label>
-        {/* <Input
-          value={colorId}
-          type="number"
-          onChange={(e) => setColorId(e.target.value)}
-        /> */}
         <Select
           defaultValue={
             colorList && colorList?.length > 0 ? colorList[0].color : undefined
           }
-          // style={{
-          //   width: 150,
-          // }}
           className="w-full"
           onChange={handleChangeColor}
           options={colorList?.map((c) => ({
@@ -176,18 +190,10 @@ const AddProductDetailModal = ({
       </div>
       <div className="mb-4">
         <label className="block font-medium mb-2">Mã kích thước</label>
-        {/* <Input
-          value={sizeId}
-          type="number"
-          onChange={(e) => setSizeId(e.target.value)}
-        /> */}
         <Select
           defaultValue={
             sizeList && sizeList?.length > 0 ? sizeList[0].size : undefined
           }
-          // style={{
-          //   width: 150,
-          // }}
           className="w-full"
           onChange={handleChangeSize}
           options={sizeList?.map((s) => ({

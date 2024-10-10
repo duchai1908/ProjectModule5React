@@ -62,13 +62,18 @@ export default function FilterContent({ handleFilterValueLeft }) {
   ];
 
   return (
-    <div className="m-5">
-      <Menu
+    <div className="m-5 ">
+      {/* <Menu
         className="md:w-[300px] w-[100%]"
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub2"]}
         mode="inline"
         items={items}
+      /> */}
+      <img
+        src="https://i.pinimg.com/564x/1d/6e/fc/1d6efc0a6d3797bc9aa11996ce4b88b3.jpg"
+        className="md:max-w-[400px] md:w-[300px] w-[100%] rounded-lg"
+        alt=""
       />
     </div>
   );

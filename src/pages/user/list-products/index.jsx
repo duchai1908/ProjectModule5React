@@ -41,7 +41,7 @@ export default function ListProducts() {
 
   const loadData = () => {
     jsonAxios
-      .get(`/admin/productDetail`)
+      .get(`/productDetail`)
       .then((resp) => {
         const data = resp.data.data;
         setProductDetailsList(data);
