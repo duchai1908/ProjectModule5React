@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 import CartList from "../../../../pages/user/cartList";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../redux/slices/authSlice";
-
 export default function ForUsers() {
   const [cartShow, setCartShow] = useState(false);
   // Hàm để đóng giỏ hàng

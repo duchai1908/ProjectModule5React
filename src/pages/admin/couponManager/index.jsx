@@ -32,7 +32,6 @@ export default function CounponManager() {
   }, []);
   const loadingData = async () => {
     const listData = await listCoupon();
-    console.log(listData);
     setPageSize(listData.data.data.pageable.pageSize);
     setPageNumber(listData.data.data.pageable.pageNumber);
     setTotalEleCoupon(listData.data.data.totalElements);
@@ -40,11 +39,7 @@ export default function CounponManager() {
   };
 
   const handlePageChange = async (page)=>{
-      const changePage = await changePageCoupon(page -1, pageSize);  
-      console.log("page: ", page);
-      console.log("pageSize: ", pageSize);
-      console.log("change",changePage);
-      
+      const changePage = await changePageCoupon(page -1, pageSize);
       setCurrentPage (page);
       setlistDataCoupon(changePage.data.data.content);
   }
@@ -156,7 +151,6 @@ export default function CounponManager() {
           ) : (
             <div>Không có dữ liệu</div>
           )}
-
           <Modal
             title="Thêm mới mã giảm giá"
             open={isModalOpen}
