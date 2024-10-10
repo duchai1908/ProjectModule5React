@@ -1,7 +1,6 @@
 import React from "react";
 import LazyLoader from "../components/LazyLoad";
 import AdminLayout from "../layouts/admin/AdminLayout";
-import CategoryManager from "../pages/admin/caterogyManager";
 
 const DashBoardPage = React.lazy(() => import("../pages/admin/dashBoard"));
 const ProductManager = React.lazy(() =>
@@ -16,9 +15,12 @@ const CustomerManagerPage = React.lazy(() =>
 );
 const ColorManager = React.lazy(() => import("../pages/admin/colorManager"));
 const SizeManager = React.lazy(() => import("../pages/admin/sizeManager"));
-// const CategoryManagerPage = React.lazy(() =>
-//   import("../pages/admin/categoryManager")
-// );
+const CategoryManagerPage = React.lazy(() =>
+  import("../pages/admin/caterogyManager")
+);
+const OrderManagerPage = React.lazy(() =>
+  import("../pages/admin/orderManager")
+);
 const PrivateRoutes = [
   {
     path: "/admin",
@@ -34,7 +36,7 @@ const PrivateRoutes = [
       },
       {
         path: "category-manager",
-        element: <CategoryManager />,
+        element: <LazyLoader children={<CategoryManagerPage />} />,
       },
       {
         path: "product-manager",
@@ -51,6 +53,10 @@ const PrivateRoutes = [
       {
         path: "size-manager",
         element: <LazyLoader children={<SizeManager />} />,
+      },
+      {
+        path: "order-manager",
+        element: <LazyLoader children={<OrderManagerPage />} />,
       },
     ],
   },

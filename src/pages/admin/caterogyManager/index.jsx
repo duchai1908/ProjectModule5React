@@ -29,38 +29,76 @@ export default function CategoryManager() {
   const options = [
     {
       key: "4",
-      label: <span>Chỉnh sửa</span>,
+      label: (
+        <div className="category-action">
+          <i class="bx bxs-edit"></i>
+          <span> Chỉnh sửa</span>
+        </div>
+      ),
       onClick: () => handleEditCategory(catUpdate),
     },
     {
       key: "5",
-      label: <span>Chặn</span>,
+      label: (
+        <div className="category-action">
+          <i class="bx bxs-key"></i>
+          <span>Thay đổi trang thái</span>
+        </div>
+      ),
+
       onClick: () => handleBlockCategory(catUpdate),
     },
     {
       key: "6",
-      label: <span>Xóa</span>,
+      label: (
+        <div className="category-action">
+          <i class="bx bx-trash"></i>
+          <span>Xoá</span>
+        </div>
+      ),
       onClick: () => handleDeleteCategory(catUpdate),
     },
   ];
   const items = [
     {
       key: "1",
-      label: <span>Hủy bỏ bộ lọc</span>,
+      label: (
+        <span
+          onClick={() => handleSort("id", "asc")}
+          className="cursor-pointer"
+        >
+          Mặc Định
+        </span>
+      ),
     },
     {
       key: "2",
-      label: <span>Đang hoạt động</span>,
+      label: (
+        <span
+          onClick={() => handleSort("name", "asc")}
+          className="cursor-pointer"
+        >
+          Lọc theo tên từ A-Z
+        </span>
+      ),
     },
     {
       key: "3",
-      label: <span>Ngừng hoạt động</span>,
+      label: (
+        <span
+          onClick={() => handleSort("name", "desc")}
+          className="cursor-pointer"
+        >
+          Lọc theo tên từ Z-A
+        </span>
+      ),
     },
   ];
 
   const { data, status, error, totalElements, number, size } = useSelector(
     (state) => state.category
   );
+
   console.log("loi", error);
   console.log("status", status);
   const dispatch = useDispatch();
@@ -72,17 +110,29 @@ export default function CategoryManager() {
   const [reload, setReload] = useState(false);
   const [actionType, setActionType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortedData, setSortedData] = useState(data);
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   useEffect(() => {
-    dispatch(findAllCategory({ page: number, size, searchTerm }));
-  }, [dispatch, number, reload, searchTerm]);
+    dispatch(
+      findAllCategory({
+        page: number,
+        size,
+        searchTerm,
+        sortField,
+        sortDirection,
+      })
+    );
+  }, [dispatch, number, reload, searchTerm, sortField, sortDirection]);
 
   // Thêm danh mục bằng cách dispatch addCategory action
   const handleAddCategory = async (newCategory) => {
     try {
       await dispatch(addCategory(newCategory));
       setIsModalVisible(false);
-      dispatch(findAllCategory({ page: 0, size: 3 }));
+      dispatch(findAllCategory({ page: number, size, searchTerm }));
+      message.success("Thêm danh mục thành công!");
     } catch (error) {
       message.error("Có lỗi xảy ra khi thêm danh mục.");
     }
@@ -108,16 +158,23 @@ export default function CategoryManager() {
 
   //ham update
 
-  const handleSave = (updatedCategoryData) => {
-    dispatch(updateCategory(updatedCategoryData)) // Truyền object vào
-      .then(() => {
-        setIsEditModalVisible(false); // Đóng modal khi cập nhật thành công
+  const handleSave = async (updatedCategoryData) => {
+    try {
+      // Gọi hàm dispatch để cập nhật danh mục
+      const resultAction = await dispatch(updateCategory(updatedCategoryData));
+
+      if (updateCategory.fulfilled.match(resultAction)) {
+        setIsEditModalVisible(false);
         setReload(!reload);
-        dispatch(findAllCategory({ page: 0, size: 3 })); // Lấy lại danh sách danh mục
-      })
-      .catch((error) => {
+        dispatch(findAllCategory({ page: 0, size: 3 }));
+      } else if (updateCategory.rejected.match(resultAction)) {
+        const error = resultAction.payload;
         console.error("Lỗi khi cập nhật danh mục:", error);
-      });
+        setError(error);
+      }
+    } catch (error) {
+      console.error("Đã xảy ra lỗi không xác định:", error);
+    }
   };
 
   //search
@@ -159,13 +216,34 @@ export default function CategoryManager() {
     // Gọi action categoryStatusChange
     dispatch(categoryStatusChange({ categoryId: category.id, formData }))
       .then(() => {
-        message.success(`Danh mục ${category.name} đã bị chặn thành công.`);
+        message.success(
+          `Danh mục ${category.name} thay đổi trạng thái thành công.`
+        );
         setReload(!reload);
       })
       .catch((error) => {
         message.error(`Có lỗi xảy ra khi chặn danh mục: ${error}`);
       });
   };
+
+  // Hàm xử lý sắp xếp
+  const handleSort = (sortField, sortDirection) => {
+    setSortField(sortField);
+    setSortDirection(sortDirection);
+    dispatch(
+      findAllCategory({
+        page: number,
+        size,
+        keySearch,
+        sortField,
+        sortDirection,
+      })
+    );
+  };
+  // Cập nhật dữ liệu đã sắp xếp
+  useEffect(() => {
+    setSortedData(data);
+  }, [data]);
 
   return (
     <>
@@ -212,34 +290,52 @@ export default function CategoryManager() {
             </div>
             <div className="overflow-x-auto">
               {/* render du lieu */}
-              <table className="w-full table-auto">
+              <table className="w-full table-auto border border-collapse border-gray-300">
                 <thead>
                   <tr className="bg-gray-200">
-                    <th className="px-4 h-11 text-left">STT</th>
-                    <th className="px-4 h-11 text-left">Name</th>
-                    <th className="px-4 h-11 text-left">Ảnh</th>
-                    <th className="px-4 h-11 text-left">Mô tả</th>
-                    <th className="px-4 h-11 text-left">Trạng thái</th>
-                    <th className="px-4 h-11 text-left">Hành động</th>
+                    <th className="border  border-gray-300 px-4 h-11 text-center">
+                      STT
+                    </th>
+                    <th className="border border-gray-300 px-4 h-11 text-center">
+                      Name
+                    </th>
+                    <th className="border border-gray-300 px-4 h-11 text-center">
+                      Ảnh
+                    </th>
+                    <th className="border border-gray-300 px-4 h-11 text-center">
+                      Mô tả
+                    </th>
+                    <th className="border border-gray-300 px-4 h-11 text-center">
+                      Trạng thái
+                    </th>
+                    <th className="border border-gray-300 px-4 h-11 text-center">
+                      Hành động
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item, index) => (
-                    <tr className="border-b" key={item.id}>
-                      <td className="px-4 h-11">{number * size + index + 1}</td>
-                      <td className="px-4 h-11">{item.name}</td>
-                      <td className="px-4 h-11">
+                  {data?.map((item, index) => (
+                    <tr className=" " key={item.id}>
+                      <td className="border border-gray-300 px-4 h-11 text-center">
+                        {number * size + index + 1}
+                      </td>
+                      <td className="border border-gray-300 px-4 h-11 text-center">
+                        {item.name}
+                      </td>
+                      <td className="border border-gray-300 px-4 h-11 cat_colum text-center">
                         <img className="category-img" src={item.image} alt="" />
                       </td>
-                      <td className="px-4 h-11">{item.description}</td>
-                      <td className="px-4 h-11">
+                      <td className="border border-gray-300 px-4 h-11 text-center">
+                        {item.description}
+                      </td>
+                      <td className="border border-gray-300 px-4 h-11 text-center">
                         {item.status === false ? ( // Nếu status là false thì bị chặn
                           <Tag color="red">khong hoat dong</Tag>
                         ) : (
                           <Tag color="green">Đang hoạt động</Tag> // Nếu status là true thì đang hoạt động
                         )}
                       </td>
-                      <td className="px-4 h-11">
+                      <td className="border border-gray-300 px-4 h-11 text-center">
                         <Dropdown
                           menu={{
                             items: options,
@@ -262,33 +358,9 @@ export default function CategoryManager() {
             </div>
             <div className="mt-4 flex justify-between items-center ">
               <div>
-                Hiển thị <b>1</b> trên <b>10</b> bản ghi
+                Hiển thị <b>{size}</b> trên <b>{totalElements}</b> bản ghi
               </div>
               <div className="flex items-center gap-5">
-                <Select
-                  defaultValue="Hiển thị 10 bản ghi / trang"
-                  style={{
-                    width: 220,
-                  }}
-                  options={[
-                    {
-                      value: "10",
-                      label: "Hiển thị 10 bản ghi / trang",
-                    },
-                    {
-                      value: "20",
-                      label: "Hiển thị 20 bản ghi / trang",
-                    },
-                    {
-                      value: "50",
-                      label: "Hiển thị 50 bản ghi / trang",
-                    },
-                    {
-                      value: "100",
-                      label: "Hiển thị 100 bản ghi / trang",
-                    },
-                  ]}
-                />
                 <div className="flex items-center gap-3">
                   <Pagination
                     total={totalElements}

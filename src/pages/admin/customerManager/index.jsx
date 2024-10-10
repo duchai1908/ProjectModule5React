@@ -13,58 +13,132 @@ import {
 import { FaFilter } from "react-icons/fa";
 import { LuRefreshCw } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
-import { findAllCustomers } from "../../../services/customerService";
+import {
+  customerStatusChange,
+  findAllCustomers,
+} from "../../../services/customerService";
 import { changePageCustomer } from "../../../redux/slices/customerSlice";
 import { PiLockKeyOpen } from "react-icons/pi";
 export default function CustomerManager() {
   const items = [
     {
       key: "1",
-      label: <span>Hủy bỏ bộ lọc</span>,
+      label: (
+        <span
+          onClick={() => handleSort("id", "asc")}
+          className="cursor-pointer"
+        >
+          Mặc Định
+        </span>
+      ),
     },
     {
       key: "2",
-      label: <span>Đang hoạt động</span>,
+      label: (
+        <span
+          onClick={() => handleSort("username", "asc")}
+          className="cursor-pointer"
+        >
+          Lọc theo tên từ A-Z
+        </span>
+      ),
     },
     {
       key: "3",
-      label: <span>Ngừng hoạt động</span>,
+      label: (
+        <span
+          onClick={() => handleSort("username", "desc")}
+          className="cursor-pointer"
+        >
+          Lọc theo tên từ Z-A
+        </span>
+      ),
     },
   ];
 
   const { data, status, error, totalElements, number, size } = useSelector(
     (state) => state.customer
   );
+
   const [reload, setReload] = useState(false);
   const [keySearch, setKeySearch] = useState("");
+  const [sortedData, setSortedData] = useState(data);
+  const [sortField, setSortField] = useState("id");
+
+  const [sortDirection, setSortDirection] = useState("asc");
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(findAllCustomers({ page: number, size, keySearch }));
-  }, [dispatch, number, reload, keySearch]);
+    dispatch(
+      findAllCustomers({
+        page: number,
+        size,
+        keySearch,
+        sortField,
+        sortDirection,
+      })
+    );
+  }, [dispatch, number, reload, keySearch, sortField, sortDirection]);
 
-  // phan trang
+  // Cập nhật dữ liệu đã sắp xếp khi dữ liệu thay đổi
+
   const handleChangePage = (page, pageSize) => {
     dispatch(changePageCustomer(page - 1));
   };
 
+  // Hàm xử lý sắp xếp
+  const handleSort = (sortField, sortDirection) => {
+    setSortField(sortField);
+    setSortDirection(sortDirection);
+    dispatch(
+      findAllCustomers({
+        page: number,
+        size,
+        keySearch,
+        sortField,
+        sortDirection,
+      })
+    );
+  };
+  // Cập nhật dữ liệu đã sắp xếp
+  useEffect(() => {
+    setSortedData(data);
+  }, [data]);
+
+  console.log("data: " + data);
   //search
   const handleSearch = (e) => {
     e.preventDefault(); // Ngăn chặn gửi form
     setKeySearch(e.target.value); // Cập nhật giá trị tìm kiếm;
     dispatch(findAllCustomers({ page: 0, size: 3, keySearch: value })); // Gọi API tìm kiếm
   };
+
   // Làm mới danh sách khi search
   const handleRefresh = () => {
     setSearchTerm("");
     dispatch(findAllCategory({ page: 0, size: 3, keySearch: "" })); // Làm mới danh sách
   };
 
+  // Change customer status
+  const handleStatusChange = (customer) => {
+    dispatch(customerStatusChange({ userId: customer.id }))
+      .then(() => {
+        message.success(
+          `Khách hàng ${customer.username} thay đổi trạng thái thành công.`
+        );
+        setReload((prev) => !prev); // Trigger reload to refresh data
+      })
+      .catch((error) => {
+        message.error(`Có lỗi xảy ra khi thay đổi trạng thái: ${error}`);
+      });
+  };
   return (
     <>
+      {/* {console.log("Dispatching with values:", data)} */}
       <div>
         {data ? (
           <div className="container mx-auto p-6 max-w-6xl">
             <div className="mb-4 flex justify-between items-center">
+              {/* sort */}
               <Dropdown
                 menu={{
                   items,
@@ -134,8 +208,8 @@ export default function CustomerManager() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item, index) => (
-                    <tr className="border-b" key={item.id}>
+                  {data.map((customer, index) => (
+                    <tr className="border-b" key={customer.id}>
                       <td className="px-4 h-16 text-center border border-gray-300">
                         {number * size + index + 1}
                       </td>
@@ -144,23 +218,23 @@ export default function CustomerManager() {
                           <div className="w-1/3 text-center border-r border-gray-300">
                             <img
                               className="w-10 h-10 rounded-full mx-auto"
-                              src={item.image}
+                              src={customer.image}
                               alt="Avatar"
                             />
                           </div>
                           <div className="w-2/3 pl-2">
                             <div className="mb-2 border-b border-gray-300">
-                              {item.phone}
+                              {customer.phone}
                             </div>
-                            <div>{item.username}</div>
+                            <div>{customer.username}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 h-16 text-center border border-gray-300">
-                        {item.address}
+                        {customer.address}
                       </td>
                       <td className="px-4 h-16 text-center border border-gray-300">
-                        {item.roles.map((role) => {
+                        {customer.roles.map((role) => {
                           return (
                             <span className="whitespace-nowrap">
                               {role.roleName}
@@ -169,17 +243,20 @@ export default function CustomerManager() {
                         })}
                       </td>
                       <td className="px-4 h-16 text-center border border-gray-300">
-                        {item.createdAt}
+                        {customer.createdAt}
                       </td>
                       <td className="px-4 h-16 text-center border border-gray-300">
-                        {true ? (
-                          <Tag color="green">Đang hoạt động</Tag>
-                        ) : (
+                        {customer.status === false ? (
                           <Tag color="red">Ngừng hoạt động</Tag>
+                        ) : (
+                          <Tag color="green">Đang hoạt động</Tag>
                         )}
                       </td>
                       <td className="px-4 h-16 text-center border border-gray-300">
-                        <Button className="border-none shadow-none focus:shadow-none focus:bg-none">
+                        <Button
+                          className="border-none shadow-none focus:shadow-none focus:bg-none"
+                          onClick={() => handleStatusChange(customer)}
+                        >
                           <PiLockKeyOpen className="text-[20px] font-bold" />
                         </Button>
                       </td>
@@ -190,33 +267,9 @@ export default function CustomerManager() {
             </div>
             <div className="mt-4 flex justify-between items-center ">
               <div>
-                Hiển thị <b>1</b> trên <b>10</b> bản ghi
+                Hiển thị <b>{size}</b> trên <b>{totalElements}</b> bản ghi
               </div>
               <div className="flex items-center gap-5">
-                <Select
-                  defaultValue="Hiển thị 10 bản ghi / trang"
-                  style={{
-                    width: 220,
-                  }}
-                  options={[
-                    {
-                      value: "10",
-                      label: "Hiển thị 10 bản ghi / trang",
-                    },
-                    {
-                      value: "20",
-                      label: "Hiển thị 20 bản ghi / trang",
-                    },
-                    {
-                      value: "50",
-                      label: "Hiển thị 50 bản ghi / trang",
-                    },
-                    {
-                      value: "100",
-                      label: "Hiển thị 100 bản ghi / trang",
-                    },
-                  ]}
-                />
                 <div className="flex items-center gap-3">
                   <Pagination
                     total={totalElements}

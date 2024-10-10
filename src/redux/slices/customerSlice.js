@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { findAllCustomers } from "../../services/customerService";
+import {
+  customerStatusChange,
+  findAllCustomers,
+} from "../../services/customerService";
 
 const initialValue = {
   status: "idle",
@@ -36,7 +39,24 @@ const customerSlice = createSlice({
       // Thời điểm bắt lỗi
       .addCase(findAllCustomers.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload.message.name;
+        state.error = action.payload;
+      });
+    // thay doi status
+    builder
+      .addCase(customerStatusChange.pending, (state) => {
+        state.status = "pending"; // Đặt trạng thái khi đang xử lý
+      })
+      .addCase(customerStatusChange.fulfilled, (state, action) => {
+        state.data = state.data.map((customer) =>
+          customer.id === action.payload.id
+            ? { ...customer, status: action.payload.status }
+            : customer
+        );
+        state.status = "succeeded";
+      })
+      .addCase(customerStatusChange.rejected, (state, action) => {
+        state.status = "failed"; // Đặt trạng thái khi thất bại
+        state.error = action.payload; // Gán lỗi vào state
       });
   },
 });

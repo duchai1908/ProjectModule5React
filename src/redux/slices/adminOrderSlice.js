@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllOrderByUser } from "../../services/userOderService";
+import {} from "../../services/userOderService";
+import {
+  findAllOrderByUser,
+  updateOrderByUser,
+} from "../../services/adminOrderService";
 
 // import { addCategory, findAllCategory } from "../../services/categoryService";
 
@@ -8,14 +12,14 @@ const initialValue = {
   data: [],
   totalElements: 0,
   number: 0,
-  size: 2,
+  size: 3,
   error: null,
   numberOfElements: 0,
 };
 //page, size, search, minPrice, maxPrice, sortOption
 
-const userOrderSlice = createSlice({
-  name: "color",
+const adminOrderSlice = createSlice({
+  name: "adminOrder",
   initialState: initialValue,
   reducers: {
     changePageUserOder: (state, action) => {
@@ -25,11 +29,11 @@ const userOrderSlice = createSlice({
   extraReducers: (builder) => {
     // Thời điểm tải dữ liệu => Chưa có dữ liệu
     builder
-      .addCase(getAllOrderByUser.pending, (state, action) => {
+      .addCase(findAllOrderByUser.pending, (state, action) => {
         state.status = "pending";
       })
       // Thời điểm đã có dữ liệu
-      .addCase(getAllOrderByUser.fulfilled, (state, action) => {
+      .addCase(findAllOrderByUser.fulfilled, (state, action) => {
         state.status = "successfully";
         state.totalElements = action.payload.data.totalElements;
         state.number = action.payload.data.number;
@@ -37,12 +41,26 @@ const userOrderSlice = createSlice({
         state.data = action.payload.data.content;
         state.numberOfElements = action.payload.data.numberOfElements;
       })
-      .addCase(getAllOrderByUser.rejected, (state, action) => {
+      .addCase(findAllOrderByUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
+
+    // builder
+    //   // .addCase(updateOrderByUser.pending, (state, action) => {
+    //   //   state.status = "pending";
+    //   // })
+    //   // Thời điểm đã có dữ liệu
+    //   .addCase(updateOrderByUser.fulfilled, (state, action) => {
+    //     state.status = "successfully";
+    //     state.data = action.payload.data;
+    //   })
+    //   .addCase(updateOrderByUser.rejected, (state, action) => {
+    //     state.status = "failed";
+    //     state.error = action.error.message;
+    //   });
   },
 });
 
-export const { changePageUserOder } = userOrderSlice.actions;
-export default userOrderSlice.reducer;
+export const { changePageUserOder } = adminOrderSlice.actions;
+export default adminOrderSlice.reducer;

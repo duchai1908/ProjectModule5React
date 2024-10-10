@@ -10,32 +10,38 @@ import { Upload, Button } from "antd";
 import { MdPublishedWithChanges } from "react-icons/md";
 
 import { FaPlus } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import UserInformationPage from "./userInformation";
 import UserOrderHistoryPage from "./userOrderHistory";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import UserChangePass from "./userChangePass";
 
 export default function UserDetail() {
-  //take user value
-  const data = useSelector((state) => state.auth);
-  const props = {
-    name: "file",
-    action: "/upload.do",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      if (info.file.status === "done") {
-        alert(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        alert(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
   // Lấy thông tin người dùng từ Redux
-  const user = useSelector((state) => state.auth.data);
-  console.log("user", user);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth);
+  const [userInfo, setUserInfo] = useState(user);
 
+  console.log("user", user);
+  // useEffect để kiểm tra giá trị userInfo mỗi khi nó thay đổi
+  useEffect(() => {
+    console.log("user từ Redux:", user); // Log user từ Redux
+    setUserInfo(user.data); // Cập nhật userInfo với user.data
+    console.log("ggg", user.data); //
+  }, [user]);
+
+  useEffect(() => {
+    if (user && user.data) {
+      setUserInfo(user.data);
+      console.log("hhh", user);
+    }
+  }, [user]);
+
+  console.log("userinfo", userInfo);
+  const handleUserUpdate = (newUserInfo) => {
+    setUserInfo(newUserInfo); // Cập nhật lại state userInfo với thông tin mới
+  };
   const [isOpen, setIsOpen] = useState(1);
   const handleChangePage = (key) => {
     console.log("key:", key);
@@ -67,26 +73,32 @@ export default function UserDetail() {
           <div className="user_main-left">
             <div className="user-profile">
               <div className="user_upload">
-                <Upload {...props} className="upload-img">
+                <Upload className="upload-img">
                   <Button className="upload-button" icon={<FaPlus />}>
-                    <img src={user.data.image} alt="" />
+                    <img
+                      src={userInfo ? userInfo?.data?.image : "anh"}
+                      alt=""
+                    />
                   </Button>
                 </Upload>
               </div>
               <div className="user-name">
-                <h1>{user.data.username}</h1>
+                <h1>{userInfo ? userInfo?.data.username : "name"}</h1>
                 <SlNote />
               </div>
               <div className="user-day">
-                {user ? user.data.dob : "Ngày sinh"}
+                {userInfo ? userInfo?.data?.dob : "Ngày sinh"}
               </div>
             </div>
             <div className="user-info">
               <div className="user-phone">
-                Phone: {user ? user.data.phone : "phone"}
+                Phone: {userInfo ? userInfo?.data?.phone : "phone"}
               </div>
-              <div className="user-address">
-                Address : {user ? user.data.address : "address"}
+              {/* <div className="user-address">
+                Address : {userInfo ? userInfo?.data?.address : "address"}
+              </div> */}
+              <div className="user-email">
+                Email : {userInfo ? userInfo?.data?.email : "email"}
               </div>
             </div>
             <div className="user_line"></div>
@@ -97,41 +109,43 @@ export default function UserDetail() {
                   onClick={() => handleChangePage(1)}
                 >
                   <FaBarcode className="user_icon-side" />
-                  <Link>Mã ưu đãi</Link>
+                  <NavLink>Thông Tin Cá Nhân</NavLink>
                 </li>
                 <li
                   className="user-item cursor-pointer"
                   onClick={() => handleChangePage(2)}
                 >
                   <LuShoppingBag />
-                  <Link>Đơn Hàng</Link>
+                  <NavLink>Đơn Hàng</NavLink>
                 </li>
                 <li
                   className="user-item cursor-pointer"
                   onClick={() => handleChangePage(3)}
                 >
                   <FaRegHeart />
-                  <Link>Yêu thích</Link>
+                  <NavLink>Yêu thích</NavLink>
                 </li>
                 <li
                   className="user-item cursor-pointer"
                   onClick={() => handleChangePage(4)}
                 >
                   <MdPublishedWithChanges />
-                  <Link>change Password</Link>
+                  <NavLink>change Password</NavLink>
                 </li>
                 <li className="user-item cursor-pointer">
                   <IoMdLogOut />
-                  <Link to="/">Đăng Xuất</Link>
+                  <NavLink to="/">Đăng Xuất</NavLink>
                 </li>
               </ul>
             </div>
           </div>
           {/* Conditional rendering based on isOpen */}
-          {isOpen === 1 && <UserInformationPage />}
+          {isOpen === 1 && (
+            <UserInformationPage onUserUpdated={handleUserUpdate} />
+          )}
           {isOpen === 2 && <UserOrderHistoryPage />}
-          {isOpen === 3 && <>hang 3</>}
-          {isOpen === 4 && <>hang 4</>}
+          {isOpen === 3 && <>hang 4</>}
+          {isOpen === 4 && <UserChangePass />}
         </div>
       </div>
     </>

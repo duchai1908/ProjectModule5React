@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Input, Upload } from "antd";
+import { Modal, Button, Input, Upload, Alert } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import ConfirmationUpdate from "../../../../components/model/ConfirmationUpdate";
 
@@ -28,22 +28,30 @@ export default function UpdateCategory({
   const handleUpload = ({ file }) => {
     setFile(file);
   };
-  const handleSubmitUpdate = () => {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    if (file) {
-      formData.append("image", file);
+  const handleSubmitUpdate = async () => {
+    try {
+      // Tạo formData với dữ liệu danh mục
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      if (file) {
+        formData.append("image", file);
+      }
+
+      const updatedCategoryData = {
+        categoryId: catUpdate.id, // ID của danh mục cần cập nhật
+        formData: formData, // Dữ liệu cần cập nhật
+      };
+      const result = await onSave(updatedCategoryData);
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        setConfirmVisible(false);
+      }
+    } catch (error) {
+      console.log("Cập nhật thất bại:", error);
     }
-
-    const updatedCategoryData = {
-      categoryId: catUpdate.id, // ID của danh mục cần cập nhật
-      formData: formData, // Dữ liệu cần cập nhật
-    };
-
-    onSave(updatedCategoryData);
-
-    setConfirmVisible(false); // Đóng modal xác nhận
   };
 
   // Hiển thị modal xác nhận khi nhấn nút Lưu
@@ -67,9 +75,17 @@ export default function UpdateCategory({
         ]}
       >
         <div>
+          {error && error.message?.name && (
+            <Alert
+              message="Lỗi"
+              description={error.message.name}
+              type="error"
+              showIcon
+            />
+          )}
           <label className="block font-medium mb-2">Tên</label>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {/* Hiển thị lỗi bằng Alert */}
         </div>
 
         <div className="mb-4">
