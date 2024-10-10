@@ -39,20 +39,21 @@ export default function Navigation() {
           Home
         </p>
       </Link>
-      <Dropdown
+      <Link to="/list-products">
+        <p className="flex text-[24px] font-bold cursor-pointer text-center hover:text-blue-500 items-center">
+          Shop
+          {/* <IoMdArrowDropdown /> */}
+        </p>
+      </Link>
+      {/* <Dropdown
         menu={{
           items,
         }}
         placement="bottom"
         overlayStyle={{ minWidth: "1000px" }} // Set dropdown menu width here
       >
-        <Link to="/list-products">
-          <p className="flex text-[24px] font-bold cursor-pointer text-center hover:text-blue-500 items-center">
-            Shop
-            <IoMdArrowDropdown />
-          </p>
-        </Link>
-      </Dropdown>
+        
+      </Dropdown> */}
 
       <Link to="/about">
         <p className="text-[24px] font-bold cursor-pointer hover:text-blue-500 items-center">

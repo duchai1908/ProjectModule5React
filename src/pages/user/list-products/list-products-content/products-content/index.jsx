@@ -51,7 +51,7 @@ export default function ProductsPanagation({
         <div className="md:flex w-[100%] items-center justify-between px-5">
           <div>
             <Select
-              defaultValue="aToZ"
+              defaultValue="none"
               className="md:w-[250px] w-[100%] mb-4"
               // style={{
               //   width: 100,
@@ -76,7 +76,7 @@ export default function ProductsPanagation({
                 },
                 {
                   value: "newToOld",
-                  label: "Price, new to old",
+                  label: "Date, new to old",
                 },
               ]}
             />

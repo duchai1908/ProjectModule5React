@@ -15,6 +15,7 @@ const UserDetailPage = React.lazy(() => import("../pages/user/userDetail"));
 const CheckOutPage = React.lazy(() => import("../pages/user/checkOut"));
 const CartDetailPage = React.lazy(() => import("../pages/user/cartDetail"));
 const WishListPage = React.lazy(() => import("../pages/user/wishList"));
+const NotFound = React.lazy(() => import("../pages/error/NotFound"));
 
 const PublicRoutes = [
   {
@@ -69,10 +70,9 @@ const PublicRoutes = [
       },
     ],
   },
-  //test
   {
-    path: "test",
-    element: <TestPage />,
+    path: "*", // Đường dẫn cho các link không hợp lệ
+    element: <LazyLoader children={<NotFound />} />, // Trang lỗi tùy chỉnh
   },
 ];
 export default PublicRoutes;
