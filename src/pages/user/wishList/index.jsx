@@ -80,7 +80,7 @@ export default function WishList() {
           
           <div className="wish_content-items">
             {wishlist && wishlist.data.data.length === 0 ? (
-              <p className="bg-red-500 flex justify-center">Danh sách yêu thích trống</p>
+              <p >Danh sách yêu thích trống</p>
             ) : (
               wishlist && wishlist.data.data.map((item) => {
                 return (
