@@ -8,6 +8,7 @@ import { findAllAddress } from "../../../services/addressService";
 import { addOrder } from "../../../services/checkoutService";
 import { clearCart } from "../../../redux/slices/cartSlice";
 import { notification } from "antd";
+import Cookies from "js-cookie";
 
 export default function CheckOut() {
   const dispatch = useDispatch();
@@ -36,6 +37,16 @@ export default function CheckOut() {
     (state) => state.address
   );
   console.log("address", addressList);
+  useEffect(()=>{
+    if (Cookies.get("token") != null) {
+      const token = JSON.parse(Cookies.get("token"));
+      if(!(token.data.roles.some((item)=> item === "ROLE_USER"))){
+        navigate("/*")
+      }
+    }else{
+      navigate("/login")
+    }
+  },[])
 
   useEffect(() => {
     dispatch(findAllAddress()); // Gọi API để lấy danh sách địa chỉ khi component mount
@@ -75,9 +86,6 @@ export default function CheckOut() {
       addressId: selectedAddress.id,
       couponId: couponData.data?.id,
     };
-
-    console.log("orderRequest", orderRequest);
-
     dispatch(addOrder(orderRequest)).then((response) => {
       if (response.meta.requestStatus === "fulfilled") {
         notification.success({

@@ -17,7 +17,7 @@ export default function AdminLayout() {
       const token = JSON.parse(Cookies.get("token"));
       
       if(!(token.data.roles.some((item)=> item === "ROLE_ADMIN"))){
-        navigate("/register")
+        navigate("/*")
       }
       dispatch(loadUserFromCookie(token));
     } else {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Select } from "antd";
+import { notification, Select } from "antd";
 import { Input, Space } from "antd";
 const { Search } = Input;
 
@@ -42,7 +42,9 @@ export default function ProductsPanagation({
    */
   const handleAddWishlist = async (productId) => {
     const response = await addToWishlist(productId);
-    console.log(response);
+    notification.success({
+      message: response.data.data
+    })
   };
 
   return (
