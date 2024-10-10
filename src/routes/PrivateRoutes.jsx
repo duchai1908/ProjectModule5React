@@ -17,8 +17,12 @@ const CustomerManagerPage = React.lazy(() =>
 );
 const ColorManager = React.lazy(() => import("../pages/admin/colorManager"));
 const SizeManager = React.lazy(() => import("../pages/admin/sizeManager"));
+
+const BannerManager = React.lazy(() => import("../pages/admin/bannerManager"));
+
 const CouponManager = React.lazy(() => import("../pages/admin/couponManager"))
 const CommentManager = React.lazy(() => import("../pages/admin/commentManager"))
+
 // const CategoryManagerPage = React.lazy(() =>
 //   import("../pages/admin/categoryManager")
 // );
@@ -54,6 +58,10 @@ const PrivateRoutes = [
       {
         path: "size-manager",
         element: <LazyLoader children={<SizeManager />} />,
+      },
+      {
+        path: "banner-manager",
+        element: <LazyLoader children={<BannerManager />} />,
       },
       ,{
         path: "coupon-manager",

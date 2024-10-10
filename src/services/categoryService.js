@@ -65,3 +65,12 @@ export const categoryStatusChange = createAsyncThunk(
     }
   }
 );
+
+export const getAllCategories = createAsyncThunk(
+  "category/listCategory",
+  async () => {
+    // console.log("vao", searchTerm);
+    const response = await jsonAxios.get(`/category/listCategory`);
+    return response.data.data;
+  }
+);

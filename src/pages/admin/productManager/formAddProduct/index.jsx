@@ -1,4 +1,4 @@
-import { Button, Input, Upload } from "antd";
+import { Button, Input, Select, Upload } from "antd";
 import { IoClose } from "react-icons/io5";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -16,7 +16,13 @@ const AddProductForm = ({
   isNameFalse,
   isCateFalse,
   isImgFalse,
+  cateData,
+  handleChangeCateValue,
 }) => {
+  // const handleChangeCateValue = (value) => {
+  //   console.log(`selected ${value}`);
+  // };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <form
@@ -47,11 +53,25 @@ const AddProductForm = ({
 
         <div className="mb-4">
           <label className="block font-medium mb-2">Mã danh mục</label>
-          <Input
+          {/* <Input
             placeholder="Nhập mã category"
             value={categoryId}
             onChange={handleCategoryIdChange}
             className="mb-3"
+          /> */}
+          <Select
+            defaultValue={
+              cateData && cateData?.length > 0 ? cateData[0].name : undefined
+            }
+            // style={{
+            //   width: 150,
+            // }}
+            className="w-full"
+            onChange={handleChangeCateValue}
+            options={cateData?.map((category) => ({
+              value: category?.id,
+              label: category?.name,
+            }))}
           />
           {isCateFalse && (
             <p className="text-red-500">Id danh mục không được để trống</p>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Input, Modal, Upload } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Input, Modal, notification, Select, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import {
@@ -7,15 +7,25 @@ import {
   findAllProductDetail,
 } from "../../../../services/productDetailService";
 
-const AddProductDetailModal = ({ visible, onClose, id }) => {
+const AddProductDetailModal = ({
+  visible,
+  onClose,
+  id,
+  colorList,
+  sizeList,
+}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(true); // If you have status to include
   const [file, setFile] = useState([]);
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
-  const [colorId, setColorId] = useState(null);
-  const [sizeId, setSizeId] = useState(null);
+  const [colorId, setColorId] = useState(
+    colorList && colorList?.length > 0 ? colorList[0].color : null
+  );
+  const [sizeId, setSizeId] = useState(
+    sizeList && sizeList?.length > 0 ? sizeList[0].size : null
+  );
   const [productId, setProductId] = useState(null);
 
   //validate
@@ -26,6 +36,21 @@ const AddProductDetailModal = ({ visible, onClose, id }) => {
   const handleUpload = (info) => {
     setFile([...file, info.file]);
   };
+
+  const clearData = () => {
+    setName("");
+    setDescription("");
+    setStatus(true);
+    setFile([]);
+    setStock(0);
+    setPrice(0);
+    setColorId(colorList && colorList?.length > 0 ? colorList[0].color : null);
+    setSizeId(sizeList && sizeList?.length > 0 ? sizeList[0].size : null);
+    setProductId(null);
+  };
+  useEffect(() => {
+    clearData();
+  }, [onClose]);
 
   const handleSubmit = async () => {
     const formData = new FormData();
@@ -47,12 +72,29 @@ const AddProductDetailModal = ({ visible, onClose, id }) => {
     // Dispatch the action to add a product detail
     await dispatch(addProductDetail(formData))
       .then(() => {
+        notification.success({
+          message: "Thêm mới sản phẩm chi tiết thành công",
+          duration: 3,
+        });
         onClose(); // Close the modal when successful
+        clearData();
         dispatch(findAllProductDetail({ id, page: 0, size: 5 })); // Refresh product details list
       })
       .catch((error) => {
-        console.error("Error adding product detail:", error);
+        notification.error({
+          message: "Thêm mới sản phẩm chi tiết thất bại",
+          duration: 3,
+        });
       });
+  };
+
+  const handleChangeColor = (value) => {
+    // console.log("selected color:", value);
+    setColorId(value);
+  };
+  const handleChangeSize = (value) => {
+    // console.log("selected color:", value);
+    setSizeId(value);
   };
 
   return (
@@ -112,18 +154,46 @@ const AddProductDetailModal = ({ visible, onClose, id }) => {
       {/* Add additional fields for color, size, product if required */}
       <div className="mb-4">
         <label className="block font-medium mb-2">Mã màu</label>
-        <Input
+        {/* <Input
           value={colorId}
           type="number"
           onChange={(e) => setColorId(e.target.value)}
+        /> */}
+        <Select
+          defaultValue={
+            colorList && colorList?.length > 0 ? colorList[0].color : undefined
+          }
+          // style={{
+          //   width: 150,
+          // }}
+          className="w-full"
+          onChange={handleChangeColor}
+          options={colorList?.map((c) => ({
+            value: c?.id,
+            label: c?.color,
+          }))}
         />
       </div>
       <div className="mb-4">
         <label className="block font-medium mb-2">Mã kích thước</label>
-        <Input
+        {/* <Input
           value={sizeId}
           type="number"
           onChange={(e) => setSizeId(e.target.value)}
+        /> */}
+        <Select
+          defaultValue={
+            sizeList && sizeList?.length > 0 ? sizeList[0].size : undefined
+          }
+          // style={{
+          //   width: 150,
+          // }}
+          className="w-full"
+          onChange={handleChangeSize}
+          options={sizeList?.map((s) => ({
+            value: s?.id,
+            label: s?.size,
+          }))}
         />
       </div>
       <div className="mb-4">

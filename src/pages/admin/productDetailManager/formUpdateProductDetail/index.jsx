@@ -1,5 +1,13 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Image, Input, Modal, Upload } from "antd";
+import {
+  Button,
+  Image,
+  Input,
+  Modal,
+  notification,
+  Select,
+  Upload,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,8 +21,9 @@ const UpdateProductDetailModal = ({
   onClose,
   currentProductUpdate,
   id,
+  colorList,
+  sizeList,
 }) => {
-  console.log("curren update:", currentProductUpdate);
   const {
     data: productDetailAndImage,
     status: productDetailAndImageStatus,
@@ -50,6 +59,28 @@ const UpdateProductDetailModal = ({
   };
 
   const handleSubmit = async () => {
+    if (name === "") {
+      notification.error({ message: "Tên đang bị trống", duration: 300 });
+      return;
+    }
+    if (description === "") {
+      notification.error({ message: "Mô tả đang bị trống", duration: 300 });
+      return;
+    }
+    if (stock < 0) {
+      notification.error({
+        message: "Số lượng phải lớn hơn hoặc bằng 0",
+        duration: 300,
+      });
+      return;
+    }
+    if (price < 0) {
+      notification.error({
+        message: "Giá phải lớn hơn hoặc bằng 0",
+        duration: 300,
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
@@ -70,15 +101,31 @@ const UpdateProductDetailModal = ({
     const productDetailId = currentProductUpdate.id;
 
     // dispatch
-    await dispatch(updateProductDetail({ productDetailId, formData }))
-      .then(() => {
-        dispatch(findAllProductDetail({ id, page: 0, size: 5 })); // Refresh product details list
-        onClose(); // Close the modal when successful
-      })
-      .catch((error) => {
-        console.error("Error update product detail:", error);
-      });
+
+    try {
+      await dispatch(updateProductDetail({ productDetailId, formData }))
+        .then(() => {
+          dispatch(findAllProductDetail({ id, page: 0, size: 5 })); // Refresh product details list
+          onClose(); // Close the modal when successful
+        })
+        .catch((error) => {
+          console.error("Error update product detail:", error);
+        });
+    } catch (err) {
+      // Handle the error
+      console.error("err cua 1:", err); // Example of handling the error
+    }
   };
+
+  const handleChangeColor = (value) => {
+    // console.log("selected color:", value);
+    setColorId(value);
+  };
+  const handleChangeSize = (value) => {
+    // console.log("selected color:", value);
+    setSizeId(value);
+  };
+
   if (currentProductUpdate) {
     return (
       <Modal
@@ -164,18 +211,42 @@ const UpdateProductDetailModal = ({
         {/* Add additional fields for color, size, product if required */}
         <div className="mb-4">
           <label className="block font-medium mb-2">Mã màu</label>
-          <Input
+          {/* <Input
             value={colorId}
             type="number"
             onChange={(e) => setColorId(e.target.value)}
+          /> */}
+          <Select
+            value={colorId}
+            // style={{
+            //   width: 150,
+            // }}
+            className="w-full"
+            onChange={handleChangeColor}
+            options={colorList?.map((c) => ({
+              value: c?.id,
+              label: c?.color,
+            }))}
           />
         </div>
         <div className="mb-4">
           <label className="block font-medium mb-2">Mã kích thước</label>
-          <Input
+          {/* <Input
             value={sizeId}
             type="number"
             onChange={(e) => setSizeId(e.target.value)}
+          /> */}
+          <Select
+            value={sizeId}
+            // style={{
+            //   width: 150,
+            // }}
+            className="w-full"
+            onChange={handleChangeSize}
+            options={sizeList?.map((s) => ({
+              value: s?.id,
+              label: s?.size,
+            }))}
           />
         </div>
         <div className="mb-4">
