@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Button, Layout, theme } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import SidebarAdmin from "./sidebar";
 import HeaderAdmin from "./header";
 import "./admin.css";
@@ -10,12 +10,16 @@ import Cookies from "js-cookie";
 import { loadUserFromCookie } from "../../services/authService";
 const { Header, Sider, Content } = Layout;
 export default function AdminLayout() {
-
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     if (Cookies.get("token") != null) {
       const token = JSON.parse(Cookies.get("token"));
+      if(token.roles != "ROLE_ADMIN"){
+        navigate("/register")
+      }
       dispatch(loadUserFromCookie(token));
+    } else {
+        navigate("/login");
     }
   }, []);
 
