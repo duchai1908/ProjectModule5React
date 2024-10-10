@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, notification } from "antd";
 import { useParams } from "react-router-dom";
 import { addReviewProduct } from "../../../../../../services/review";
 import { useSelector } from "react-redux";
@@ -29,6 +29,9 @@ export default function FormReviewUsers({handleReload}) {
           const response = await addReviewProduct(review);
           //  window.location.reload();
           handleReload();
+          notification.success({
+            message: "Đánh giá thành công"
+          })
         } catch (error) {
           console.error("Error fetching review: ", error.response);
         }

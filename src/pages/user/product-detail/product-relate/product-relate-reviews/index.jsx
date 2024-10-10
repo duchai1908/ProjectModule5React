@@ -60,7 +60,7 @@ export default function ProductRelateReviews({ product }) {
     const fetchCountReview = async () => {
       try {
         const countRating1 = await countRating(id);
-        console.log("data: ",countRating1);
+        console.log("dataRating: ",countRating1);
         
         setCountRate(countRating1);
       } catch (error) {
