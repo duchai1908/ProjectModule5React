@@ -24,15 +24,14 @@ export default function Login() {
           message: "Lấy mật khẩu thành công",
           description: "Kiểm tra mail để lấy mật khẩu"
         })
+        setIsModalOpen(false);
       }
     }catch(error){
       notification.error({
         message:error.response.data.message,
         duration:2
-      }) 
-      setIsModalOpen(false);
-    }
-      
+      })     
+    }      
       form.resetFields();
       
   }

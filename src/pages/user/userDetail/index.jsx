@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import UserInformationPage from "./userInformation";
 import UserOrderHistoryPage from "./userOrderHistory";
 import { useSelector } from "react-redux";
+import UserAddressPage from "./userAddres";
 
 export default function UserDetail() {
   //take user value
@@ -117,6 +118,13 @@ export default function UserDetail() {
                   className="user-item cursor-pointer"
                   onClick={() => handleChangePage(4)}
                 >
+                  <FaRegHeart />
+                  <Link>Địa chỉ</Link>
+                </li>
+                <li
+                  className="user-item cursor-pointer"
+                  onClick={() => handleChangePage(5)}
+                >
                   <MdPublishedWithChanges />
                   <Link>change Password</Link>
                 </li>
@@ -131,7 +139,7 @@ export default function UserDetail() {
           {isOpen === 1 && <UserInformationPage />}
           {isOpen === 2 && <UserOrderHistoryPage />}
           {isOpen === 3 && <>hang 3</>}
-          {isOpen === 4 && <>hang 4</>}
+          {isOpen === 4 && <><UserAddressPage/></>}
         </div>
       </div>
     </>
