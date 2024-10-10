@@ -123,13 +123,6 @@ export default function UserDetail() {
                 </li>
                 <li
                   className="user-item cursor-pointer"
-                  onClick={() => handleChangePage(3)}
-                >
-                  <FaRegHeart />
-                  <NavLink>Yêu thích</NavLink>
-                </li>
-                <li
-                  className="user-item cursor-pointer"
                   onClick={() => handleChangePage(4)}
                 >
                   <FaRegHeart />

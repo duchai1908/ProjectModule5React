@@ -76,32 +76,8 @@ export default function ForUsers() {
         // },
       ]
     : [
-        {
-          key: "1",
-          label: (
-            <Link
-              to="/user-detail"
-              rel="noopener noreferrer"
-              className="flex gap-3 items-center"
-            >
-              <FaUser className="text-blue-400" />
-              My Accounts
-            </Link>
-          ),
-        },
-        {
-          key: "2",
-          label: (
-            <Link
-              to="/wish-list"
-              rel="noopener noreferrer"
-              className="flex gap-3 items-center"
-            >
-              <FaHeart className="text-blue-400" />
-              WishList
-            </Link>
-          ),
-        },
+        
+         
         {
           key: "4",
           label: (
