@@ -151,7 +151,7 @@ export default function DashBoard() {
           <div className="charts">
             <div className="chart_bar">
               <h2 className="title_dash">Total Revenue</h2>
-              <span className="description_dash">{data?.monthlyRevenue}</span>
+              <span className="description_dash">doanh so</span>
               <div className="revenue">
                 <ChartComponent />
               </div>

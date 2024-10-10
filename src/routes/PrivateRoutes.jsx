@@ -83,4 +83,3 @@ const PrivateRoutes = [
   },
 ];
 export default PrivateRoutes;
-// customer-manager

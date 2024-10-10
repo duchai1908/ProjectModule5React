@@ -99,8 +99,6 @@ export default function CategoryManager() {
     (state) => state.category
   );
 
-  console.log("loi", error);
-  console.log("status", status);
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
