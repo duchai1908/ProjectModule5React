@@ -11,10 +11,12 @@ import { loadUserFromCookie } from "../../services/authService";
 const { Header, Sider, Content } = Layout;
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (Cookies.get("token") != null) {
       const token = JSON.parse(Cookies.get("token"));
-      if(token.roles != "ROLE_ADMIN"){
+      
+      if(!(token.data.roles.some((item)=> item === "ROLE_ADMIN"))){
         navigate("/register")
       }
       dispatch(loadUserFromCookie(token));
