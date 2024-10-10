@@ -1,5 +1,6 @@
 import { Breadcrumb } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function CategoryHeader() {
   return (
@@ -22,16 +23,16 @@ export default function CategoryHeader() {
             items={[
               {
                 title: (
-                  <a
-                    href="#"
+                  <Link
+                    to="/"
                     className="hover:text-blue-500 transition-colors duration-300 text-red-700"
                   >
                     Home
-                  </a>
+                  </Link>
                 ),
               },
               {
-                title: "Category name",
+                title: "Danh sách sản phẩm",
               },
             ]}
           />

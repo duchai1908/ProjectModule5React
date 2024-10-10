@@ -77,10 +77,13 @@ export default function ProductDetail() {
         // Xử lý lỗi
       });
   };
+  //List same product by category id
   useEffect(() => {
     if (productR) {
-      if (productR?.category?.id) {
-        dispatch(getAllProductRelateByCateId({ id: productR?.category?.id }));
+      if (productR?.product?.category?.id) {
+        dispatch(
+          getAllProductRelateByCateId({ id: productR?.product?.category?.id })
+        );
       }
     }
     console.log("productRLate", productRLate);

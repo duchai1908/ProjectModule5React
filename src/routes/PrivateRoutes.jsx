@@ -26,6 +26,7 @@ const OrderManagerPage = React.lazy(() =>
 const BannerManager = React.lazy(() => import("../pages/admin/bannerManager"));
 
 const CouponManager = React.lazy(() => import("../pages/admin/couponManager"));
+const NotFound = React.lazy(() => import("../pages/error/NotFound"));
 const CommentManager = React.lazy(() =>
   import("../pages/admin/commentManager")
 );
@@ -80,6 +81,10 @@ const PrivateRoutes = [
         element: <LazyLoader children={<CommentManager />} />,
       },
     ],
+  },
+  {
+    path: "*", // Đường dẫn cho các link không hợp lệ
+    element: <LazyLoader children={<NotFound />} />, // Trang lỗi tùy chỉnh
   },
 ];
 export default PrivateRoutes;
