@@ -7,6 +7,10 @@ import CartList from "../../../../pages/user/cartList";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../../redux/slices/authSlice";
 
+import { FaUser, FaHeart } from "react-icons/fa";
+import { IoLogOut, IoLogIn } from "react-icons/io5";
+
+
 export default function ForUsers() {
   const [cartShow, setCartShow] = useState(false);
   // Hàm để đóng giỏ hàng
@@ -30,7 +34,12 @@ export default function ForUsers() {
         {
           key: "1",
           label: (
-            <Link to="/user-detail" rel="noopener noreferrer">
+            <Link
+              to="/user-detail"
+              rel="noopener noreferrer"
+              className="flex gap-3 items-center"
+            >
+              <FaUser className="text-blue-400" />
               My Accounts
             </Link>
           ),
@@ -38,29 +47,44 @@ export default function ForUsers() {
         {
           key: "2",
           label: (
-            <Link to="/wish-list" rel="noopener noreferrer">
+            <Link
+              to="/wish-list"
+              rel="noopener noreferrer"
+              className="flex gap-3 items-center"
+            >
+              <FaHeart className="text-blue-400" />
               WishList
             </Link>
           ),
         },
         {
           key: "3",
-          label: <span onClick={handleLogout}>Sign Out</span>,
-        },
-        {
-          key: "5",
           label: (
-            <Link to="/test">
-              <p>Test Page</p>
-            </Link>
+            <span onClick={handleLogout} className="flex gap-3 items-center">
+              <IoLogOut className="text-blue-400 text-[16px]" />
+              <span>Sign Out</span>
+            </span>
           ),
         },
+        // {
+        //   key: "5",
+        //   label: (
+        //     <Link to="/test">
+        //       <p>Test Page</p>
+        //     </Link>
+        //   ),
+        // },
       ]
     : [
         {
           key: "1",
           label: (
-            <Link to="/user-detail" rel="noopener noreferrer">
+            <Link
+              to="/user-detail"
+              rel="noopener noreferrer"
+              className="flex gap-3 items-center"
+            >
+              <FaUser className="text-blue-400" />
               My Accounts
             </Link>
           ),
@@ -68,7 +92,12 @@ export default function ForUsers() {
         {
           key: "2",
           label: (
-            <Link to="/wish-list" rel="noopener noreferrer">
+            <Link
+              to="/wish-list"
+              rel="noopener noreferrer"
+              className="flex gap-3 items-center"
+            >
+              <FaHeart className="text-blue-400" />
               WishList
             </Link>
           ),
@@ -76,19 +105,20 @@ export default function ForUsers() {
         {
           key: "4",
           label: (
-            <Link to="/login">
+            <Link to="/login" className="flex gap-3 items-center">
+              <IoLogIn className="text-blue-400" />
               <p>Login</p>
             </Link>
           ),
         },
-        {
-          key: "5",
-          label: (
-            <Link to="/test">
-              <p>Test Page</p>
-            </Link>
-          ),
-        },
+        // {
+        //   key: "5",
+        //   label: (
+        //     <Link to="/test">
+        //       <p>Test Page</p>
+        //     </Link>
+        //   ),
+        // },
       ];
   return (
     <>

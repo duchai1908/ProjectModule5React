@@ -84,7 +84,7 @@ export default function UserOrderHistoryPage() {
 
   // Handle edit product detail
   const handleOpenOderDetail = async (order) => {
-    console.log(currentProduct);
+    console.log("check order in history:", order);
     setCurrentOrder(order);
     setIsModalVisible(true);
   };

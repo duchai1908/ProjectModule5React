@@ -13,18 +13,29 @@ import { changePageProductDetail } from "../../../redux/slices/productDetailSlic
 import { useParams } from "react-router-dom";
 import AddProductDetailModal from "./formAddProductDetail";
 import UpdateProductDetailModal from "./formUpdateProductDetail";
+import { getAllColorsByNothing } from "../../../services/colorService";
+import { getAllSizesByNothing } from "../../../services/sizeService";
 
 export default function ProductDetailManager() {
   const { id } = useParams();
 
-  const { data, status, error, totalElements, number, size } = useSelector(
-    (state) => state.productDetail
-  );
+  const { data, status, error, totalElements, number, size, numberOfElements } =
+    useSelector((state) => state.productDetail);
   const {
     data: productCurrentt,
     status: productCurrenttStatus,
     error: productCurrenttError,
   } = useSelector((state) => state.product);
+  const {
+    data: colorList,
+    status: colorListStatus,
+    error: colorListError,
+  } = useSelector((state) => state.colorStore);
+  const {
+    data: sizeList,
+    status: sizeListStatus,
+    error: sizeListError,
+  } = useSelector((state) => state.sizeStore);
 
   const dispatch = useDispatch();
   //for model add
@@ -34,10 +45,14 @@ export default function ProductDetailManager() {
 
   const [currentProductUpdate, setCurrentProductUpdate] = useState(null);
 
+  const [isReload, setIsReload] = useState(false);
+
   // Fetch product details when component mounts and whenever the page changes
   useEffect(() => {
     dispatch(findAllProductDetail({ id, page: number, size }));
-  }, [dispatch, number, size, id]);
+    dispatch(getAllColorsByNothing());
+    dispatch(getAllSizesByNothing());
+  }, [dispatch, number, size, id, isReload]);
 
   // Function to handle page change
   const handleChangePage = async (page, pageSize) => {
@@ -183,8 +198,8 @@ export default function ProductDetailManager() {
               </div>
               <div className="mt-4 flex justify-between items-center ">
                 <div>
-                  Hiển thị <b>{totalElements}</b> trên
-                  <b>{size}</b> bản ghi
+                  Hiển thị <b>{numberOfElements}</b> trên
+                  <b>{totalElements}</b> bản ghi
                 </div>
                 <div className="flex items-center gap-5">
                   <div className="flex items-center gap-3">
@@ -203,9 +218,14 @@ export default function ProductDetailManager() {
           )}
           <AddProductDetailModal
             visible={isModalVisible}
-            onClose={() => setIsModalVisible(false)}
+            onClose={() => {
+              setIsModalVisible(false);
+              setIsReload(!isReload);
+            }}
             onAdd={handleAddProductDetail}
             id={id}
+            colorList={colorList}
+            sizeList={sizeList}
           />
           <UpdateProductDetailModal
             visible={isModalEditVisible}
@@ -213,6 +233,8 @@ export default function ProductDetailManager() {
             //product id (not product detail id)
             id={id}
             currentProductUpdate={currentProductUpdate}
+            colorList={colorList}
+            sizeList={sizeList}
           />
         </div>
       </div>

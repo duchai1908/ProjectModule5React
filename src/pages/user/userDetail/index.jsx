@@ -13,9 +13,13 @@ import { FaPlus } from "react-icons/fa6";
 import { Link, NavLink } from "react-router-dom";
 import UserInformationPage from "./userInformation";
 import UserOrderHistoryPage from "./userOrderHistory";
+
 import { useDispatch, useSelector } from "react-redux";
 
 import UserChangePass from "./userChangePass";
+
+import { useSelector } from "react-redux";
+import UserAddressPage from "./userAddres";
 
 export default function UserDetail() {
   // Lấy thông tin người dùng từ Redux
@@ -129,6 +133,13 @@ export default function UserDetail() {
                   className="user-item cursor-pointer"
                   onClick={() => handleChangePage(4)}
                 >
+                  <FaRegHeart />
+                  <Link>Địa chỉ</Link>
+                </li>
+                <li
+                  className="user-item cursor-pointer"
+                  onClick={() => handleChangePage(5)}
+                >
                   <MdPublishedWithChanges />
                   <NavLink>change Password</NavLink>
                 </li>
@@ -144,8 +155,9 @@ export default function UserDetail() {
             <UserInformationPage onUserUpdated={handleUserUpdate} />
           )}
           {isOpen === 2 && <UserOrderHistoryPage />}
-          {isOpen === 3 && <>hang 4</>}
-          {isOpen === 4 && <UserChangePass />}
+          {isOpen === 5 && <UserChangePass />}
+          {isOpen === 3 && <>hang 3</>}
+          {isOpen === 4 && <><UserAddressPage/></>}
         </div>
       </div>
     </>

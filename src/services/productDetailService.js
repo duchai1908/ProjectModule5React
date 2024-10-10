@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { formAxios, jsonAxios } from "../api";
+import { notification } from "antd";
 
 export const findAllProductDetail = createAsyncThunk(
   "admin/productDetail/product",
@@ -58,7 +59,12 @@ export const updateProductDetail = createAsyncThunk(
       return response.data;
     } catch (error) {
       // console.log("loi");
-      return rejectWithValue(error.response?.data || error.message);
+      console.log("error: ", error.response.data.message);
+      notification.error({
+        message: error.response.data.message.message,
+        duration: 3,
+      });
+      return rejectWithValue(error.response?.data.message || error.message);
     }
   }
 );

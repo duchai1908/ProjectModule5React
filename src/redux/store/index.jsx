@@ -16,9 +16,13 @@ import addressSlice from "../slices/addressSlice";
 import productDetailAndImageSlice from "../slices/productDetailAndImageSlice";
 import checkoutSlice from "../slices/checkoutSlice";
 import userOrderSlice from "../slices/userOrderSlice";
+
 import userSlice from "../slices/userSlice";
 import adminOrderSlice from "../slices/adminOrderSlice";
 import dashBroadSlice from "../slices/dashBroadSlice";
+
+import guestCategorySlice from "../slices/guestCategorySclie";
+
 
 const store = configureStore({
   reducer: {
@@ -40,6 +44,7 @@ const store = configureStore({
     user: userSlice,
     adminOrder: adminOrderSlice,
     dashBoard: dashBroadSlice,
+    guestCategory: guestCategorySlice,
   },
 });
 export default store;

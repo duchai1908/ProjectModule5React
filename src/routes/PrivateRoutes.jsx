@@ -2,6 +2,7 @@ import React from "react";
 import LazyLoader from "../components/LazyLoad";
 import AdminLayout from "../layouts/admin/AdminLayout";
 
+
 const DashBoardPage = React.lazy(() => import("../pages/admin/dashBoard"));
 const ProductManager = React.lazy(() =>
   import("../pages/admin/productManager")
@@ -15,12 +16,20 @@ const CustomerManagerPage = React.lazy(() =>
 );
 const ColorManager = React.lazy(() => import("../pages/admin/colorManager"));
 const SizeManager = React.lazy(() => import("../pages/admin/sizeManager"));
+
 const CategoryManagerPage = React.lazy(() =>
   import("../pages/admin/caterogyManager")
 );
 const OrderManagerPage = React.lazy(() =>
   import("../pages/admin/orderManager")
 );
+
+
+const BannerManager = React.lazy(() => import("../pages/admin/bannerManager"));
+
+const CouponManager = React.lazy(() => import("../pages/admin/couponManager"))
+const CommentManager = React.lazy(() => import("../pages/admin/commentManager"))
+
 const PrivateRoutes = [
   {
     path: "/admin",
@@ -58,6 +67,18 @@ const PrivateRoutes = [
         path: "order-manager",
         element: <LazyLoader children={<OrderManagerPage />} />,
       },
+
+        path: "banner-manager",
+        element: <LazyLoader children={<BannerManager />} />,
+      },
+      ,{
+        path: "coupon-manager",
+        element: <LazyLoader children={<CouponManager />} />,
+      },
+      {
+        path: "comment-manager",
+        element: <LazyLoader children={<CommentManager />} />,
+      }
     ],
   },
 ];

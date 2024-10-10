@@ -116,9 +116,9 @@ export default function ProductsPanagation({
                     <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
                       {productDetail ? (
                         <>
-                          <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-gray-200 hover:text-black hover:border-white">
+                          {/* <button className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-gray-200 hover:text-black hover:border-white">
                             <FaShoppingCart className="text-lg" />
-                          </button>
+                          </button> */}
                           <button
                             onClick={() => handleAddWishlist(product.id)}
                             className="flex items-center justify-center border bg-gray-200 rounded-full p-2 m-1 shadow transition hover:bg-white hover:text-red-600 hover:border-white"
@@ -141,9 +141,9 @@ export default function ProductsPanagation({
                             {product.name}
                           </p>
                         </Link>
-                        <p className="mb-3 line-through">
+                        {/* <p className="mb-3 line-through">
                           {formatCurrencyVND(productDetail.price)}
-                        </p>
+                        </p> */}
                         <p className="mb-3 font-bold">
                           {formatCurrencyVND(productDetail.price)}
                         </p>
@@ -153,7 +153,7 @@ export default function ProductsPanagation({
                         <p className="cursor-not-allowed text-gray-400 hover:text-blue-500 mb-3 font-bold">
                           {product.name}
                         </p>
-                        <p className="mb-3 opacity-0 line-through">hihi</p>
+                        {/* <p className="mb-3 opacity-0 line-through">hihi</p> */}
                         <p className="mb-3 font-bold">Giá không có sẵn</p>
                       </>
                     )}
@@ -165,10 +165,10 @@ export default function ProductsPanagation({
                       <li className="cursor-pointer rounded-full w-[16px] h-[16px] bg-yellow-500"></li>
                     </ul> */}
                   </div>
-                  <div className="my-3 flex justify-center gap-2">
+                  {/* <div className="my-3 flex justify-center gap-2">
                     <FaStar className="text-yellow-300" />
                     <p>3.3/5</p>
-                  </div>
+                  </div> */}
                 </div>
               );
             })

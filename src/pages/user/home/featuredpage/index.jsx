@@ -10,7 +10,7 @@ import "swiper/css/autoplay"; // CSS cho autoplay
 import { Link } from "react-router-dom";
 import "swiper/css/autoplay"; // Import CSS cho autoplay
 import { Autoplay } from "swiper/modules";
-export default function Feartured() {
+export default function Feartured({ productNewest }) {
   return (
     <>
       <section className="block p-0 w-full max-w-[1300px] m-[0_auto] z-20 mt-14">
@@ -54,7 +54,33 @@ export default function Feartured() {
               modules={[Autoplay]} // Thêm Autoplay vào modules
               className="mySwiper"
             >
-              <SwiperSlide className="slide-box">
+              {productNewest &&
+                productNewest?.map((productN, index) => {
+                  return (
+                    <SwiperSlide className="slide-box" key={index}>
+                      <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group feature-box">
+                        <div className="">
+                          <a href="">
+                            <img
+                              src={productN?.image}
+                              className=" border rounded-3xl max-h-[250px]"
+                            />
+                          </a>
+                        </div>
+                        <div className="mt-4">
+                          <Link href="#" className="font-bol slide-link">
+                            {productN?.name}
+                          </Link>
+                          {/* <p className="slide-text">1.999.000 đ</p> */}
+                          <Button className="slide-button">
+                            <span>Add to cart</span>
+                          </Button>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
+              {/* <SwiperSlide className="slide-box">
                 <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group feature-box">
                   <div className="">
                     <a href="">
@@ -137,33 +163,14 @@ export default function Feartured() {
                     </Button>
                   </div>
                 </div>
-              </SwiperSlide>
-              <SwiperSlide className="slide-box">
-                <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group feature-box">
-                  <div className="">
-                    <a href="">
-                      <img
-                        src="/images/e1_11_600x.webp"
-                        className=" border rounded-3xl "
-                      />
-                    </a>
-                  </div>
-                  <div className="mt-4">
-                    <Link href="#" className="font-bol slide-link">
-                      Ha. HX 12 Note Pro
-                    </Link>
-                    <p className="slide-text">1.999.000 đ</p>
-                    <Button className="slide-button">
-                      <span>Add to cart</span>
-                    </Button>
-                  </div>
-                </div>
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </div>
-          <Button className="view-button">
-            <span>View All</span>
-          </Button>
+          <Link to="list-products">
+            <Button className="view-button">
+              <span>View All</span>
+            </Button>
+          </Link>
         </div>
       </section>
     </>
