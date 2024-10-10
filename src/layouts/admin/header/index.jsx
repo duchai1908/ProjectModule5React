@@ -7,8 +7,17 @@ import {
   MenuUnfoldOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function HeaderAdmin({ onToggleMenu, isCollapsed }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () =>{
+    dispatch(logout());
+    navigate("/login")
+  }
   const items = [
     {
       key: "1",
@@ -16,33 +25,10 @@ export default function HeaderAdmin({ onToggleMenu, isCollapsed }) {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="https://www.antgroup.com"
+          href=""
+          onClick={handleLogout}
         >
-          1st menu item
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item
-        </a>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item
+          Đăng xuất
         </a>
       ),
     },
@@ -67,16 +53,9 @@ export default function HeaderAdmin({ onToggleMenu, isCollapsed }) {
           />
 
           <div>
-            <BellFilled className="text-[24px]" />
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottomCenter"
-            >
-              {/* <Button className=""> */}
+            <BellFilled className="text-[24px] mr-5" />
+            <Dropdown menu={{ items }} placement="bottomLeft" arrow>
               <Avatar size={36} icon={<UserOutlined />} />
-              {/* </Button> */}
             </Dropdown>
           </div>
         </div>

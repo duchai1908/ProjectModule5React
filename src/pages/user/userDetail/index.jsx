@@ -18,7 +18,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import UserChangePass from "./userChangePass";
 
-import { useSelector } from "react-redux";
 import UserAddressPage from "./userAddres";
 
 export default function UserDetail() {

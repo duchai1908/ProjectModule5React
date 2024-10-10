@@ -4,13 +4,17 @@ import FormReviewUsers from "./form-review";
 import { FaStar } from "react-icons/fa";
 import { Button, Rate, Select } from "antd";
 import { useParams } from "react-router-dom";
-import { addAllReviewProduct, countRating } from "../../../../../services/review";
+import {
+  addAllReviewProduct,
+  countRating,
+} from "../../../../../services/review";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 export default function ProductRelateReviews({ product }) {
   const [isOpenReviews, setIsOpenReviews] = useState(false);
   const [listReview, setListReview] = useState([]);
-  const [countRate,setCountRate] = useState({});
+  const [countRate, setCountRate] = useState({});
   const { id } = useParams();
   const handleChange = (value) => {
     // console.log(`selected ${value}`);
@@ -36,9 +40,9 @@ export default function ProductRelateReviews({ product }) {
     return `${day}/${month}/${year}`;
   };
 
-  const [reload, setReload] = useState(false)
+  const [reload, setReload] = useState(false);
 
-  const handleReload = () => setReload(!reload)
+  const handleReload = () => setReload(!reload);
 
   useEffect(() => {
     loadingReview();
@@ -54,23 +58,21 @@ export default function ProductRelateReviews({ product }) {
     };
     // tạo hàm để gọi api bất đồng bộ review
     const fetchCountReview = async () => {
-      try{
-          const countRating1 = await countRating(id);
-          setCountRate(countRating1);
-          
-      } catch (error){
+      try {
+        const countRating1 = await countRating(id);
+        console.log("data: ",countRating1);
+        
+        setCountRate(countRating1);
+      } catch (error) {
         console.error("Error fetching review: ", error.response);
       }
-    }
+    };
     fetchAllReview();
     fetchCountReview();
   };
   return (
-   
     <>
-     {
-      console.log("rate",countRate)  
-    }
+      {console.log("rate", countRate)}
       <div className=" p-4 bg-gray-100 rounded-lg" id="product-review">
         {product.reviews == 0 ? (
           <>
@@ -85,7 +87,15 @@ export default function ProductRelateReviews({ product }) {
               </p>
               <div class="grid grid-cols-1 gap-4 md:grid-cols-3 sm:grid-cols-1">
                 <div class=" p-4 flex flex-col items-center justify-center text-[22px]">
-                  <p>Rate: {Object.keys(countRate).length > 0 ? JSON.stringify(countRate.data.data.averageRating) : 0 }/5</p>
+                  <p>
+                    {console.log(countRate)
+                    }
+                    Rate:{" "}
+                    {countRate?.data?.data?.averageRating != null
+                      ? JSON.stringify(countRate?.data?.data?.averageRating)
+                      : 0 }
+                    /5
+                  </p>
                   <div className="flex text-yellow-400">
                     <FaStar />
                     <FaStar />
@@ -97,7 +107,9 @@ export default function ProductRelateReviews({ product }) {
                 <div class=" p-4 flex justify-center text-[22px]">
                   <div>
                     <div className="flex text-yellow-400 justify-start">
-                      <p className="text-black">({countRate?.data?.data?.ratingCount['5'] || "0"})</p>
+                      <p className="text-black">
+                        ({countRate?.data?.data?.ratingCount["5"] || "0"})
+                      </p>
                       <FaStar />
                       <FaStar />
                       <FaStar />
@@ -105,43 +117,53 @@ export default function ProductRelateReviews({ product }) {
                       <FaStar />
                     </div>
                     <div className="flex text-yellow-400 justify-start">
-                      <p className="text-black">({countRate?.data?.data?.ratingCount['4'] || "0"})</p>
+                      <p className="text-black">
+                        ({countRate?.data?.data?.ratingCount["4"] || "0"})
+                      </p>
                       <FaStar />
                       <FaStar />
                       <FaStar />
                       <FaStar />
                     </div>
                     <div className="flex text-yellow-400 justify-start">
-                      <p className="text-black">({countRate?.data?.data?.ratingCount['3'] || "0"})</p>
+                      <p className="text-black">
+                        ({countRate?.data?.data?.ratingCount["3"] || "0"})
+                      </p>
                       <FaStar />
                       <FaStar />
                       <FaStar />
                     </div>
                     <div className="flex text-yellow-400 justify-start">
-                      <p className="text-black">({countRate?.data?.data?.ratingCount['2'] || "0"})</p>
+                      <p className="text-black">
+                        ({countRate?.data?.data?.ratingCount["2"] || "0"})
+                      </p>
                       <FaStar />
                       <FaStar />
                     </div>
                     <div className="flex text-yellow-400 justify-start">
-                      <p className="text-black">({countRate?.data?.data?.ratingCount['1'] || "0"})</p>
+                      <p className="text-black">
+                        ({countRate?.data?.data?.ratingCount["1"] || "0"})
+                      </p>
                       <FaStar />
                     </div>
                   </div>
                 </div>
                 <div class="p-4 flex items-center justify-center">
-                  <Button className="p-7 text-[16px]" onClick={handleOpen}>
-                    Write a comment
-                  </Button>
+                  {Cookies.get("token") && (
+                    <Button className="p-7 text-[16px]" onClick={handleOpen}>
+                      Write a comment
+                    </Button>
+                  )}
                 </div>
               </div>
               <hr />
               {isOpenReviews ? (
                 <div className="transition-all duration-500 ease-in-out overflow-hidden max-h-[500px]">
-                  <FormReviewUsers handleReload={handleReload}/>
+                  <FormReviewUsers handleReload={handleReload} />
                 </div>
               ) : (
                 <div className="transition-all duration-500 ease-in-out overflow-hidden max-h-0">
-                  <FormReviewUsers handleReload={handleReload}/>
+                  <FormReviewUsers handleReload={handleReload} />
                 </div>
               )}
 

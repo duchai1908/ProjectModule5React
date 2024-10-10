@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Input } from "antd";
 import { useParams } from "react-router-dom";
 import { addReviewProduct } from "../../../../../../services/review";
+import { useSelector } from "react-redux";
 
 export default function FormReviewUsers({handleReload}) {
   const formRef = useRef();
@@ -11,7 +12,7 @@ export default function FormReviewUsers({handleReload}) {
   const[error,setError] = useState("");
   const[review,setReview] = useState({});
   const[valueComment,setValueComment] = useState("");
-  
+  const data = useSelector((state)=>state.auth);
   const handleRating = (e)=>{
     setRating(e.target.value);
   }
@@ -61,7 +62,7 @@ export default function FormReviewUsers({handleReload}) {
           "productId": +productId,
         })
         formRef.current.reset();
-        setValueComment("");
+        setComment("");
       }
   }
 
@@ -69,7 +70,7 @@ export default function FormReviewUsers({handleReload}) {
   return (
     <>
     
-      <form ref={formRef} action="" onSubmit={(e)=>handleSubmitReview(e)}>
+      <form ref={formRef}  action="" onSubmit={(e)=>handleSubmitReview(e)}>
         <div>
           <p className="text-[24px] font-bold text-center my-5">
             Write a review
@@ -135,7 +136,7 @@ export default function FormReviewUsers({handleReload}) {
             <p>Review</p>
           </div>
           <div className="flex justify-center text-[20px]">
-            <Input.TextArea rows={4} className="input-review w-[70%]" value={valueComment} onChange={handleComment}/>
+            <Input.TextArea rows={4} className="input-review w-[70%]" value={comment} onChange={handleComment}/>
             
           </div>
           {error && (
