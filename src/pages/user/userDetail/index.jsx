@@ -18,7 +18,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import UserChangePass from "./userChangePass";
 
-import { useSelector } from "react-redux";
 import UserAddressPage from "./userAddres";
 
 export default function UserDetail() {
@@ -157,7 +156,11 @@ export default function UserDetail() {
           {isOpen === 2 && <UserOrderHistoryPage />}
           {isOpen === 5 && <UserChangePass />}
           {isOpen === 3 && <>hang 3</>}
-          {isOpen === 4 && <><UserAddressPage/></>}
+          {isOpen === 4 && (
+            <>
+              <UserAddressPage />
+            </>
+          )}
         </div>
       </div>
     </>

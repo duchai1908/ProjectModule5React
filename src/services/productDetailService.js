@@ -22,15 +22,22 @@ export const findAllProductDetailByNothing = createAsyncThunk(
 
 export const addProductDetail = createAsyncThunk(
   "admin/productDetail/add",
-  async (newProductDetail) => {
+  async ({ formData, onClose, clearData }) => {
     try {
       const response = await formAxios.post(
         `/admin/productDetail`, // Assuming this is the correct endpoint for adding
-        newProductDetail
+        formData
       );
+      onClose();
+      clearData();
       return response.data;
     } catch (error) {
-      // console.log("loi");
+      notification.error({
+        message: error?.response?.data?.message?.message,
+        duration: 3,
+      });
+      onClose();
+      clearData();
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -82,12 +89,10 @@ export const findProductDetailById = createAsyncThunk(
 );
 
 export const findProductDetailByProductId = createAsyncThunk(
-  "admin/productDetail/product/id",
+  "productDetail/product/id",
   async ({ id }) => {
     try {
-      const response = await formAxios.get(
-        `/admin/productDetail/productId/${id}`
-      );
+      const response = await formAxios.get(`/productDetail/productId/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);

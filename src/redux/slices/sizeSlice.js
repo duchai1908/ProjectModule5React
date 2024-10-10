@@ -37,7 +37,7 @@ const sizeSlice = createSlice({
       // Thời điểm đã có dữ liệu
       .addCase(getAllSize.fulfilled, (state, action) => {
         state.status = "successfully";
-        console.log(action.payload);
+        // console.log(action.payload);
         // state.data = action.payload.data;
         state.totalElements = action.payload.data.totalElements;
         state.number = action.payload.data.number;
@@ -60,7 +60,7 @@ const sizeSlice = createSlice({
       })
       .addCase(addSize.rejected, (state, action) => {
         state.status = "failed";
-        console.log("error:", action);
+        // console.log("error:", action);
         state.error = action.error.message;
       })
 
@@ -69,9 +69,9 @@ const sizeSlice = createSlice({
       })
       .addCase(getAllSizesByNothing.fulfilled, (state, action) => {
         state.status = "successfully";
-        console.log("vao:", action);
+        // console.log("vao:", action);
         state.data = action.payload.data;
-        console.log("action", action.payload.data);
+        // console.log("action", action.payload.data);
       })
       .addCase(getAllSizesByNothing.rejected, (state, action) => {
         state.status = "failed";
@@ -88,7 +88,7 @@ const sizeSlice = createSlice({
       })
       .addCase(updateSize.rejected, (state, action) => {
         state.status = "failed";
-        console.log("error:", action);
+        // console.log("error:", action);
         state.error = action.error.message;
       })
 

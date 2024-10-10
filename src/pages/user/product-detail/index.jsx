@@ -68,7 +68,7 @@ export default function ProductDetail() {
   }, [pisc]);
   const loadData = () => {
     jsonAxios
-      .get(`/admin/productDetail`)
+      .get(`/productDetail`)
       .then((resp) => {
         const data = resp.data.data;
         setProductDetailRelateList(data);
@@ -132,9 +132,9 @@ export default function ProductDetail() {
     },
   ];
 
-  useEffect(()=>{
-    window.scrollTo({top:0,behavior:'smooth'})
-  },[])
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   return (
     <>

@@ -37,7 +37,7 @@ const colorSlice = createSlice({
       // Thời điểm đã có dữ liệu
       .addCase(getAllColors.fulfilled, (state, action) => {
         state.status = "successfully";
-        console.log(action.payload);
+        // console.log(action.payload);
         // state.data = action.payload.data;
         state.totalElements = action.payload.data.totalElements;
         state.number = action.payload.data.number;
@@ -60,7 +60,7 @@ const colorSlice = createSlice({
       })
       .addCase(addColor.rejected, (state, action) => {
         state.status = "failed";
-        console.log("error:", action);
+        // console.log("error:", action);
         state.error = action.error.message;
       })
 
@@ -69,9 +69,9 @@ const colorSlice = createSlice({
       })
       .addCase(getAllColorsByNothing.fulfilled, (state, action) => {
         state.status = "successfully";
-        console.log("vao:", action);
+        // console.log("vao:", action);
         state.data = action.payload.data;
-        console.log("action", action.payload.data);
+        // console.log("action", action.payload.data);
       })
       .addCase(getAllColorsByNothing.rejected, (state, action) => {
         state.status = "failed";
@@ -88,7 +88,7 @@ const colorSlice = createSlice({
       })
       .addCase(updateColor.rejected, (state, action) => {
         state.status = "failed";
-        console.log("error:", action);
+        // console.log("error:", action);
         state.error = action.error.message;
       })
 

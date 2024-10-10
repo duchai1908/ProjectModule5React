@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { CiCircleMore } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Dropdown, Image, Input, Pagination, Select, Tag } from "antd";
+import {
+  Button,
+  Dropdown,
+  Image,
+  Input,
+  notification,
+  Pagination,
+  Select,
+  Tag,
+} from "antd";
 import { FaFilter } from "react-icons/fa";
 import { LuRefreshCw } from "react-icons/lu";
 import {
@@ -75,7 +84,11 @@ export default function ProductDetailManager() {
   // Handle delete product detail
   const handleDelete = async (productDetail) => {
     await dispatch(deleteProductDetail(productDetail.id));
-    console.log("Product detail deleted successfully");
+    notification.success({
+      message: "Thông báo",
+      description: "Xóa thành công sản phẩm",
+      type: "success",
+    });
   };
 
   // Handle edit product detail
