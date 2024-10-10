@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Input, Upload } from "antd";
+import { Button, Image, Input, Select, Upload } from "antd";
 import { IoClose } from "react-icons/io5";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -18,6 +18,8 @@ export default function UpdateProductForm({
   isNameFalse,
   isCateFalse,
   isImgFalse,
+  cateData,
+  handleChangeCateValue,
 }) {
   return (
     <>
@@ -52,11 +54,20 @@ export default function UpdateProductForm({
 
           <div className="mb-4">
             <label className="block font-medium mb-2">Mã danh mục</label>
-            <Input
+            {/* <Input
               placeholder="Nhập mã category"
               value={categoryId}
               onChange={handleCategoryIdChange}
               className="mb-3"
+            /> */}
+            <Select
+              defaultValue={categoryId}
+              className="w-full"
+              onChange={handleChangeCateValue}
+              options={cateData?.map((category) => ({
+                value: category?.id,
+                label: category?.name,
+              }))}
             />
             {isCateFalse && (
               <p className="text-red-500">Id danh mục không được để trống</p>
@@ -78,14 +89,20 @@ export default function UpdateProductForm({
 
             {/* Display the current image */}
             {productUpdate.image && !file && (
-              <>
-              <p>Ảnh Cũ</p>
-                <img
+              <div className="w-full max-h-[170px]">
+                <p>Ảnh Cũ</p>
+                {/* <img
                   src={productUpdate.image}
                   alt="Current product"
                   className="mb-3 max-w-xs"
+                /> */}
+                <Image
+                  width={150}
+                  height={150}
+                  src={productUpdate?.image}
+                  className="object-cover rounded-md"
                 />
-              </>
+              </div>
             )}
 
             {/* Allow the user to upload a new image */}

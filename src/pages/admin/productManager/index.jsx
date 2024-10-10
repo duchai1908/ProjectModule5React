@@ -4,6 +4,7 @@ import {
   Image,
   Input,
   Modal,
+  notification,
   Pagination,
   Radio,
   Select,
@@ -19,6 +20,8 @@ import { UploadOutlined } from "@ant-design/icons";
 import AddProductForm from "./formAddProduct";
 import UpdateProductForm from "./formUpdateProduct";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../../../services/categoryService";
 //   import "./category.css";
 /**
  * Product Manager
@@ -89,6 +92,18 @@ const ProductManager = () => {
 
   const [isReload, setIsReload] = useState(false);
 
+  const {
+    data: cateData,
+    status: cateStatus,
+    error: cateError,
+  } = useSelector((state) => state.guestCategory);
+
+  const dispath = useDispatch();
+
+  useEffect(() => {
+    dispath(getAllCategories());
+  }, []);
+
   //Filter value
   // Function to handle the item click to change filter value
   const handleMenuClick = (e) => {
@@ -133,7 +148,6 @@ const ProductManager = () => {
         `/admin/products?page=${page}&size=${size}&productName=${searchInput}&sortOption=${filterValue}`
       )
       .then((resp) => {
-        console.log(resp);
         const data = resp.data.data;
         setContent(data.content);
         setTotalElements(data.totalElements);
@@ -237,8 +251,9 @@ const ProductManager = () => {
     formAxios
       .post(`/admin/products`, formData)
       .then((response) => {
-        console.log("Thành công:", response.data);
+        console.log("vao");
         setIsReload(!isReload);
+        // loadData();
       })
       .catch((error) => {
         console.error("Lỗi:", error);
@@ -253,6 +268,7 @@ const ProductManager = () => {
   };
 
   const handleCategoryIdChange = (e) => {
+    console.log("value: ", e.target.value);
     setCategoryId(e.target.value);
     if (e.target.value) {
       setIsCateFalse(false); // Clear the error when value is valid
@@ -282,7 +298,7 @@ const ProductManager = () => {
 
   // Assuming productUpdate contains the details of the product being edited, including the image URL.
   const handleUpdateProduct = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     // Prepare form data
     const formData = new FormData();
 
@@ -300,18 +316,45 @@ const ProductManager = () => {
     formAxios
       .put(`/admin/products/${productUpdate.id}`, formData)
       .then((response) => {
-        console.log("Thành công:", response.data);
-        handleCloseFormUpdate();
-        setIsReload(!isReload);
+        notification.success({
+          message: "Thành công",
+          description: "Sản phẩm cập nhật thành công",
+        });
+
+        // handleCloseFormUpdate();
+
+        // Thêm độ trễ trước khi reload dữ liệu
+        setTimeout(() => {
+          setIsReload(!isReload); // Gọi reload sau một khoảng thời gian
+        }, 10000); // Độ trễ 10 giây (10000ms)
       })
       .catch((error) => {
-        console.error("Lỗi:", error);
+        notification.error({
+          message: "Lỗi cập nhật",
+          description: "Cập nhật bị lỗi rồi bạn",
+        });
       });
   };
 
   const handleBlock = (item) => {
     // Logic to handle block action
     console.log("Block item:", item);
+    jsonAxios
+      .put(`/admin/products/changeStatus/${item.id}`)
+      .then((resp) => {
+        notification.success({
+          message: "Thành công",
+          description: "Sản phẩm cập nhật trạng thái thành công",
+        });
+        setIsReload(!isReload);
+      })
+      .catch((err) => {
+        // Xử lý lỗi
+        notification.error({
+          message: "Lỗi cập nhật",
+          description: "Không thể chỉnh trạng thái của sản phẩm",
+        });
+      });
   };
 
   //xem reload lai trang
@@ -339,6 +382,11 @@ const ProductManager = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const handleChangeCateValue = (value) => {
+    console.log(`selected ${value}`);
+    setCategoryId(value);
   };
 
   return (
@@ -413,7 +461,7 @@ const ProductManager = () => {
             </thead>
             <tbody>
               {/* <tr className="border-b"> */}
-              {content.map((item, index) => {
+              {content?.map((item, index) => {
                 // Define options dynamically for each item
                 const options = [
                   {
@@ -423,7 +471,7 @@ const ProductManager = () => {
                   },
                   {
                     key: "5",
-                    label: <span>Chặn</span>,
+                    label: <span>Chỉnh trạng thái</span>,
                     onClick: () => handleBlock(item), // Pass the item to the block handler
                   },
                   {
@@ -491,30 +539,6 @@ const ProductManager = () => {
             Hiển thị <b>{numberElements}</b> trên <b>{totalElements}</b> bản ghi
           </div>
           <div className="flex items-center gap-5">
-            {/* <Select
-              defaultValue="Hiển thị 10 bản ghi / trang"
-              style={{
-                width: 220,
-              }}
-              options={[
-                {
-                  value: "10",
-                  label: "Hiển thị 10 bản ghi / trang",
-                },
-                {
-                  value: "20",
-                  label: "Hiển thị 20 bản ghi / trang",
-                },
-                {
-                  value: "50",
-                  label: "Hiển thị 50 bản ghi / trang",
-                },
-                {
-                  value: "100",
-                  label: "Hiển thị 100 bản ghi / trang",
-                },
-              ]}
-            /> */}
             <div className="flex items-center gap-3">
               <Pagination
                 current={page + 1}
@@ -541,6 +565,8 @@ const ProductManager = () => {
             isNameFalse={isNameFalse}
             isCateFalse={isCateFalse}
             isImgFalse={isImgFalse}
+            cateData={cateData}
+            handleChangeCateValue={handleChangeCateValue}
           />
         )}
         {/* form edit */}
@@ -562,6 +588,8 @@ const ProductManager = () => {
               isNameFalse={isNameFalse}
               isCateFalse={isCateFalse}
               isImgFalse={isImgFalse}
+              cateData={cateData}
+              handleChangeCateValue={handleChangeCateValue}
             />
           </>
         ) : (

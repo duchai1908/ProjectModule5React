@@ -17,6 +17,7 @@ const initialValue = {
   number: 0,
   size: 5,
   error: null,
+  numberOfElements: 0,
 };
 
 const productDetailSlice = createSlice({
@@ -41,6 +42,7 @@ const productDetailSlice = createSlice({
         state.number = action.payload.data.number;
         state.size = action.payload.data.size;
         state.data = action.payload.data.content;
+        state.numberOfElements = action.payload.data.numberOfElements;
       })
       .addCase(findAllProductDetail.rejected, (state, action) => {
         state.status = "failed";

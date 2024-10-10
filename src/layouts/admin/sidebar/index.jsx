@@ -6,6 +6,9 @@ import {
   AppstoreOutlined,
   StockOutlined,
   AuditOutlined,
+  BgColorsOutlined,
+  GatewayOutlined,
+  FileImageOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
@@ -39,12 +42,15 @@ export default function SidebarAdmin() {
         <Menu.Item key="/admin/order" icon={<SolutionOutlined />}>
           <Link to="/admin/order">Order Manager</Link>
         </Menu.Item>
-        <Menu.Item key="/admin/color-manager" icon={<StockOutlined />}>
+        <Menu.Item key="/admin/color-manager" icon={<BgColorsOutlined />}>
           <Link to="/admin/color-manager">Color Manager</Link>
         </Menu.Item>
-        <Menu.Item key="/admin/size-manager" icon={<StockOutlined />}>
+        <Menu.Item key="/admin/size-manager" icon={<GatewayOutlined />}>
           <Link to="/admin/size-manager">Size Manager</Link>
         </Menu.Item>
+        {/* <Menu.Item key="/admin/banner-manager" icon={<FileImageOutlined />}>
+          <Link to="/admin/banner-manager">Banner Manager</Link>
+        </Menu.Item> */}
         <Menu.Item key="/admin/charts" icon={<StockOutlined />}>
           <Link to="/admin/charts">Charts</Link>
         </Menu.Item>
