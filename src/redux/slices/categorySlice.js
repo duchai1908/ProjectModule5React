@@ -44,8 +44,7 @@ const categorySlice = createSlice({
       })
       .addCase(findAllCategory.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload.message.name;
-        console.log(action.payload.message.name);
+        state.error = action.payload;
       });
 
     // Xử lý thêm mới danh mục
@@ -55,13 +54,19 @@ const categorySlice = createSlice({
         state.status = "pending";
       })
       .addCase(addCategory.fulfilled, (state, action) => {
-        console.log("Category added successfully", action.payload);
         state.status = "successfully";
+        const newData = [...state.data, action.payload];
+        state.data = newData;
+        // Cập nhật totalElements từ backend (giả sử bạn có giá trị này trong action.payload)
+        state.totalElements = action.payload.totalElements; // Nhận từ backend
+
+        // Chuyển đến trang mới nếu cần
+        // Giả sử action.payload.number là trang mới
+        state.number = action.payload.number;
       })
       .addCase(addCategory.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload.message.name;
-        console.log("error", action.payload.message.name);
       });
 
     // Xử lý xóa danh mục
@@ -73,8 +78,9 @@ const categorySlice = createSlice({
         state.status = "successfully";
 
         state.data = state.data.filter(
-          (category) => category.id !== action.payload.data.content.id
-        ); // Xóa danh mục theo ID
+          (category) => category.id !== action.payload
+        );
+        // state.number = action.payload.data.number;
       })
       .addCase(deleteCategory.rejected, (state, action) => {
         state.status = "failed";

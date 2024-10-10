@@ -18,6 +18,7 @@ const AddCategoryModal = ({ visible, onClose, error }) => {
   const handleUpload = ({ file }) => {
     setFile(file);
   };
+
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append("name", name);
@@ -94,8 +95,11 @@ const AddCategoryModal = ({ visible, onClose, error }) => {
         <div>
           <label className="block font-medium mb-2">Tên</label>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {/* {error && error.message?.name && (
+            <p style={{ color: "red" }}>{error.message.name}</p>
+          )} */}
         </div>
+
         <div className="mb-4">
           <label className="block font-medium mb-2">Ảnh sản phẩm</label>
           <Upload
