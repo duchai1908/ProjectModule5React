@@ -92,22 +92,22 @@ const AddProductDetailModal = ({
     }
 
     // Dispatch the action to add a product detail
-    await dispatch(addProductDetail(formData))
-      .then(() => {
-        notification.success({
-          message: "Thêm mới sản phẩm chi tiết thành công",
-          duration: 3,
-        });
-        onClose(); // Close the modal when successful
-        clearData();
-        dispatch(findAllProductDetail({ id, page: 0, size: 5 })); // Refresh product details list
-      })
-      .catch((error) => {
-        notification.error({
-          message: "Thêm mới sản phẩm chi tiết thất bại",
-          duration: 3,
-        });
-      });
+    await dispatch(addProductDetail({ formData, onClose, clearData }));
+    // .then(() => {
+    //   notification.success({
+    //     message: "Thêm mới sản phẩm chi tiết thành công",
+    //     duration: 3,
+    //   });
+    //   onClose(); // Close the modal when successful
+    //   clearData();
+    //   dispatch(findAllProductDetail({ id, page: 0, size: 5 })); // Refresh product details list
+    // })
+    // .catch((error) => {
+    //   notification.error({
+    //     message: "Thêm mới sản phẩm chi tiết thất bại",
+    //     duration: 3,
+    //   });
+    // });
   };
 
   const handleChangeColor = (value) => {

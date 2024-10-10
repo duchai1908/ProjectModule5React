@@ -98,8 +98,9 @@ export default function ProductsPanagation({
               // Tìm productDetail đầu tiên khớp với product.id
               const productDetail = productDetails.find(
                 (productDetailsItem) =>
-                  productDetailsItem.product.id === product.id
+                  productDetailsItem?.product?.id === product?.id
               );
+              console.log("product Detail: " + productDetail);
 
               return (
                 <div

@@ -32,7 +32,7 @@ export const findAllProductWithCondition = createAsyncThunk(
     // console.log("search: ", search);
     // console.log("sortOption: ", sortOption);
     const response = await jsonAxios.get(
-      `/admin/products?page=${page}&size=${size}&productName=${search}&sortOption=${sortOption}`
+      `/product?page=${page}&size=${size}&productName=${search}&sortOption=${sortOption}`
     );
     // console.log(response.data);
     return response.data;
@@ -41,7 +41,7 @@ export const findAllProductWithCondition = createAsyncThunk(
 
 export const getProductById = createAsyncThunk("product/id", async ({ id }) => {
   try {
-    const response = await formAxios.get(`/admin/products/${id}`);
+    const response = await formAxios.get(`/product/${id}`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data || error.message);
