@@ -3,7 +3,7 @@ import { formAxios, jsonAxios } from "../api";
 import { notification } from "antd";
 
 export const getAllProductRelateByCateId = createAsyncThunk(
-  "admin/relatedProduct/cateId",
+  "product/relatedProduct/cateId",
   async ({ id }) => {
     const response = await jsonAxios.get(`/product/relatedProduct/${id}`);
     console.log("list related products", response);

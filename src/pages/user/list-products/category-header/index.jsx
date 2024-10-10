@@ -17,7 +17,7 @@ export default function CategoryHeader() {
           </div>
         </div>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-3">Category Name</h1>
+          <h1 className="text-3xl font-bold mb-3">Danh sách sản phẩm</h1>
           <Breadcrumb
             items={[
               {
@@ -42,7 +42,7 @@ export default function CategoryHeader() {
             className="w-[250px] h-[250px] bg-cover bg-center rounded-3xl"
             style={{
               backgroundImage:
-                "url('https://i.pinimg.com/736x/bb/03/be/bb03be3373d101ad3e175fd10bb74afd.jpg')",
+                "url('https://i.pinimg.com/564x/de/2d/2d/de2d2dcbbc8796d20a9b81b274b2fa3d.jpg')",
             }}
           >
             {/* Optionally, you can add content here */}

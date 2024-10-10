@@ -27,7 +27,7 @@ export const findAllProductWithCondition = createAsyncThunk(
   //   //   return response.data;
   //   // }
   // }
-  "admin/products",
+  "product",
   async ({ page, size, search, sortOption }) => {
     // console.log("search: ", search);
     // console.log("sortOption: ", sortOption);
@@ -39,16 +39,13 @@ export const findAllProductWithCondition = createAsyncThunk(
   }
 );
 
-export const getProductById = createAsyncThunk(
-  "admin/product/id",
-  async ({ id }) => {
-    try {
-      const response = await formAxios.get(`/admin/products/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
+export const getProductById = createAsyncThunk("product/id", async ({ id }) => {
+  try {
+    const response = await formAxios.get(`/admin/products/${id}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
   }
-);
+});
 
 // http://localhost:8080/api/v1/admin/products?minPrice=0&maxPrice=120000&sortOption=lowToHigh
