@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./wishList.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Breadcrumb, Button } from "antd";
 import { getWishList, removeAllWishlist, removeWishlist } from "../../../services/wishList";
+import Cookies from "js-cookie";
 export default function WishList() {
   const [wishlist, setWishlist] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
+    if (Cookies.get("token") != null) {
+      const token = JSON.parse(Cookies.get("token"));
+      if(!(token.data.roles.some((item)=> item === "ROLE_USER"))){
+        navigate("/*")
+      }
+    }else{
+      navigate("/login")
+    }
     const fetchWishList = async () => {
       try {
         const response = await getWishList();
@@ -73,48 +83,51 @@ export default function WishList() {
           </div> */}
         </div>
         {
-          wishlist && wishlist.data.data.length !== 0 ?  (<Button onClick={handleRemoveAll}>Remove All</Button>) : (<p></p>)
+          wishlist?.data?.data?.length>0 ? (<Button onClick={handleRemoveAll}>Remove All</Button>) : ("")
         }
        
         <div className="wish_content">
           
           <div className="wish_content-items">
-            {wishlist && wishlist.data.data.length === 0 ? (
-              <p >Danh sách yêu thích trống</p>
-            ) : (
-              wishlist && wishlist.data.data.map((item) => {
-                return (
-                  <>
-                    {/*item wishlist start*/}
-                    <div className="wish_content-item">
-                      <Link className="wish_img" to="#">
-                        <img
-                          className="wish_img-product"
-                          src={item.image}
-                          alt=""
-                        />
-                      </Link>
-                      <div className="wish_content-detail">
-                        <h4 className="post-title">
-                          <Link className="link_wish-item" to="#">
-                            {item.name}
-                          </Link>
-                        </h4>
-                        <p class="wish-pro-price">{item.category.name}</p>
-                        <div className="wish_button">
-                          <Link to="/order" className="wish_button-item">
-                            Order Now
-                          </Link>
-                          <Link onClick={()=>handleDeleteWishlist(item.id)} className="wish_button-item remove">
-                            Remove
-                          </Link>
+            {console.log("wishList: ",wishlist)
+            }
+            {wishlist && wishlist?.data?.data?.length > 0 ? (
+                wishlist && wishlist?.data?.data.map((item) => {
+                  return (
+                    <>
+                      {/*item wishlist start*/}
+                      <div className="wish_content-item">
+                        <Link className="wish_img" to="#">
+                          <img
+                            className="wish_img-product"
+                            src={item.image}
+                            alt=""
+                          />
+                        </Link>
+                        <div className="wish_content-detail">
+                          <h4 className="post-title">
+                            <Link className="link_wish-item" to="#">
+                              {item.name}
+                            </Link>
+                          </h4>
+                          <p class="wish-pro-price">{item.category.name}</p>
+                          <div className="wish_button">
+                            <Link to="/order" className="wish_button-item">
+                              Order Now
+                            </Link>
+                            <Link onClick={()=>handleDeleteWishlist(item.id)} className="wish_button-item remove">
+                              Remove
+                            </Link>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {/*item wishlist end*/}
-                  </>
-                );
-              })
+                      {/*item wishlist end*/}
+                    </>
+                  );
+                })
+              
+            ) : (
+              <p >Danh sách yêu thích trống</p>
             )}
           </div>
         </div>

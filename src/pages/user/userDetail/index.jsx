@@ -10,7 +10,7 @@ import { Upload, Button } from "antd";
 import { MdPublishedWithChanges } from "react-icons/md";
 
 import { FaPlus } from "react-icons/fa6";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import UserInformationPage from "./userInformation";
 import UserOrderHistoryPage from "./userOrderHistory";
 
@@ -19,35 +19,39 @@ import { useDispatch, useSelector } from "react-redux";
 import UserChangePass from "./userChangePass";
 
 import UserAddressPage from "./userAddres";
+import Cookies from "js-cookie";
 
 export default function UserDetail() {
   // Lấy thông tin người dùng từ Redux
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth);
   const [userInfo, setUserInfo] = useState(user);
-
-  console.log("user", user);
-  // useEffect để kiểm tra giá trị userInfo mỗi khi nó thay đổi
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if (Cookies.get("token") != null) {
+      const token = JSON.parse(Cookies.get("token"));
+      if(!(token.data.roles.some((item)=> item === "ROLE_USER"))){
+        navigate("/*")
+      }
+    }else{
+      navigate("/login")
+    }
+  },[])
   useEffect(() => {
-    console.log("user từ Redux:", user); // Log user từ Redux
     setUserInfo(user.data); // Cập nhật userInfo với user.data
-    console.log("ggg", user.data); //
   }, [user]);
 
   useEffect(() => {
     if (user && user.data) {
       setUserInfo(user.data);
-      console.log("hhh", user);
     }
   }, [user]);
 
-  console.log("userinfo", userInfo);
   const handleUserUpdate = (newUserInfo) => {
     setUserInfo(newUserInfo); // Cập nhật lại state userInfo với thông tin mới
   };
   const [isOpen, setIsOpen] = useState(1);
   const handleChangePage = (key) => {
-    console.log("key:", key);
     setIsOpen(key);
   };
 
@@ -86,7 +90,7 @@ export default function UserDetail() {
                 </Upload>
               </div>
               <div className="user-name">
-                <h1>{userInfo ? userInfo?.data.username : "name"}</h1>
+                <h1>{userInfo ? userInfo?.data?.username : "name"}</h1>
                 <SlNote />
               </div>
               <div className="user-day">
