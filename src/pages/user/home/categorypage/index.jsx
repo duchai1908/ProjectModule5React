@@ -1,29 +1,36 @@
 import React from "react";
 import "./category.css";
 import { Link } from "react-router-dom";
-export default function CategoryPage() {
+export default function CategoryPage({ categoryLimit }) {
   return (
     <>
       <section className="block p-0 w-full max-w-[1300px] m-[0_auto] z-20 mt-20">
         <div className="w-full flex items-center justify-between  m-[0_auto] relative z-[10]">
           <div className="flex flex-wrap justify-between gap-5 w-full">
-            <div className="flex flex-col items-center justify-center  flex-1 min-w-[200px] m-2 group">
-              <div>
-                <a href="">
-                  <img
-                    src="/images/collection-banner-_36_600x.webp"
-                    className="border rounded-3xl"
-                  />
-                </a>
-              </div>
-              <div className="mt-6">
-                <Link className="font-bold text-black group-hover:text-blue-500 category-title">
-                  Headphone
-                </Link>
-              </div>
-            </div>
+            {categoryLimit?.map((item, index) => {
+              return (
+                <div
+                  className="flex flex-col items-center justify-center  flex-1 min-w-[200px] m-2 group"
+                  key={index}
+                >
+                  <div>
+                    <a href="">
+                      <img
+                        src={item?.image}
+                        className="border rounded-3xl max-h-[400px]"
+                      />
+                    </a>
+                  </div>
+                  <div className="mt-6">
+                    <Link className="font-bold text-black group-hover:text-blue-500 category-title">
+                      {item?.name}
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
 
-            <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group">
+            {/* <div className="flex flex-col items-center justify-center flex-1 min-w-[200px] m-2 group">
               <div>
                 <Link href="">
                   <img
@@ -69,7 +76,7 @@ export default function CategoryPage() {
                   Smartwatch
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

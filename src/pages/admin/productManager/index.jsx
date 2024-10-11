@@ -251,7 +251,9 @@ const ProductManager = () => {
     formAxios
       .post(`/admin/products`, formData)
       .then((response) => {
-        console.log("vao");
+        notification.success({
+          message: "Thêm sản phẩm thành công!",
+        });
         setIsReload(!isReload);
         // loadData();
       })

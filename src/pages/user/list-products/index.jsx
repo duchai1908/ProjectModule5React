@@ -32,7 +32,7 @@ export default function ListProducts() {
     dispatch(
       findAllProductWithCondition({
         page: number,
-        size,
+        size: 8,
         search: searchValue,
         sortOption,
       })

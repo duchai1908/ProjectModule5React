@@ -16,6 +16,7 @@ export default function Home() {
   console.log(data);
 
   const [productNewest, setProductNewest] = useState(null);
+  const [categoryLimit, setCategoryLimit] = useState(null);
   useEffect(() => {
     jsonAxios
       .get(`/product/newest`)
@@ -26,11 +27,18 @@ export default function Home() {
       .catch((err) => {
         // Xử lý lỗi
       });
+    jsonAxios
+      .get(`/category/listCategory/limit`)
+      .then((resp) => {
+        const data2 = resp.data.data;
+        setCategoryLimit(data2);
+      })
+      .catch((err) => {});
   }, []);
   return (
     <>
       <Slider />
-      <CategoryPage />
+      <CategoryPage categoryLimit={categoryLimit} />
       <Feartured productNewest={productNewest} />
       <ContentHome />
       <BannerArea />
