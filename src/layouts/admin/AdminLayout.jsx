@@ -1,34 +1,67 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { Layout } from "antd";
-// import "../../../public/admin.css";
-import "../../assets/admin.css"
-import SideBar from "./side-bar/SideBar";
+import React, { useEffect, useState } from "react";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Button, Layout, theme } from "antd";
+import { Outlet, useNavigate } from "react-router-dom";
+import SidebarAdmin from "./sidebar";
 import HeaderAdmin from "./header";
-
+import "./admin.css";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { loadUserFromCookie } from "../../services/authService";
+const { Header, Sider, Content } = Layout;
 export default function AdminLayout() {
-  // Lift the collapsed state here
-  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (Cookies.get("token") != null) {
+      const token = JSON.parse(Cookies.get("token"));
+      
+      if(!(token.data.roles.some((item)=> item === "ROLE_ADMIN"))){
+        navigate("/*")
+      }
+      dispatch(loadUserFromCookie(token));
+    } else {
+        navigate("/login");
+    }
+  }, []);
 
-  // Function to toggle the sidebar collapsed state
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
+  const toggleMenu = () => {
+    setCollapsed((prev) => !prev);
   };
 
   return (
-    <Layout className="min-h-screen flex">
-      {/* Sidebar */}
-      <SideBar collapsed={collapsed} />
-
-      {/* Main Layout */}
-      <Layout className="flex h-[100vh] overflow-hidden">
-        {/* Header */}
-        <HeaderAdmin toggleCollapsed={toggleCollapsed} collapsed={collapsed} />
-
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-4">
+    <Layout className="h-screen">
+      <Sider
+        className="fixed-sider"
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        width={260}
+        collapsedWidth={80} //
+      >
+        <SidebarAdmin />
+      </Sider>
+      <Layout className="layout_dash">
+        {/* Header layout */}
+        <HeaderAdmin onToggleMenu={toggleMenu} isCollapsed={collapsed} />
+        {/* Content layout */}
+        <Content
+          className="content-dashboard"
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
           <Outlet />
-        </div>
+        </Content>
       </Layout>
     </Layout>
   );

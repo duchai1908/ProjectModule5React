@@ -1,0 +1,188 @@
+.wish_header {
+  width: 100%;
+  height: 80px;
+  background-color: #ececec;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.wish_link {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wish_link-home {
+  font-size: 20px;
+}
+.wish_home {
+  color: #303030;
+  padding: 8px 6px;
+  /* background-color: #02a9f7; */
+}
+.wish_title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #02a9f7;
+}
+.wish_home:hover {
+  background-color: transparent !important;
+  border-radius: 5px;
+}
+
+.wish_link span {
+  font-size: 20px;
+  font-weight: 600;
+}
+.wish_link-icon {
+  font-size: 20px;
+}
+.wish_list {
+  color: #02a9f7;
+}
+
+.ant-breadcrumb a {
+  height: 32px;
+}
+
+.ant-breadcrumb a:hover {
+  background-color: rgb(226, 226, 226);
+}
+.wish_content {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 68px;
+}
+.wish_content-items {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+.wish_img {
+  display: block;
+  /* height: 100%; */
+  width: 100%;
+}
+.wish_content-item {
+  /* background-color: red; */
+  padding: 12px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.wish_img img {
+  vertical-align: middle;
+  border-style: none;
+  max-width: 100%;
+  border-radius: 20px;
+}
+.post-title {
+  margin: 15px 0 10px;
+  color: #000;
+  font-size: 16px;
+}
+.link_wish-item {
+  color: #303030;
+}
+.link_wish-item:hover {
+  color: #02a9f7;
+}
+.wish-pro-price {
+  font-size: 16px;
+  color: #303030;
+  margin-bottom: 10px;
+}
+.wish_button-item {
+  appearance: none;
+  background-color: #02a9f7;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: #fff;
+  border: 0.125em solid transparent;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 1.8rem;
+  min-width: 0;
+  outline: none;
+  padding: 0.8em 2.3em;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+}
+
+.wish_button-item:disabled {
+  pointer-events: none;
+}
+
+.wish_button-item:hover {
+  color: #1a1a1a;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.wish_button-item:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+.wish_button-item.remove {
+  appearance: none;
+  background-color: #1a1a1a;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: #fff;
+  border: 0.125em solid transparent;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 1.8rem;
+  min-width: 0;
+  outline: none;
+  padding: 0.8em 2.3em;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+}
+
+.wish_button-item.removes:disabled {
+  pointer-events: none;
+}
+
+.wish_button-item.remove:hover {
+  color: #1a1a1a;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.wish_button-item.remove:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+.wish_button {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.wish_content-detail {
+  text-align: center;
+}

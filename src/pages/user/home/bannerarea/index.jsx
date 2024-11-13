@@ -1,11 +1,103 @@
 import React from "react";
-
+import "./banner.css";
 export default function BannerArea() {
   return (
-    <section className="block p-0 w-full max-w-[1200px] m-[0_auto] z-20 mt-14">
-      <div className="w-full relative z-[10]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="flex flex-col items-center justify-center p-4  rounded-md">
+    <section className="w-full  max-w-[1300px] mx-auto z-20 mt-20 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {/* items */}
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <a href="" className="banner-link max-w-full max-h-full">
+              <img
+                src="https://minimalin-demo.myshopify.com/cdn/shop/files/electronics-banner_9_470x.png?v=1708774566"
+                className="banner-img w-full h-full"
+              />
+            </a>
+          </div>
+          <div class="flip-card-back">
+            <p class="title">Xin chào</p>
+            <p>
+              Camera drop là một thiết bị an ninh nhỏ gọn, kết nối internet,
+              cung cấp giám sát video theo thời gian thực, phát hiện chuyển
+              động, nhìn ban đêm và âm thanh hai chiều. Dễ dàng lắp đặt và có
+              thể truy cập từ xa qua ứng dụng di động, phù hợp cho việc giám sát
+              nhà ở và doanh nghiệp
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <a href="" className="banner-link max-w-full max-h-full">
+              <img
+                src="https://minimalin-demo.myshopify.com/cdn/shop/files/electronics-banner_9_470x.png?v=1708774566"
+                className="banner-img w-full h-full"
+              />
+            </a>
+          </div>
+          <div class="flip-card-back">
+            <p class="title">Xin chào</p>
+            <p>
+              Camera drop là một thiết bị an ninh nhỏ gọn, kết nối internet,
+              cung cấp giám sát video theo thời gian thực, phát hiện chuyển
+              động, nhìn ban đêm và âm thanh hai chiều. Dễ dàng lắp đặt và có
+              thể truy cập từ xa qua ứng dụng di động, phù hợp cho việc giám sát
+              nhà ở và doanh nghiệp
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <a href="" className="banner-link max-w-full max-h-full">
+              <img
+                src="https://minimalin-demo.myshopify.com/cdn/shop/files/electronics-banner_9_470x.png?v=1708774566"
+                className="banner-img w-full h-full"
+              />
+            </a>
+          </div>
+          <div class="flip-card-back">
+            <p class="title">Xin chào</p>
+            <p>
+              Camera drop là một thiết bị an ninh nhỏ gọn, kết nối internet,
+              cung cấp giám sát video theo thời gian thực, phát hiện chuyển
+              động, nhìn ban đêm và âm thanh hai chiều. Dễ dàng lắp đặt và có
+              thể truy cập từ xa qua ứng dụng di động, phù hợp cho việc giám sát
+              nhà ở và doanh nghiệp
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <a href="" className="banner-link max-w-full max-h-full">
+              <img
+                src="https://minimalin-demo.myshopify.com/cdn/shop/files/electronics-banner_9_470x.png?v=1708774566"
+                className="banner-img w-full h-full"
+              />
+            </a>
+          </div>
+          <div class="flip-card-back">
+            <p class="title">Xin chào</p>
+            <p>
+              Camera drop là một thiết bị an ninh nhỏ gọn, kết nối internet,
+              cung cấp giám sát video theo thời gian thực, phát hiện chuyển
+              động, nhìn ban đêm và âm thanh hai chiều. Dễ dàng lắp đặt và có
+              thể truy cập từ xa qua ứng dụng di động, phù hợp cho việc giám sát
+              nhà ở và doanh nghiệp
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+  <div className="flex flex-col items-center justify-center p-4  rounded-md">
           <div>
               <a href="">
                 <img
@@ -26,7 +118,7 @@ export default function BannerArea() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center p-4 rounded-md sm:col-span-2 lg:col-span-1">
-            {/* Căn giữa trên màn hình vừa */}
+         
             <div>
               <a href="">
                 <img
@@ -36,8 +128,4 @@ export default function BannerArea() {
               </a>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+ */

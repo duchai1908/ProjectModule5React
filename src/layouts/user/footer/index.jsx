@@ -5,7 +5,7 @@ export default function FooterLayout() {
   return (
     <>
       <footer className="home-footer">
-        <div className="block p-8 w-full max-w-[1200px] m-[0_auto] z-20 mt-16">
+        <div className="block p-8 w-full max-w-[1300px] m-[0_auto] z-20 mt-16">
           <div className="flex flex-wrap justify-between bg-white rounded-xl ">
             {/* Item 1 */}
             <div className="flex items-center justify-center flex-1 min-w-[200px] m-2">

@@ -1,0 +1,137 @@
+.feature-title {
+  font-size: 30px;
+  position: relative;
+}
+.feature-line {
+  height: 1px;
+  position: absolute;
+  left: 40%;
+  bottom: 0;
+  background-color: rgb(229, 229, 229);
+  width: 260px;
+}
+.slide-box {
+  margin-top: 20px;
+}
+.feature-box {
+  /* background-color: red; */
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.slide-text {
+  margin-top: 10px;
+  color: #02a9f7;
+}
+/* From Uiverse.io by CristianMontoya98 */
+/* From Uiverse.io by abrahamcalsin */
+.slide-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #02a9f7;
+  font-family: "Montserrat", sans-serif !important;
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  margin-top: 10px;
+}
+
+.slide-button:after {
+  content: " ";
+  width: 0%;
+  height: 100%;
+  background: #fff;
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  right: 0;
+}
+
+.slide-button:hover::after {
+  right: auto;
+  left: 0;
+  width: 100%;
+}
+
+.slide-button span {
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 18px 25px;
+  color: #fff;
+  font-size: 1.125em;
+  font-weight: 700;
+  z-index: 20;
+  transition: all 0.3s ease-in-out;
+}
+
+.slide-button:hover span {
+  color: #183153;
+  animation: scaleUp 0.3s ease-in-out;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+/* From Uiverse.io by abrahamcalsin */
+.view-button {
+  height: 50px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #183153;
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  margin-top: 30px;
+}
+
+.view-button:after {
+  content: " ";
+  width: 0%;
+  height: 100%;
+  background: #fff;
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  right: 0;
+}
+
+.view-button:hover::after {
+  right: auto;
+  left: 0;
+  width: 100%;
+}
+
+.view-button span {
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 18px 25px;
+  color: #fff;
+  font-size: 1.125em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  z-index: 20;
+  transition: all 0.3s ease-in-out;
+}
+
+.view-button:hover span {
+  color: #183153;
+  animation: scaleUp 0.3s ease-in-out;
+}
