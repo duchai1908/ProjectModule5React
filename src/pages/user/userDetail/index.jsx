@@ -20,6 +20,7 @@ import UserChangePass from "./userChangePass";
 
 import UserAddressPage from "./userAddres";
 import Cookies from "js-cookie";
+import UserChat from "./userChat";
 
 export default function UserDetail() {
   // Lấy thông tin người dùng từ Redux
@@ -127,6 +128,13 @@ export default function UserDetail() {
                 </li>
                 <li
                   className="user-item cursor-pointer"
+                  onClick={() => handleChangePage(3)}
+                >
+                  <FaRegHeart />
+                  <Link>Chat</Link>
+                </li>
+                <li
+                  className="user-item cursor-pointer"
                   onClick={() => handleChangePage(4)}
                 >
                   <FaRegHeart />
@@ -152,7 +160,7 @@ export default function UserDetail() {
           )}
           {isOpen === 2 && <UserOrderHistoryPage />}
           {isOpen === 5 && <UserChangePass />}
-          {isOpen === 3 && <>hang 3</>}
+          {isOpen === 3 && <UserChat/>}
           {isOpen === 4 && (
             <>
               <UserAddressPage />

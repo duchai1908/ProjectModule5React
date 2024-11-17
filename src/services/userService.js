@@ -43,3 +43,19 @@ export const changePassword = createAsyncThunk(
     }
   }
 );
+export const listUser = () =>{
+  const reponse = jsonAxios.get("user/information/listUser");
+  return reponse;
+}
+export const getUser = () =>{
+  const reponse = jsonAxios.get("user/information/getUser");
+  return reponse;
+}
+export const getUsernameById = (id) =>{
+  const reponse = jsonAxios.get(`user/information/getUsername/${id}`);
+  return reponse;
+}
+export const getHistory = (id) =>{
+  const reponse = jsonAxios.get(`user/information/getHistory/${id}`);
+  return reponse;
+}
